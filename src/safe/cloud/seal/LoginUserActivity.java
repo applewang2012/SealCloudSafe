@@ -6,18 +6,25 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
+
+import android.accounts.NetworkErrorException;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.NinePatchDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
@@ -40,6 +47,7 @@ public class LoginUserActivity extends BaseActivity{
 	private String mUserName, mPassword;
 	private EditText userNameEditText;
 	private EditText passwordEditText;
+	private boolean mValidUserPassword = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -48,7 +56,6 @@ public class LoginUserActivity extends BaseActivity{
 		setContentView(R.layout.seal_login_user); 
 		ActivityController.addActivity(LoginUserActivity.this);
 		initView();
-		commonServiceInterface();
 	}
 	
 	
@@ -73,30 +80,95 @@ public class LoginUserActivity extends BaseActivity{
 		if (mPassword != null && !mPassword.equals("")){
 			passwordEditText.setText(mPassword);
 		}
-		Button login = (Button)findViewById(R.id.id_login_user_button);
+		
+		final Button login = (Button)findViewById(R.id.id_login_user_button);
 		login.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
+				if (!mValidUserPassword){
+					return;
+				}
 				mUserName = userNameEditText.getEditableText().toString();
 				mPassword = passwordEditText.getEditableText().toString();
-				if (mUserName == null || mUserName.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-					return;
-				}
-				if (mPassword == null || mPassword.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-					return;
-				}
-				if (CommonUtil.mUserHost == null || CommonUtil.mUserHost.equals("")){
-					GlobalUtil.shortToast(getApplication(), "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-					return;
-				}
+//				if (mUserName == null || mUserName.equals("")){
+//					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//					return;
+//				}
+//				if (mPassword == null || mPassword.equals("")){
+//					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//					return;
+//				}
+//				if (CommonUtil.mUserHost == null || CommonUtil.mUserHost.equals("")){
+//					GlobalUtil.shortToast(getApplication(), "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//					return;
+//				}
 				showLoadingView();
 				loginUser();
 			}
 		});
+		if (mUserName != null && mPassword != null){
+			login.setBackgroundResource(R.drawable.button_click_clickable);
+			login.setTextColor(Color.parseColor("#ffffff"));
+		}
 		
+		userNameEditText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if (passwordEditText.getText().length() > 5 && userNameEditText.getText().length() > 5){
+					login.setBackgroundResource(R.drawable.button_click_clickable);
+					login.setTextColor(Color.parseColor("#ffffff"));
+					mValidUserPassword = true;
+				}else{
+					login.setBackgroundResource(R.drawable.button_click_unclickable);
+					login.setTextColor(Color.parseColor("#888888"));
+					mValidUserPassword = false;
+				}
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
+		passwordEditText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				if (passwordEditText.getText().length() > 5 && userNameEditText.getText().length() > 5){
+					login.setBackgroundResource(R.drawable.button_click_clickable);
+					login.setTextColor(Color.parseColor("#ffffff"));
+					mValidUserPassword = true;
+				}else{
+					login.setBackgroundResource(R.drawable.button_click_unclickable);
+					login.setTextColor(Color.parseColor("#888888"));
+					mValidUserPassword = false;
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+			
+				
+			}
+		});
 		Button registerButton = (Button)findViewById(R.id.id_login_user_register);
 		Button modifyButton = (Button)findViewById(R.id.id_login_user_modify_password);
 		registerButton.setOnClickListener(new OnClickListener() {
@@ -134,24 +206,6 @@ public class LoginUserActivity extends BaseActivity{
 		mPresenter.startPresentServiceTask();
 	}
 	
-	private void commonServiceInterface(){
-		SharedPreferences sharedata = getApplication().getSharedPreferences("user_info", 0);
-	    String host = sharedata.getString("host", "");
-	    Log.i("mingguo", "common service preference host  "+host);
-	    if (host == null || host.equals("")){
-	    	showLoadingView();
-	    	String url = "http://www.guardts.com/commonservice/commonservices.asmx?op=GetAreas";
-			SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mCommonServiceAction));
-			rpc.addProperty("status", "1");
-			mPresenter.readyPresentServiceParams(getApplicationContext(), url, mCommonServiceAction, rpc);
-			mPresenter.startPresentServiceTask();
-	    }else{
-	    	CommonUtil.mUserHost = host;
-	    }
-	    
-	    
-		
-	}
 	
 	private void showLoadingView(){
 		if (mLoadingView != null) {
@@ -241,26 +295,21 @@ public class LoginUserActivity extends BaseActivity{
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
-			if (msg.what == 100){
-				dismissLoadingView();
-				SharedPreferences sharedata = getApplicationContext().getSharedPreferences("user_info", 0);
-				SharedPreferences.Editor editor = sharedata.edit();
-			    editor.putString("user_name", mUserName);
-			    editor.putString("user_password", mPassword);
-			    editor.commit();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
-//				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
-//				intent.putExtra("user_name", mUserName);
-//				intent.putExtra("user_password", mPassword);
-//				startActivity(intent);
-//				finish();
-			}else if (msg.what == 101){
-				dismissLoadingView();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-			}else if (msg.what == 110){
-				dismissLoadingView();
-				showSelectAlertDialog("请选择所在区域", parseCommonService((String)msg.obj));
-			}
+//			if (msg.what == 100){
+//				dismissLoadingView();
+//				SharedPreferences sharedata = getApplicationContext().getSharedPreferences("user_info", 0);
+//				SharedPreferences.Editor editor = sharedata.edit();
+//			    editor.putString("user_name", mUserName);
+//			    editor.putString("user_password", mPassword);
+//			    editor.commit();
+//				GlobalUtil.shortToast(getApplication(), getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+//			}else if (msg.what == 101){
+//				dismissLoadingView();
+//				GlobalUtil.shortToast(getApplication(), getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//			}else if (msg.what == 110){
+//				dismissLoadingView();
+//				showSelectAlertDialog("请选择所在区域", parseCommonService((String)msg.obj));
+//			}
 		}
 	};
 	

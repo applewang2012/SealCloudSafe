@@ -31,5 +31,18 @@ public class CommonUtil {
     public static int mSelectCityRequestCode = 2;
     
     
+    public static String getSoapName(String action){
+		if (action == null || action.equals("")){
+			return null;
+		}
+		int index = action.lastIndexOf("/");
+		return action.substring(index+1);
+	}
+    
+    private static double dEARTH_RADIUS = 6378.137;  // 地球半径
+    private static double Rad(double d)
+    {
+        return (d * Math.PI / 180.0);
+    }
     
 }

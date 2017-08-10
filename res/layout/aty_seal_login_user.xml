@@ -103,7 +103,7 @@
 		        	android:layout_marginLeft="@dimen/base_dimen_18"
 		        	android:text="《用户服务协议》"
 		        	android:textSize="@dimen/base_dimen_24"
-		        	android:textColor="#df070c"
+		        	android:textColor="#d43c33"
 	        	    />
 	        </LinearLayout>
 	        

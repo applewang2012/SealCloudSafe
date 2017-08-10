@@ -2,5 +2,21 @@
 
     <string name="app_name">SealCloudSafe</string>
 	<string name="edit_input">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+	<string name="edit_idcard_input">0123456789xX</string>
 	
+	<string name="user_name_not_null">用户名不能为空</string>
+    <string name="old_pwd_not_null">原密码不能为空</string>
+    <string name="pwd_not_null">密码不能为空</string>
+    <string name="pwd_input_error">密码不能小于6位</string>
+    <string name="pwd_again_not_same">两次输入密码不一致</string>
+    <string name="new_pwd_not_null">新密码不能为空</string>
+    <string name="new_again_pwd_not_null">确认密码不能为空</string>
+    <string name="surface_name_not_null">姓名不能为空</string>
+    <string name="id_card_not_null">身份证号不能为空</string>
+    <string name="id_card_input_error">身份证号输入有误</string>
+    
+    <string name="username_register_again">该用户名已被注册"</string>
+    <string name="phone_not_null">手机号不能为空</string>
+    <string name="phone_input_error">手机号码输入 有误</string>
+    <string name="verify_error">验证码输入有误，请重新输入！</string>
 </resources>

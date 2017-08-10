@@ -7,14 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
-import android.accounts.NetworkErrorException;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.NinePatchDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +22,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.Window;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
@@ -53,7 +50,7 @@ public class LoginUserActivity extends BaseActivity{
 		super.onCreate(savedInstanceState);
 //		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
-		setContentView(R.layout.seal_login_user); 
+		setContentView(R.layout.aty_seal_login_user); 
 		ActivityController.addActivity(LoginUserActivity.this);
 		initView();
 	}
@@ -180,7 +177,7 @@ public class LoginUserActivity extends BaseActivity{
 					return;
 				}
 				
-				//startActivity(new Intent(LoginUserActivity.this, RegisterUserStep1Activity.class));
+				startActivity(new Intent(LoginUserActivity.this, RegisterUserStep1Activity.class));
 			}
 		});
 		modifyButton.setOnClickListener(new OnClickListener() {

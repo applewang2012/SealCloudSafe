@@ -56,10 +56,8 @@ public class LoginUserActivity extends BaseActivity{
 	}
 	
 	
-	
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 	}
 
@@ -88,14 +86,14 @@ public class LoginUserActivity extends BaseActivity{
 				}
 				mUserName = userNameEditText.getEditableText().toString();
 				mPassword = passwordEditText.getEditableText().toString();
-//				if (mUserName == null || mUserName.equals("")){
-//					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-//					return;
-//				}
-//				if (mPassword == null || mPassword.equals("")){
-//					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-//					return;
-//				}
+				if (mUserName == null || mUserName.equals("")){
+					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					return;
+				}
+				if (mPassword == null || mPassword.equals("")){
+					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					return;
+				}
 //				if (CommonUtil.mUserHost == null || CommonUtil.mUserHost.equals("")){
 //					GlobalUtil.shortToast(getApplication(), "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 //					return;
@@ -194,7 +192,7 @@ public class LoginUserActivity extends BaseActivity{
 	}
 	
 	private void loginUser(){
-		String url = CommonUtil.mUserHost+"services.asmx?op=ValidateLogin";
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=ValidateLogin";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mLoginAction));
 		rpc.addProperty("username", mUserName);
 		rpc.addProperty("password", mPassword);
@@ -292,21 +290,26 @@ public class LoginUserActivity extends BaseActivity{
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
-//			if (msg.what == 100){
-//				dismissLoadingView();
-//				SharedPreferences sharedata = getApplicationContext().getSharedPreferences("user_info", 0);
-//				SharedPreferences.Editor editor = sharedata.edit();
-//			    editor.putString("user_name", mUserName);
-//			    editor.putString("user_password", mPassword);
-//			    editor.commit();
-//				GlobalUtil.shortToast(getApplication(), getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
-//			}else if (msg.what == 101){
-//				dismissLoadingView();
-//				GlobalUtil.shortToast(getApplication(), getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-//			}else if (msg.what == 110){
+			if (msg.what == 100){
+				dismissLoadingView();
+				SharedPreferences sharedata = getApplicationContext().getSharedPreferences("user_info", 0);
+				SharedPreferences.Editor editor = sharedata.edit();
+			    editor.putString("user_name", mUserName);
+			    editor.putString("user_password", mPassword);
+			    editor.commit();
+				GlobalUtil.shortToast(getApplication(), getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
+				intent.putExtra("user_name", mUserName);
+				intent.putExtra("user_password", mPassword);
+				startActivity(intent);
+				finish();
+			}else if (msg.what == 101){
+				dismissLoadingView();
+				GlobalUtil.shortToast(getApplication(), getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+			}else if (msg.what == 110){
 //				dismissLoadingView();
 //				showSelectAlertDialog("请选择所在区域", parseCommonService((String)msg.obj));
-//			}
+			}
 		}
 	};
 	

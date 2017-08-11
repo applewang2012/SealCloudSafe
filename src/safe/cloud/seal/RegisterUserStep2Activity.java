@@ -33,13 +33,12 @@ import safe.cloud.seal.model.ActivityController;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
 import safe.cloud.seal.util.GlobalUtil;
-import tenant.guardts.house.R;
 
 public class RegisterUserStep2Activity extends BaseActivity{
 
 	private TextView mTitleBar;
 	private HoursePresenter mPresenter;
-	private String mUserName;
+	private String mPhone;
 	private String mPassword, mPasswordIndentify;
 	private String mValidAction = "http://tempuri.org/ValidateLoginName";
 	private boolean mUsernameValid;
@@ -51,6 +50,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	private String mLiveFaceToString, mSelfPhotoToString;
 	private DetectionAuthentic authentic;
 	private String mIdentifyAction = "http://tempuri.org/IdentifyValidateLive";
+	private String mRegisterAction = "http://tempuri.org/AddUserInfo";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +61,8 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		mTitleBar = (TextView)findViewById(R.id.id_titlebar);
 		mTitleBar.setText("实名认证");
+		mPhone = getIntent().getStringExtra("phone");
+		mPassword = getIntent().getStringExtra("user_password");
 		initView();
 		initHandler();
 	}
@@ -122,11 +124,10 @@ public class RegisterUserStep2Activity extends BaseActivity{
                 super.handleMessage(msg);
                 int degree = GlobalUtil.readPictureDegree(mPhotoFilePath);
                 Bitmap rotationBitmap = GlobalUtil.rotaingImageView(degree, BitmapFactory.decodeFile(mPhotoFilePath, null));
-   			 	Log.w("mingguo", "onActivityResult  before compress image  "+rotationBitmap.getWidth()+" height  "+rotationBitmap.getHeight()+"  byte  "+rotationBitmap.getByteCount());
+   			 	Log.w("mingguo", "onActivityResult  before compress image  "+rotationBitmap.getWidth()+" height  "+rotationBitmap.getHeight()+"  byte  ");
    			 	Bitmap newBitmap = GlobalUtil.compressScale(rotationBitmap);
-   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  "+newBitmap.getByteCount());
-   			 mSelfPhotoToString = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
-                
+   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  ");
+   			 	mSelfPhotoToString = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
             }
         };
         
@@ -211,6 +212,26 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		}
 	}
 
+	private void registerUserName(){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=AddUserInfo";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mRegisterAction));
+		rpc.addProperty("loginName", mPhone);
+		rpc.addProperty("password", mPassword);
+		rpc.addProperty("userType", "0");
+		rpc.addProperty("realName", mRealName);
+		rpc.addProperty("title", "title");
+		rpc.addProperty("sex", "male");
+		rpc.addProperty("phone", mPhone);
+		rpc.addProperty("fax", "fax");
+		rpc.addProperty("email", "email");
+		rpc.addProperty("idcard", mIdCard);
+		rpc.addProperty("nickName", "nick");
+		rpc.addProperty("address", "address");
+		rpc.addProperty("status", "0"); //
+		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mRegisterAction, rpc);
+		mPresenter.startPresentServiceTask();
+	}
+	
     	
 	private void checkUserNameValid(String username){
 		String url = CommonUtil.mUserHost+"services.asmx?op=ValidateLoginName";
@@ -242,7 +263,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 						}else{
 							if (compareResult.equals("0")){
 									GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
-//									registerUserName();
+									registerUserName();
 									return;
 								
 							}else{
@@ -254,6 +275,16 @@ public class RegisterUserStep2Activity extends BaseActivity{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+			}else if (msg.what == 301){
+				ActivityController.finishAll();
+				GlobalUtil.shortToast(getApplication(), getString(R.string.register_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+				Intent intent = new Intent(RegisterUserStep2Activity.this, RegisterUserFinishActivity.class);
+				intent.putExtra("user_name", mPhone);
+				intent.putExtra("user_password", mPassword);
+				startActivity(intent);
+				finish();
+			}else if (msg.what == 302){
+				GlobalUtil.shortToast(getApplication(), "登录失败,请重试！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}
 			
 		}
@@ -294,6 +325,12 @@ public class RegisterUserStep2Activity extends BaseActivity{
 				message.what = 102;
 				message.obj = templateInfo;
 				mHandler.sendMessage(message);
+			}else if (action.equals(mRegisterAction)){
+				if (templateInfo.equals("true")){
+					mHandler.sendEmptyMessage(301);
+				}else{
+					mHandler.sendEmptyMessage(302);
+				}
 			}
 		}
 	}

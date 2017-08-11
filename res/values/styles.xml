@@ -7,12 +7,24 @@
     <style name="CustomWindowTitleBackground">
        <item name="android:background">#337ffd</item>
 	</style>
+	<style name="CustomWindowBackground">
+       <item name="android:background">#e5e3e3</item>
+	</style>
 	
     <!-- Application theme. -->
     <style name="AppTheme" parent="android:Theme">
      <item name="android:windowTitleSize">@dimen/base_dimen_90</item>
      <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
+     <item name="android:windowAnimationStyle">@style/activityAnim</item>
 	</style>
+	
+    <style name="activityAnim">
+        <item name="android:activityOpenEnterAnimation">@anim/popshow_anim</item>
+        <item name="android:activityOpenExitAnimation">@anim/pophidden_anim</item>
+    	<item name="android:activityCloseEnterAnimation">@anim/popshow_anim</item>
+    	<item name="android:activityCloseExitAnimation">@anim/pophidden_anim</item>
+
+    </style>
 	
     <style name="loading_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowFullscreen">true</item>

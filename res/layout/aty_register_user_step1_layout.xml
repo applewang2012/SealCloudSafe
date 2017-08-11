@@ -200,6 +200,7 @@
 		        		 android:background="#00000000"
 		        		 android:textColorHint="#b2b2b2"
 		        		 android:textColor="#000000"
+		        		 android:maxLength="16"
 	        	        />
 	       	</FrameLayout>
 	       	<FrameLayout 
@@ -229,6 +230,7 @@
 		        		 android:background="#00000000"
 		        		 android:textColorHint="#b2b2b2"
 		        		 android:textColor="#000000"
+		        		 android:maxLength="16"
 	        	        />
 	       	</FrameLayout>
             

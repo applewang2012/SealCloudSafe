@@ -338,6 +338,7 @@ public class LoginUserActivity extends BaseActivity{
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
 		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		//{"ret":"0","UserID":"26","LoginName":"kezhang","Phone":"13920887566","RealName":"刻章长"}
 		if (action != null && templateInfo != null){
 			if (action.equals(mLoginAction)){
 				if (templateInfo.equals("false")){

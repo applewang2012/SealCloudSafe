@@ -60,7 +60,5 @@
 		    android:dividerHeight="@dimen/base_dimen_10"
              />
      
-   
-    
 	  
 </FrameLayout>

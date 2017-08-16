@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import safe.cloud.seal.AlbumActivity;
 import safe.cloud.seal.ApplyForSealActivity;
 import safe.cloud.seal.R;
+import safe.cloud.seal.album.ImageItem;
 import safe.cloud.seal.presenter.DataStatusInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.GlobalUtil;
@@ -85,7 +87,7 @@ public class AddSealInfoStep2Fragment extends Fragment implements DataStatusInte
 		Log.i("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fgt_apply_for_seal_upload_file_layout, container, false);
 		initTitleBar();
-		
+		initHandler();
 		initView();
 		return mRootView;
 	}
@@ -179,8 +181,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1000;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 			}
 		});
 		zhizhaoImage2.setOnClickListener(new OnClickListener() {
@@ -188,8 +190,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1001;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 				
 			}
 		});
@@ -198,8 +200,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1002;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext ,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity() ,R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 			}
 		});
 		farenId2.setOnClickListener(new OnClickListener() {
@@ -207,8 +209,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1003;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 				
 			}
 		});
@@ -217,8 +219,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1004;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 			}
 		});
 		jingbanrenId2.setOnClickListener(new OnClickListener() {
@@ -226,8 +228,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1005;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 				
 			}
 		});
@@ -236,8 +238,8 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1006;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 			}
 		});
 		danweijieshaoxin2.setOnClickListener(new OnClickListener() {
@@ -245,13 +247,44 @@ private void initView(){
 			@Override
 			public void onClick(View v) {
 				mSelectPhotoFlag  = 1007;
-				ll_popup.startAnimation(AnimationUtils.loadAnimation(mContext,R.anim.activity_translate_in));
-				pop.showAtLocation(getActivity().getLayoutInflater().inflate(R.layout.fgt_apply_for_seal_upload_file_layout, null), Gravity.BOTTOM, 0, 0);
+				ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(),R.anim.activity_translate_in));
+				pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 				
 			}
 		});
 	}
+
 	
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		switch (requestCode) {
+		case TAKE_PICTURE:
+			if (resultCode == Activity.RESULT_OK){
+				Message subMessage = mSubHandler.obtainMessage();
+				subMessage.what = mSelectPhotoFlag;
+				subMessage.obj = mPhotoFilePath;
+				mSubHandler.sendMessage(subMessage);
+				//mSubHandler.sendEmptyMessage(mSelectPhotoFlag);
+			}
+			break;
+		case SELECT_PICTURE:
+			if (resultCode == Activity.RESULT_OK){
+				if (data != null){
+					ImageItem item = (ImageItem)data.getSerializableExtra("image_shot");
+					Log.w("mingguo", "  on activity  result image  path   "+item.getImagePath());
+					Message subMessage = mSubHandler.obtainMessage();
+					subMessage.what = mSelectPhotoFlag;
+					subMessage.obj = item.getImagePath();
+					mSubHandler.sendMessage(subMessage);
+				}
+			}
+			break;
+		}
+	}
+
 	private void initHandler(){
     	//创建一个线程,线程名字：handler-thread
         myHandlerThread = new HandlerThread( "handler-thread") ;

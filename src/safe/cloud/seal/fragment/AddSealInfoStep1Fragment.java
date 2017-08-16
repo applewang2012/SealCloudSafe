@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.renderscript.Element;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -175,13 +177,36 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		});
 		
 		mSealUseDanweiEdit = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_seal_use_danwei);
-		mSealUseDanweiEdit.setOnFocusChangeListener(new OnFocusChangeListener() {
+//		mSealUseDanweiEdit.setOnFocusChangeListener(new OnFocusChangeListener() {
+//			
+//			@Override
+//			public void onFocusChange(View v, boolean hasFocus) {
+//				if (hasFocus){
+//					mSelectSealType.setText("");
+//				}
+//			}
+//		});
+		
+		mSealUseDanweiEdit.addTextChangedListener(new TextWatcher() {
 			
 			@Override
-			public void onFocusChange(View v, boolean hasFocus) {
-				if (!hasFocus){
-					//requestGetCorInfo(mSealUseDanweiEdit.getEditableText().toString());
-				}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				Log.i("mingguo", "use danwei  onTextChanged  ");
+				mSelectSealType.setText("");
+				mSelectSealGuige.setText("");
+				mSealNeirongText.setText("");
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				
+				
 			}
 		});
 		
@@ -286,7 +311,9 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 
 			@Override
 			public void onClick(View v) {
-				if (!checkApplySealValid()){
+				mAction.onNextFragment();
+				return;
+				/*if (!checkApplySealValid()){
 					return;
 				}
 				mVerifyCode = inputVerify.getEditableText().toString();
@@ -317,7 +344,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					return;
 				}
 				showLoadingView();
-				checkPhoneVerifyCode(mPhone, mVerifyCode);
+				checkPhoneVerifyCode(mPhone, mVerifyCode);*/
 			}
 		});
 	}

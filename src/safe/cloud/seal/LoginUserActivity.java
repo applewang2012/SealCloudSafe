@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
@@ -45,6 +46,9 @@ public class LoginUserActivity extends BaseActivity{
 	private EditText userNameEditText;
 	private EditText passwordEditText;
 	private boolean mValidUserPassword = false;
+	private String mPhone;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -62,6 +66,7 @@ public class LoginUserActivity extends BaseActivity{
 	}
 
 	private void initView(){
+	    
 		mPresenter = new HoursePresenter(getApplicationContext(), this);
 		mLoadingView = (View)findViewById(R.id.id_data_loading);
 		dismissLoadingView();
@@ -301,6 +306,7 @@ public class LoginUserActivity extends BaseActivity{
 				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
 				intent.putExtra("user_name", mUserName);
 				intent.putExtra("user_password", mPassword);
+				editor.putString("user_phone", mPhone);
 				startActivity(intent);
 				finish();
 			}else if (msg.what == 101){
@@ -312,6 +318,7 @@ public class LoginUserActivity extends BaseActivity{
 			}
 		}
 	};
+	
 	
 
 
@@ -341,11 +348,21 @@ public class LoginUserActivity extends BaseActivity{
 		//{"ret":"0","UserID":"26","LoginName":"kezhang","Phone":"13920887566","RealName":"刻章长"}
 		if (action != null && templateInfo != null){
 			if (action.equals(mLoginAction)){
-				if (templateInfo.equals("false")){
-					mHandler.sendEmptyMessage(101);
-				}else if (templateInfo.equals("true")){
-					mHandler.sendEmptyMessage(100);
+				JSONObject object;
+				try {
+					object = new JSONObject(templateInfo);
+					String ret = (String)object.optString("ret");
+					if (ret != null && ret.equals("0")){
+						mPhone = (String) object.opt("Phone");
+						mHandler.sendEmptyMessage(100);
+					}else{
+						mHandler.sendEmptyMessage(101);
+					}
+				} catch (JSONException e) {
+					
+					e.printStackTrace();
 				}
+				
 			}else if (action.equals(mCommonServiceAction)){
 				Message msg = mHandler.obtainMessage();
 				msg.what = 110;

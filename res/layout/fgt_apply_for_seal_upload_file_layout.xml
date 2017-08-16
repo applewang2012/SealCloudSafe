@@ -1,0 +1,200 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f5f3f3"
+ 	 >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        
+        android:paddingBottom="@dimen/base_dimen_20"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="@dimen/base_dimen_623"
+            android:layout_height="@dimen/base_dimen_75"
+            android:layout_marginTop="@dimen/base_dimen_34"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/apply_seal_step2_title" />
+
+        <FrameLayout 
+            android:layout_width="@dimen/base_dimen_680"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/base_dimen_26"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/item_red_shape_solid_corner"
+            android:padding="@dimen/base_dimen_10"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="退回原因"
+                android:textColor="#d43c33"
+                android:textStyle="bold"
+                android:textSize="@dimen/base_dimen_28" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/base_dimen_120"
+                android:text="身份证信息上传有误"
+                android:textColor="#777777"
+                android:textSize="@dimen/base_dimen_28" />
+           
+        </FrameLayout>
+        
+        <LinearLayout 
+            android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:background="#ffffff"
+	        android:orientation="vertical"
+	        android:paddingTop="@dimen/base_dimen_40"
+	        android:paddingBottom="@dimen/base_dimen_40"
+	        android:layout_marginTop="@dimen/base_dimen_40"
+            >
+            <TextView 
+	            android:layout_width="fill_parent"
+	            android:layout_height="@dimen/base_dimen_80"
+	            android:gravity="center_vertical"
+	            android:text="请上传所需要件"
+	            android:textColor="#888888"
+	            android:textStyle="bold"
+	            android:textSize="@dimen/base_dimen_30"
+	            android:layout_marginLeft="@dimen/base_dimen_26"
+	            />
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_150"
+                android:layout_marginTop="@dimen/base_dimen_40"
+                android:orientation="horizontal">
+                <TextView 
+                    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+	                android:layout_marginLeft="@dimen/base_dimen_26"
+	                android:text="营   业   执   照"
+	                android:textColor="#777777"
+	                android:textSize="@dimen/base_dimen_28"/>
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_zhizhao1"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                	android:clickable="true"
+                    />
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_zhizhao2"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                	android:clickable="true"
+                    />
+            </LinearLayout>
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_150"
+                android:layout_marginTop="@dimen/base_dimen_40"
+                android:orientation="horizontal">
+                <TextView 
+                    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+	                android:layout_marginLeft="@dimen/base_dimen_26"
+	                android:text="法 人 身 份  证"
+	                android:textColor="#777777"
+	                android:textSize="@dimen/base_dimen_28"/>
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_faren_shenfenzheng"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                	android:clickable="true"
+                    />
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_faren_shenfenzheng2"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                	android:clickable="true"
+                    />
+            </LinearLayout>
+            
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_150"
+                android:layout_marginTop="@dimen/base_dimen_40"
+                android:orientation="horizontal">
+                <TextView 
+                    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+	                android:layout_marginLeft="@dimen/base_dimen_26"
+	                android:text="经办人身份证"
+	                android:textColor="#777777"
+	                android:textSize="@dimen/base_dimen_28"/>
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_jingbanren_shenfenzheng"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                    />
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_jingbanren_shenfenzheng2"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                    />
+            </LinearLayout>
+            <LinearLayout 
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_150"
+                android:layout_marginTop="@dimen/base_dimen_40"
+                android:orientation="horizontal">
+                <TextView 
+                    android:layout_width="wrap_content"
+                	android:layout_height="wrap_content"
+	                android:layout_marginLeft="@dimen/base_dimen_26"
+	                android:text="单 位 介 绍 信"
+	                android:textColor="#777777"
+	                android:textSize="@dimen/base_dimen_28"/>
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_danwei_jieshaoxin1"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                    />
+                <ImageView 
+                    android:id="@+id/id_seal_upload_add_danwei_jieshaoxin2"
+                    android:layout_width="@dimen/base_dimen_150"
+                	android:layout_height="@dimen/base_dimen_150"
+                	android:background="@drawable/icon_addpic_unfocused"
+                	android:layout_marginLeft="@dimen/base_dimen_12"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        
+        
+        
+        <Button
+            android:id="@+id/id_aty_apply_seal_next_step_button"
+            android:layout_width="@dimen/base_dimen_520"
+            android:layout_height="@dimen/base_dimen_80"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/base_dimen_60"
+            android:background="@drawable/button_background_selector"
+            android:gravity="center"
+            android:text="确认上传"
+            android:textColor="@drawable/button_text_selector"
+            android:textSize="@dimen/base_dimen_30" />
+    </LinearLayout>
+
+</ScrollView>

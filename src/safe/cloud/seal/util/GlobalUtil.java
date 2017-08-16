@@ -1,8 +1,10 @@
 package safe.cloud.seal.util;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 
 import android.app.Activity;
@@ -24,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import safe.cloud.seal.R;
+import safe.cloud.seal.album.BitmapCache;
 import safe.cloud.seal.widget.NewToast;
 
 
@@ -279,6 +282,16 @@ public final class GlobalUtil {
 		return filename;
 	}
 	
+	public static String createScreenshotDirectory(Context context, String name) {
+		File file = new File(Environment.getExternalStorageDirectory()+"/signetimage");
+		if (!file.exists()){
+			file.mkdir();
+		}
+		String filename = file.getPath()+"/"+name+".jpg";
+		Log.i("mingguo", "phote generate  file name   "+filename);
+		return filename;
+	}
+	
 	public static int readPictureDegree(String path) {
         int degree  = 0;
         try {
@@ -381,5 +394,31 @@ public final class GlobalUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
         return baos.toByteArray();
+	}
+	
+	
+	public static Bitmap revitionImageSize(String path) throws IOException {
+		BufferedInputStream in = new BufferedInputStream(new FileInputStream(
+				new File(path)));
+		BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeStream(in, null, options);
+		in.close();
+		int i = 0;
+		int angle = BitmapCache.readPictureDegree(path);
+		Bitmap bitmap = null;
+		while (true) {
+			if ((options.outWidth >> i <= 1000)
+					&& (options.outHeight >> i <= 1000)) {
+				in = new BufferedInputStream(
+						new FileInputStream(new File(path)));
+				options.inSampleSize = (int) Math.pow(2.0D, i);
+				options.inJustDecodeBounds = false;
+				bitmap = BitmapCache.rotaingImageView(angle, BitmapFactory.decodeStream(in, null, options));
+				break;
+			}
+			i += 1;
+		}
+		return bitmap;
 	}
 }

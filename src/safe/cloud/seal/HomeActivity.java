@@ -2,8 +2,12 @@ package safe.cloud.seal;
 
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import safe.cloud.seal.fragment.SealStatusFragment;
 import safe.cloud.seal.presenter.HoursePresenter;
 
@@ -18,6 +22,7 @@ public class HomeActivity extends BaseActivity {
 	private String mCity = null;
 	private int mVersionCode = -1;
 	private SealStatusFragment mStatusFragment;
+	private String mPhone;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +31,7 @@ public class HomeActivity extends BaseActivity {
 		
 		mUserName = getIntent().getStringExtra("user_name");
 		mPassword = getIntent().getStringExtra("user_password");
+		mPhone = getIntent().getStringExtra("user_phone");
 		initView();
 //		getUserInfo();
 		
@@ -41,6 +47,16 @@ public class HomeActivity extends BaseActivity {
 			fragmentTransaction.show(mStatusFragment);
 			fragmentTransaction.commitAllowingStateLoss();
 		}
+		
+		Button addSealButton = (Button)findViewById(R.id.id_home_tab_add_sign_button);
+		addSealButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				startActivity(new Intent(HomeActivity.this, ApplyForSealActivity.class));
+			}
+		});
 	}
 	
 

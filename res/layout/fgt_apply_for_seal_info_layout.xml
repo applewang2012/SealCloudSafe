@@ -1,0 +1,716 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#f5f3f3" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#f5f3f3"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/base_dimen_20" >
+
+            <ImageView
+                android:layout_width="@dimen/base_dimen_623"
+                android:layout_height="@dimen/base_dimen_75"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/base_dimen_34"
+                android:background="@drawable/apply_seal_step_title" />
+
+            <FrameLayout
+                android:layout_width="@dimen/base_dimen_680"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/base_dimen_26"
+                android:background="@drawable/item_red_shape_solid_corner"
+                android:padding="@dimen/base_dimen_10" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="退回原因"
+                    android:textColor="#d43c33"
+                    android:textSize="@dimen/base_dimen_30"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_120"
+                    android:text="身份证信息上传有误"
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_select_quyu"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:layout_marginTop="@dimen/base_dimen_20"
+                android:background="#ffffff"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="所属区域"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <TextView
+                    android:id="@+id/id_aty_apply_seal_quyu_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+
+                <ImageView
+                    android:layout_width="@dimen/base_dimen_27"
+                    android:layout_height="@dimen/base_dimen_15"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/base_dimen_36"
+                    android:background="@drawable/select_content_more" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_select_number"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="印章编码"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <TextView
+                    android:id="@+id/id_aty_apply_seal_number_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_select_fenju"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="使用单位"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_seal_use_danwei"
+                    android:layout_width="@dimen/base_dimen_560"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入单位名称"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_type"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="印章类型"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <TextView
+                    android:id="@+id/id_aty_apply_seal_type_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+
+                <ImageView
+                    android:layout_width="@dimen/base_dimen_27"
+                    android:layout_height="@dimen/base_dimen_15"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/base_dimen_36"
+                    android:background="@drawable/select_content_more" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_select_guige"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="印章规格"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <TextView
+                    android:id="@+id/id_aty_apply_seal_select_guige_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+
+                <ImageView
+                    android:layout_width="@dimen/base_dimen_27"
+                    android:layout_height="@dimen/base_dimen_15"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/base_dimen_36"
+                    android:background="@drawable/select_content_more" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_seal_neirong"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <!-- <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="印章内容"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_seal"
+                    android:layout_width="@dimen/base_dimen_560"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入印章内容"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" /> -->
+                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="印章内容"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <TextView
+                    android:id="@+id/id_aty_apply_seal_seal_neirong_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_input_waiwen_content"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="外文内容"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_waiwen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入外文内容"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_zhizhang_danwei"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:layout_marginTop="@dimen/base_dimen_20"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="制章单位"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <TextView
+                    android:id="@+id/id_aty_apply_seal_zhizhang_danwei_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:text=""
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+                
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <FrameLayout
+                    android:id="@+id/id_aty_apply_seal_kezhi_type"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/base_dimen_80"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/base_dimen_26"
+                        android:text="刻制类型"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/base_dimen_30" />
+
+                    <TextView
+                        android:id="@+id/id_aty_apply_seal_kezhi_type_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/base_dimen_165"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="#555555"
+                        android:textSize="@dimen/base_dimen_28" />
+
+                    <ImageView
+                        android:layout_width="@dimen/base_dimen_27"
+                        android:layout_height="@dimen/base_dimen_15"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="@dimen/base_dimen_16"
+                        android:background="@drawable/select_content_more" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/id_aty_apply_seal_dengji_type"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/base_dimen_80"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="登记类型"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/base_dimen_30" />
+
+                    <TextView
+                        android:id="@+id/id_aty_apply_seal_dengji_type_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="@dimen/base_dimen_165"
+                        android:gravity="center_vertical"
+                        android:text=""
+                        android:textColor="#555555"
+                        android:textSize="@dimen/base_dimen_28" />
+
+                    <ImageView
+                        android:layout_width="@dimen/base_dimen_27"
+                        android:layout_height="@dimen/base_dimen_15"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="@dimen/base_dimen_36"
+                        android:background="@drawable/select_content_more" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <FrameLayout
+                    android:id="@+id/id_aty_apply_seal_zhizuo_type"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/base_dimen_80"
+                    android:layout_weight="1"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="@dimen/base_dimen_200"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/base_dimen_26"
+                        android:text="制作等级"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/base_dimen_30" />
+
+                    <TextView
+                        android:id="@+id/id_aty_apply_seal_zhizuo_type_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:layout_marginLeft="@dimen/base_dimen_165"
+                        android:text=""
+                        android:textColor="#555555"
+                        android:textSize="@dimen/base_dimen_28" />
+
+                    <ImageView
+                        android:layout_width="@dimen/base_dimen_27"
+                        android:layout_height="@dimen/base_dimen_15"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="@dimen/base_dimen_16"
+                        android:background="@drawable/select_content_more" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:id="@+id/id_aty_apply_seal_chaizhi_type"
+                    android:layout_width="0dp"
+                    android:layout_height="@dimen/base_dimen_80"
+                    android:layout_weight="1"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:text="章体材质"
+                        android:textColor="#000000"
+                        android:textSize="@dimen/base_dimen_30" />
+
+                    <TextView
+                        android:id="@+id/id_aty_apply_seal_chaizhi_type_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="center"
+                        android:layout_marginLeft="@dimen/base_dimen_165"
+                        android:text=""
+                        android:textColor="#555555"
+                        android:textSize="@dimen/base_dimen_28" />
+
+                    <ImageView
+                        android:layout_width="@dimen/base_dimen_27"
+                        android:layout_height="@dimen/base_dimen_15"
+                        android:layout_gravity="right|center_vertical"
+                        android:layout_marginRight="@dimen/base_dimen_36"
+                        android:background="@drawable/select_content_more" />
+                </FrameLayout>
+            </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_input_shenqingren_content"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:layout_marginTop="@dimen/base_dimen_20"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="申  请  人"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_idname"
+                    android:layout_width="@dimen/base_dimen_560"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入申请人姓名"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_input_shenqingren_idcard_content"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="身份证号"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_idcard_number"
+                    android:layout_width="@dimen/base_dimen_560"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入申请人身份证号码"
+                    android:maxLength="18"
+                    android:digits="@string/edit_idcard_input"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_input_phone_number_content"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="联系方式"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_phone_number"
+                    android:layout_width="@dimen/base_dimen_280"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入申请人手机号码"
+                    android:inputType="number"
+                    android:maxLength="11"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" />
+
+                <Button
+                    android:id="@+id/id_aty_apply_seal_get_phone_verifycode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="@dimen/base_dimen_36"
+                    android:background="#00000000"
+                    android:gravity="center"
+                    android:text="获取验证码"
+                    android:textColor="#ef1619"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_dimen_1"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/base_dimen_26"
+                android:layout_marginRight="@dimen/base_dimen_26"
+                android:background="#cccccc" />
+
+            <FrameLayout
+                android:id="@+id/id_aty_apply_seal_input_verifycode_content"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/base_dimen_80"
+                android:background="#ffffff"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_26"
+                    android:text="验  证  码"
+                    android:textColor="#000000"
+                    android:textSize="@dimen/base_dimen_30" />
+
+                <EditText
+                    android:id="@+id/id_aty_apply_seal_input_phone_yanzhengma"
+                    android:layout_width="@dimen/base_dimen_560"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
+                    android:hint="请输入手机验证码"
+                    android:inputType="number"
+                    android:maxLength="6"
+                    android:textColor="#555555"
+                    android:textColorHint="#b2b2b2"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <Button
+                android:id="@+id/id_aty_apply_seal_next_step_button"
+                android:layout_width="@dimen/base_dimen_520"
+                android:layout_height="@dimen/base_dimen_80"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/base_dimen_60"
+                android:background="@drawable/button_background_selector"
+                android:gravity="center"
+                android:text="下一步"
+                android:textColor="@drawable/button_text_selector"
+                android:textSize="@dimen/base_dimen_30" />
+        </LinearLayout>
+	</ScrollView>
+	
+    <include
+            android:id="@+id/id_data_loading"
+            layout="@layout/layout_loading_dialog" />
+        
+
+</FrameLayout>

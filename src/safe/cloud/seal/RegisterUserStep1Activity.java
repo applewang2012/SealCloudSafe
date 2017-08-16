@@ -205,7 +205,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 								nextIntent.putExtra("user_password", mPassword);
 								startActivity(nextIntent);
 							}else{
-								GlobalUtil.shortToast(getApplication(), getString(R.string.verify_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+								GlobalUtil.shortToast(getApplication(), getString(R.string.verify_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 							}
 						}
 					} catch (JSONException e) {

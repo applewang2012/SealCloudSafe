@@ -24,4 +24,8 @@
     <string name="please_input_password">请输入密码</string>
     <string name="login_success">登录成功</string>
     <string name="login_failed">登录失败，检查用户名和密码</string>
+    
+    <string name="button_ok">确定</string>
+    <string name="button_udpate">升级</string>
+    <string name="button_cancel">取消</string>
 </resources>

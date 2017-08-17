@@ -1,20 +1,29 @@
 package safe.cloud.seal;
 
+import static com.camera.authenticationlibrary.AuthenticationUtil.publicFilePath;
+
 import java.io.File;
+import java.util.ArrayList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
+import com.camera.authenticationlibrary.AuthenticationUtil;
+import com.camera.authenticationlibrary.ReciveImg;
 import com.gzt.faceid5sdk.DetectionAuthentic;
 import com.gzt.faceid5sdk.listener.ResultListener;
 import com.oliveapp.face.livenessdetectorsdk.utilities.algorithms.DetectedRect;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -29,6 +38,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import cn.cloudwalk.FaceInterface;
+import cn.cloudwalk.libproject.LiveStartActivity;
+import cn.cloudwalk.libproject.util.Base64Util;
+import cn.cloudwalk.libproject.util.FileUtil;
+import cn.cloudwalk.libproject.util.ImgUtil;
 import safe.cloud.seal.model.ActivityController;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
@@ -51,7 +65,8 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	private DetectionAuthentic authentic;
 	private String mIdentifyAction = "http://tempuri.org/IdentifyValidateLive";
 	private String mRegisterAction = "http://tempuri.org/AddUserInfo";
-	
+	public static int liveLevel = FaceInterface.LevelType.LEVEL_STANDARD;
+	private ArrayList<Integer> liveList;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,8 +78,45 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		mTitleBar.setText("实名认证");
 		mPhone = getIntent().getStringExtra("phone");
 		mPassword = getIntent().getStringExtra("user_password");
+		initData();
 		initView();
 		initHandler();
+	}
+	
+	
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		
+	}
+
+
+
+	private void initData(){
+		publicFilePath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath())
+                .append(File.separator).append("cloudwalk").toString();
+        FileUtil.mkDir(publicFilePath);
+
+        liveList = new ArrayList<Integer>();
+        liveList.add(FaceInterface.LivessType.LIVESS_MOUTH);
+        liveList.add(FaceInterface.LivessType.LIVESS_HEAD_UP);
+        liveList.add(FaceInterface.LivessType.LIVESS_HEAD_DOWN);
+        liveList.add(FaceInterface.LivessType.LIVESS_HEAD_LEFT);
+        liveList.add(FaceInterface.LivessType.LIVESS_HEAD_RIGHT);
+        liveList.add(FaceInterface.LivessType.LIVESS_EYE);
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction("iw_sendok");
+        registerReceiver(broadcastReceiver, intentFilter);
+        
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//               
+//            }
+//        });
 	}
 	
 	
@@ -99,19 +151,44 @@ public class RegisterUserStep2Activity extends BaseActivity{
 					GlobalUtil.shortToast(getApplication(),getString(R.string.id_card_input_error) , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
-				GlobalUtil.longToast(getApplication(),"拍照认证！");
-				Intent getPhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				mPhotoFilePath = GlobalUtil.createScreenshotDirectory(RegisterUserStep2Activity.this);
-				File out = new File(mPhotoFilePath);
-				Uri uri = Uri.fromFile(out);
-				getPhoto.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-				getPhoto.putExtra("return-data", true);
-				getPhoto.putExtra("camerasensortype", 2);
-				startActivityForResult(getPhoto, 1);
+				AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
+//				GlobalUtil.longToast(getApplication(),"拍照认证！");
+//				Intent getPhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//				mPhotoFilePath = GlobalUtil.createScreenshotDirectory(RegisterUserStep2Activity.this);
+//				File out = new File(mPhotoFilePath);
+//				Uri uri = Uri.fromFile(out);
+//				getPhoto.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+//				getPhoto.putExtra("return-data", true);
+//				getPhoto.putExtra("camerasensortype", 2);
+//				startActivityForResult(getPhoto, 1);
 			
 			}
 		});
 	}
+	
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+        	showLoadingView();
+        	mSubHandler.sendEmptyMessage(5000);
+        	
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                	mSubHandler.sendEmptyMessage(5000);
+//                    
+//                }
+//            }).start();
+
+        }
+    };
+
+    public String getBase64Pic() {
+        Bitmap face1Bitmap = BitmapFactory.decodeFile(publicFilePath + "/" + "bestface.jpg");//filePath;
+        byte[] imgAData = ImgUtil.bitmapToByte(face1Bitmap, Bitmap.CompressFormat.JPEG, 70);
+
+        return Base64Util.encode(imgAData);
+    }
 	
 	private void initHandler(){
     	//创建一个线程,线程名字：handler-thread
@@ -122,12 +199,21 @@ public class RegisterUserStep2Activity extends BaseActivity{
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                int degree = GlobalUtil.readPictureDegree(mPhotoFilePath);
-                Bitmap rotationBitmap = GlobalUtil.rotaingImageView(degree, BitmapFactory.decodeFile(mPhotoFilePath, null));
-   			 	Log.w("mingguo", "onActivityResult  before compress image  "+rotationBitmap.getWidth()+" height  "+rotationBitmap.getHeight()+"  byte  ");
-   			 	Bitmap newBitmap = GlobalUtil.compressScale(rotationBitmap);
-   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  ");
-   			 	mSelfPhotoToString = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
+                if (msg.what == 1000){
+                	int degree = GlobalUtil.readPictureDegree(mPhotoFilePath);
+	                Bitmap rotationBitmap = GlobalUtil.rotaingImageView(degree, BitmapFactory.decodeFile(mPhotoFilePath, null));
+	   			 	Log.w("mingguo", "onActivityResult  before compress image  "+rotationBitmap.getWidth()+" height  "+rotationBitmap.getHeight()+"  byte  ");
+	   			 	Bitmap newBitmap = GlobalUtil.compressScale(rotationBitmap);
+	   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  ");
+	   			 	mSelfPhotoToString = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
+                }else if (msg.what == 5000){
+                	String renzhengResult = ReciveImg.getRenzhengResult(mIdCard, mRealName ,getBase64Pic());
+                    Message message = mHandler.obtainMessage();
+                    message.what = 500;
+                    message.obj = renzhengResult;
+                    mHandler.sendMessage(message);
+                }
+                
             }
         };
         
@@ -285,6 +371,31 @@ public class RegisterUserStep2Activity extends BaseActivity{
 				finish();
 			}else if (msg.what == 302){
 				GlobalUtil.shortToast(getApplication(), "登录失败,请重试！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+			}else if (msg.what == 500){
+				dismissLoadingView();
+				JSONObject object = null;
+				try {
+					object = new JSONObject((String)msg.obj);
+					if (object != null){
+						String status_code = object.optString("status_code");
+						if (status_code != null){
+							if (status_code.equals("200")){
+								GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+								registerUserName();
+							}else {
+								String compareError = object.optString("msg");
+								GlobalUtil.shortToast(getApplication(), mRealName + compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+							}
+						}
+							
+					}else{
+							GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证失败  " , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 			}
 			
 		}
@@ -292,6 +403,17 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	};
 	
 	
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
+		if (broadcastReceiver != null) {
+            unregisterReceiver(broadcastReceiver);
+        }
+	}
+
+
 
 	@Override
 	public void onStatusStart() {

@@ -54,7 +54,7 @@ public class ScanQrcodeActivity extends BaseActivity implements Callback {
 		setContentView(R.layout.scan_qrcode_layout);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		TextView titlebar = (TextView)findViewById(R.id.id_titlebar);
-		titlebar.setText("扫一扫");
+		titlebar.setText("扫码登陆");
 		//ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
 		CameraManager.init(getApplication());
 		viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);

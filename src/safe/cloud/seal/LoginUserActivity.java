@@ -46,7 +46,7 @@ public class LoginUserActivity extends BaseActivity{
 	private EditText userNameEditText;
 	private EditText passwordEditText;
 	private boolean mValidUserPassword = false;
-	private String mPhone;
+	private String mPhone , mRealName;;
 	
 	
 	@Override
@@ -76,6 +76,7 @@ public class LoginUserActivity extends BaseActivity{
 		mPassword = getIntent().getStringExtra("user_password");
 		if (mUserName != null && !mUserName.equals("")){
 			userNameEditText.setText(mUserName);
+			mValidUserPassword = true;
 		}
 		if (mPassword != null && !mPassword.equals("")){
 			passwordEditText.setText(mPassword);
@@ -91,6 +92,7 @@ public class LoginUserActivity extends BaseActivity{
 				}
 				mUserName = userNameEditText.getEditableText().toString();
 				mPassword = passwordEditText.getEditableText().toString();
+				
 				if (mUserName == null || mUserName.equals("")){
 					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
@@ -306,7 +308,8 @@ public class LoginUserActivity extends BaseActivity{
 				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
 				intent.putExtra("user_name", mUserName);
 				intent.putExtra("user_password", mPassword);
-				editor.putString("user_phone", mPhone);
+				intent.putExtra("user_phone", mPhone);
+				intent.putExtra("user_realname", mRealName);
 				startActivity(intent);
 				finish();
 			}else if (msg.what == 101){
@@ -353,7 +356,9 @@ public class LoginUserActivity extends BaseActivity{
 					object = new JSONObject(templateInfo);
 					String ret = (String)object.optString("ret");
 					if (ret != null && ret.equals("0")){
-						mPhone = (String) object.opt("Phone");
+						mPhone = object.optString("Phone");
+						mRealName = object.optString("RealName");
+						Log.w("mingguo", "login user  phone  "+mPhone);
 						mHandler.sendEmptyMessage(100);
 					}else{
 						mHandler.sendEmptyMessage(101);

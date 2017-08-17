@@ -8,7 +8,7 @@
      <include
         android:id="@+id/id_common_title_bar"
         android:visibility="visible"
-        layout="@layout/titlebar"
+        layout="@layout/titlebar_new_style"
        />
      
      <FrameLayout
@@ -49,10 +49,10 @@
         
    
    <ListView
-            android:id="@+id/id_fragment_surround_life_listview"
+            android:id="@+id/id_seal_status_fragment_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/base_dimen_674"
+            android:layout_marginTop="@dimen/base_dimen_380"
 			android:cacheColorHint="#00000000"
 			android:divider="#00000000"
 		    android:fadingEdge="none"

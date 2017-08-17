@@ -6,15 +6,21 @@ import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.ksoap2.serialization.SoapObject;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,16 +29,17 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import safe.cloud.seal.R;
+import safe.cloud.seal.ScanQrcodeActivity;
+import safe.cloud.seal.model.SealStatusInfo;
+import safe.cloud.seal.model.UniversalAdapter;
+import safe.cloud.seal.model.UniversalViewHolder;
 import safe.cloud.seal.presenter.DataStatusInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
-import safe.cloud.seal.util.GlobalUtil;
 import safe.cloud.seal.widget.CircleFlowIndicator;
 import safe.cloud.seal.widget.ImagePagerAdapter;
 import safe.cloud.seal.widget.ViewFlow;
@@ -50,7 +57,10 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 	private List<String> mContentList = new ArrayList<>();
 	private ViewFlow mViewFlow;
 	private CircleFlowIndicator mFlowIndicator;
+	private String mPhoneNumber;
+	private List<SealStatusInfo> mDataList = new ArrayList<>();
 	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -65,15 +75,30 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		// TODO Auto-generated method stub
 		Log.i("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fg_signal_status_layout, container, false);
+		if (getArguments() != null) {  
+	        mPhoneNumber = getArguments().getString("phone");
+	        Log.i("mingguo", "framgent user phone  "+mPhoneNumber);
+		}
 		initTitleBar();
-		initAdapter();
 		
+		initData();
+		initAdapter();
 		initBanner();
-		initSearchData();
 		
 		return mRootView;
 	}
 	
+	private void initData(){
+		for (int i = 0; i < 5; i++){
+			SealStatusInfo info = new SealStatusInfo();
+			info.setSealCorp("天津有限公司");
+			info.setSealDate("申请时间：2017/08/05");
+			info.setSealType("财务专用章");
+			info.setSealStatus("未通过");
+			mDataList.add(info);
+		}
+		
+	}
 	private void initTitleBar(){
 		
 		View titlebarView = (View)mRootView.findViewById(R.id.id_common_title_bar);
@@ -82,8 +107,16 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		titleText.setTextColor(Color.parseColor("#ffffff"));
 		Button backButton = (Button)titlebarView.findViewById(R.id.id_titlebar_back);
 		backButton.setVisibility(View.INVISIBLE);
-		View titleBarBg = (View)mRootView.findViewById(R.id.id_titlebar_background);
 		
+		ImageView scanLogin = (ImageView)titlebarView.findViewById(R.id.id_titlebar_scan_login);
+		scanLogin.setVisibility(View.VISIBLE);
+		scanLogin.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivityForResult(new Intent(getActivity(), ScanQrcodeActivity.class), 1);
+			}
+		});
 		
 	}
 	
@@ -108,45 +141,63 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		mFlowIndicator.invalidate();
 	}
 	
+	private void initAdapter(){
+		ListView showList = (ListView)mRootView.findViewById(R.id.id_seal_status_fragment_list);
+		UniversalAdapter mAdapter = new UniversalAdapter<SealStatusInfo>(mContext, R.layout.fgt_status_listview_item, mDataList) {
 
-	
-	
-	
-	
-	public  class TitleViewHolder {
-        public TextView textView;
-    }
-	
-	public  class ContentViewHolder {
-        public Button button;
-    }
-	
-	
-	private void initSearchData() {
-		
+			@Override
+			public void convert(UniversalViewHolder holder, SealStatusInfo info) {
+				// TODO Auto-generated method stub
+				View holderView = holder.getConvertView();
+				TextView sealType = (TextView)holderView.findViewById(R.id.id_seal_status_item_type);
+				TextView sealStatus = (TextView)holderView.findViewById(R.id.id_seal_status_item_status);
+				TextView sealCorp = (TextView)holderView.findViewById(R.id.id_seal_status_item_corporation);
+				TextView sealDate = (TextView)holderView.findViewById(R.id.id_seal_status_item_apply_date);
+				sealType.setText(info.getSealType());
+				sealStatus.setText(info.getSealStaus());
+				sealCorp.setText(info.getSealCorp());
+				sealDate.setText(info.getSealDate());
+			}
+		};
+		showList.setAdapter(mAdapter);
+		showList.setOnItemClickListener(this);
 	}
 	
-	private int getContentCount(){
-		int num = 0;
-		for (int i =0; i < mContentMap.size(); i++){
-			int childCount = mContentMap.get(i).length;
-			num = num + childCount;
-		}
-		return num;
+
+	private void showScanLoginDialog(final String sid){
+		new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT).setTitle("扫描登录") 
+		  
+	     .setMessage("您确认要登录印章治安管理信息系统") 
+	  
+	     .setPositiveButton(getString(R.string.button_ok),new DialogInterface.OnClickListener() {
+	         @Override  
+	  
+	         public void onClick(DialogInterface dialog, int which) {
+	        	 requestQRcodeLogin(sid, mPhoneNumber);
+	         }  
+	  
+	     }).setNegativeButton(getString(R.string.button_cancel),new DialogInterface.OnClickListener() {  
+	  
+	         @Override  
+	  
+	         public void onClick(DialogInterface dialog, int which) {//��Ӧ�¼�  
+	             Log.i("alertdialog"," dialog interface ");  
+	         }  
+	  
+	     }).show();
+	}
+	
+	private void requestQRcodeLogin(String sid, String phone){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=QRLogin";
+		String soapaction = "http://tempuri.org/QRLogin";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(soapaction));
+		rpc.addProperty("sid", sid);
+		rpc.addProperty("phone", phone);
+		mPresent.readyPresentServiceParams(mContext, url, soapaction, rpc);
+		mPresent.startPresentServiceTask();
 	}
 	
 	
-	
-	
-//	private void getUserInfo(){
-//		String url = CommonUtil.mUserHost+"services.asmx?op=GetUserInfo";
-//		String soapaction = "http://tempuri.org/GetUserInfo";
-//		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(soapaction));
-//		rpc.addProperty("username", mUsername);
-//		mPresent.readyPresentServiceParams(mContext, url, soapaction, rpc);
-//		mPresent.startPresentServiceTask();
-//		
-//	}
 //
 //	private void showLoadingView(){
 //		if (mLoadingView != null) {
@@ -165,6 +216,34 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 //	}
 	
 	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == 1 && resultCode == Activity.RESULT_OK){
+			if (data != null){
+				try {
+					String scanResult = data.getExtras().getString("result");
+					Log.e("mingguo", "scan  result  " + scanResult);
+					if (!TextUtils.isEmpty(scanResult)) {
+						JSONObject obj = new JSONObject(scanResult);
+						String type = obj.optString("type");
+						if (type != null && type.equalsIgnoreCase("login")){
+							String sid = obj.optString("sid");
+							Log.i("mingguo", "scan  result  sid " + sid+"  phone  "+mPhoneNumber);
+							showScanLoginDialog(sid);
+							
+						}
+					}
+
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@Override
 	public void onDestroy() {
 		super.onDestroy();
 	}
@@ -178,14 +257,7 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
-			HashMap<String,String> infoModel = parseUserInfo((String)msg.obj);
-//			dismissLoadingView();
-//			if (infoModel != null){
-//				mUserContainer.setVisibility(View.VISIBLE);
-//				
-//				mUserAddress.setText(infoModel.get("Phone"));
-//				mUserId.setText(infoModel.get("LoginName"));
-//			}
+
 		}
 	};
 	
@@ -227,35 +299,17 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 	@Override
 	public void onStatusStart() {
 		// TODO Auto-generated method stub
-		
+		Log.e("mingguo", "on status  start ");
 	}
 
 	@Override
 	public void onStatusError(String action, String error) {
 		// TODO Auto-generated method stub
-		
+		Log.e("mingguo", "on status error  "+error);
 	}
 
 	
 	
-	private void initAdapter(){
-//		mSurroundListview = (ListView)mRootView.findViewById(R.id.id_fragment_surround_life_listview);
-//		mAdapter = new UniversalAdapter<SurroundInfo>(mContext, R.layout.surround_fragment_list_item, mDataList) {
-//
-//			@Override
-//			public void convert(UniversalViewHolder holder, SurroundInfo info) {
-//				View holderView = holder.getConvertView();
-//				TextView surroundname = (TextView)holderView.findViewById(R.id.id_surround_fragment_item_hot_name);
-//				TextView surroundaddress = (TextView)holderView.findViewById(R.id.id_surround_fragment_item_hot_address);
-//				TextView surroundphone = (TextView)holderView.findViewById(R.id.id_surround_fragment_item_hot_phone);
-//				surroundname.setText(info.getNearName());
-//				surroundaddress.setText(info.getNearAddress());
-//				surroundphone.setText(info.getNearPhone());
-//			}
-//		};
-//		mSurroundListview.setAdapter(mAdapter);
-//		mSurroundListview.setOnItemClickListener(this);
-	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

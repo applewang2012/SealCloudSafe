@@ -28,8 +28,8 @@
         android:label="@string/app_name"
          >
         <activity
-            android:name=".WelcomeActivity"
-            android:theme="@style/AppTheme"
+            android:name=".RegisterUserStep2Activity"
+            android:theme="@style/SealAppTheme"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:label="@string/app_name" >
             <intent-filter>
@@ -41,19 +41,19 @@
          <activity android:name=".LoginUserActivity" 
              android:windowSoftInputMode="adjustUnspecified|stateHidden"
              android:screenOrientation="portrait"
-             android:theme="@style/AppTheme"></activity>
+             android:theme="@style/SealAppTheme"></activity>
         <activity android:name=".ScanQrcodeActivity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
-           android:theme="@style/AppTheme"
+           android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
         <activity android:name=".RegisterUserStep1Activity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
-           android:theme="@style/AppTheme"
+           android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
-        <activity android:name=".RegisterUserStep2Activity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
-           android:theme="@style/AppTheme"
-           android:screenOrientation="portrait"></activity>
+<!--         <activity android:name=".RegisterUserStep2Activity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
+           android:theme="@style/SealAppTheme"
+           android:screenOrientation="portrait"></activity> -->
          <activity  
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:theme="@style/AppTheme"
+            android:theme="@style/SealAppTheme"
             android:screenOrientation="portrait"
             android:name=".RegisterUserFinishActivity" />
           <activity  
@@ -64,7 +64,7 @@
          
         <activity  
            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-           android:theme="@style/AppTheme"
+           android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"
            android:name=".ApplyForSealActivity" />
          
@@ -81,27 +81,35 @@
         
         <activity
             android:name="cn.cloudwalk.libproject.LiveStartActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.LiveActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.LiveActivity2"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.LiveResultActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.BaseActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.BestFaceActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.RealTimeFaceActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         <activity
             android:name="cn.cloudwalk.libproject.TemplatedActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
         
     </application>

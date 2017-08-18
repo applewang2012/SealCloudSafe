@@ -12,7 +12,7 @@
 	</style>
 	
     <!-- Application theme. -->
-    <style name="AppTheme" parent="android:Theme">
+    <style name="SealAppTheme" parent="android:Theme">
      <item name="android:windowTitleSize">@dimen/base_dimen_90</item>
      <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
      <item name="android:windowAnimationStyle">@style/activityAnim</item>

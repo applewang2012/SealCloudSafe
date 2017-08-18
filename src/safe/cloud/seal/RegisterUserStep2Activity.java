@@ -383,8 +383,14 @@ public class RegisterUserStep2Activity extends BaseActivity{
 								GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 								registerUserName();
 							}else {
-								String compareError = object.optString("msg");
-								GlobalUtil.shortToast(getApplication(), mRealName + compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+								if (status_code.equals("111")){
+									String compareError = object.optString("error_code");
+									GlobalUtil.shortToast(getApplication(), status_code +"  "+compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+								}else{
+									String compareError = object.optString("msg");
+									GlobalUtil.shortToast(getApplication(), status_code +"  "+compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+								}
+								
 							}
 						}
 							

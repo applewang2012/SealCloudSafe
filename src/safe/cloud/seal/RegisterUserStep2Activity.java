@@ -11,9 +11,6 @@ import org.ksoap2.serialization.SoapObject;
 
 import com.camera.authenticationlibrary.AuthenticationUtil;
 import com.camera.authenticationlibrary.ReciveImg;
-import com.gzt.faceid5sdk.DetectionAuthentic;
-import com.gzt.faceid5sdk.listener.ResultListener;
-import com.oliveapp.face.livenessdetectorsdk.utilities.algorithms.DetectedRect;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,13 +18,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,7 +57,6 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	private HandlerThread myHandlerThread ;
 	private Handler mSubHandler;
 	private String mLiveFaceToString, mSelfPhotoToString;
-	private DetectionAuthentic authentic;
 	private String mIdentifyAction = "http://tempuri.org/IdentifyValidateLive";
 	private String mRegisterAction = "http://tempuri.org/AddUserInfo";
 	public static int liveLevel = FaceInterface.LevelType.LEVEL_STANDARD;
@@ -152,16 +146,6 @@ public class RegisterUserStep2Activity extends BaseActivity{
 					return;
 				}
 				AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
-//				GlobalUtil.longToast(getApplication(),"拍照认证！");
-//				Intent getPhoto = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//				mPhotoFilePath = GlobalUtil.createScreenshotDirectory(RegisterUserStep2Activity.this);
-//				File out = new File(mPhotoFilePath);
-//				Uri uri = Uri.fromFile(out);
-//				getPhoto.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-//				getPhoto.putExtra("return-data", true);
-//				getPhoto.putExtra("camerasensortype", 2);
-//				startActivityForResult(getPhoto, 1);
-			
 			}
 		});
 	}
@@ -236,36 +220,6 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		
 	}
 	
-	private void startLiveIdentifyActivity(){
-		authentic = DetectionAuthentic.getInstance(RegisterUserStep2Activity.this, new ResultListener() {
-
-		@Override
-		public void onSDKUsingFail(String errorMessage, String errorCode) {
-			// TODO Auto-generated method stub
-			GlobalUtil.shortToast(getApplication(), errorMessage, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-			
-		}
-		
-		@Override
-		public void onIDCardImageCaptured(byte[] faceImages, DetectedRect arg1) {
-			if(faceImages == null){
-				GlobalUtil.shortToast(getApplication(), "image capture  无人脸", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-			}
-		}
-		
-		@Override
-		public void onFaceImageCaptured(byte[] faceImages) {
-			if(faceImages == null){
-				GlobalUtil.shortToast(getApplication(), "image capture  无人脸", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-			}
-			showLoadingView();
-			mLiveFaceToString = android.util.Base64.encodeToString(faceImages, android.util.Base64.NO_WRAP);
-			identifyUserInfo(mLiveFaceToString, mSelfPhotoToString);
-		}
-		});
-	
-		authentic.autenticateToCaptureAction(RegisterUserStep2Activity.this, mRealName, mIdCard);
-	}
 	
 	private void showLoadingView(){
 		
@@ -292,7 +246,6 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		if (resultCode == RESULT_OK && requestCode == 1) {
 			 Log.w("mingguo", "activity result  width data   "+data);
 			 mSubHandler.sendEmptyMessage(1000);
-			 startLiveIdentifyActivity();
 		}else{
 			GlobalUtil.shortToast(getApplication(), "头像采集失败", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 		}

@@ -79,39 +79,6 @@
         <activity android:name="com.gzt.faceid5sdk.ImageCaptureActivity"></activity>
         <activity android:name="com.gzt.faceid5sdk.LivenessDetectionActivity"></activity>
         
-        <activity
-            android:name="cn.cloudwalk.libproject.LiveStartActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.LiveActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.LiveActivity2"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.LiveResultActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.BaseActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.BestFaceActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.RealTimeFaceActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name="cn.cloudwalk.libproject.TemplatedActivity"
-            android:theme="@android:style/Theme.NoTitleBar"
-            android:screenOrientation="portrait"/>
-        
     </application>
 
 </manifest>

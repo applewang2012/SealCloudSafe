@@ -1,37 +1,29 @@
 package safe.cloud.seal.fragment;
 
-import java.text.CharacterIterator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.MissingFormatWidthException;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
-import org.w3c.dom.Text;
-
-import com.oliveapp.camerasdk.r;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.renderscript.Element;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
@@ -40,10 +32,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import safe.cloud.seal.R;
-import safe.cloud.seal.RegisterUserStep1Activity;
-import safe.cloud.seal.RegisterUserStep2Activity;
 import safe.cloud.seal.model.SealInfoModel;
 import safe.cloud.seal.presenter.ActionOperationInterface;
 import safe.cloud.seal.presenter.DataStatusInterface;

@@ -64,7 +64,9 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private String mSendVerifyCodeAction = "http://tempuri.org/SendIdentifyCodeMsg";
 	private String mCheckVerifyCodeAction = "http://tempuri.org/ValidateIdentifyCode";
 	private String mGetDefaultSignContentAction = "http://tempuri.org/GetDefaultSignContent";
+	private String mCheckSignContentExistAction = "http://tempuri.org/IsExsitsSameContent";
 	private String mGetCorpInfoAction = "http://tempuri.org/GetCorporationInfo";
+	private String mGetUpdateSignAction = "http://tempuri.org/UpdateSignetInfo";
 	private Map<String, SealInfoModel> mSelectorInfo = new HashMap<>();
 	private View mLoadingView;
 	private TextView mSelectQuyuText, mSealNumberText, mSelectSealType;
@@ -81,7 +83,8 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private int mTimeCount = -1;
 	private TextView mSealNeirongText;
 	private EditText mSealUseDanweiEdit;
-	
+	private boolean mExistSeal;
+	private EditText mRegisterPhone, mRealName, mRealId;
 	
 	public  void setFragmentActionListener(ActionOperationInterface action) {
 		mAction = action;
@@ -140,7 +143,11 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			
 			@Override
 			public void onClick(View v) {
-				
+			if (mSelectorInfo.get("getAllRegister") == null || mSelectorInfo.get("getAllRegister").getSelectedId() == null){
+				GlobalUtil.shortToast(mContext, "请首先选择所属区域", getResources().getDrawable(R.drawable.ic_dialog_no));
+			}else{
+					getAllCarveCorps();
+				}
 			}
 		});
 		
@@ -263,10 +270,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			}
 		});
 		
-		final EditText phone = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_number);
+		mRegisterPhone = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_number);
 		final EditText inputVerify = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_yanzhengma);
-		final EditText inputName = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_idname);
-		final EditText inputIdcard = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_idcard_number);
+		mRealName = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_idname);
+		mRealId = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_idcard_number);
 		mVerifyCodeButton = (Button)mRootView.findViewById(R.id.id_aty_apply_seal_get_phone_verifycode);
 		mVerifyCodeButton.setOnClickListener(new OnClickListener() {
 			
@@ -274,7 +281,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 
 			@Override
 			public void onClick(View v) {
-				mPhone = phone.getEditableText().toString();
+				mPhone = mRegisterPhone.getEditableText().toString();
 				if (mPhone == null || mPhone.equals("")){
 					GlobalUtil.shortToast(mContext, getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
@@ -300,15 +307,15 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 
 			@Override
 			public void onClick(View v) {
-				mAction.onNextFragment();
-				return;
-				/*if (!checkApplySealValid()){
+				//mAction.onNextFragment();
+				//return;
+				if (!checkApplySealValid()){
 					return;
 				}
 				mVerifyCode = inputVerify.getEditableText().toString();
-				mPhone = phone.getEditableText().toString();
-				String name = inputName.getEditableText().toString();
-				String idcard = inputIdcard.getEditableText().toString();
+				mPhone = mRegisterPhone.getEditableText().toString();
+				String name = mRealName.getEditableText().toString();
+				String idcard = mRealId.getEditableText().toString();
 				if (name == null || name.equals("")){
 					GlobalUtil.shortToast(mContext, "申请人姓名不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
@@ -320,7 +327,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					GlobalUtil.shortToast(mContext, "申请人身份证号输入有误", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
-				
+				if (mExistSeal){
+					GlobalUtil.shortToast(mContext, "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
+					return;
+				}
 				if (mPhone == null || mPhone.equals("")){
 					GlobalUtil.shortToast(mContext, getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
@@ -333,7 +343,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					return;
 				}
 				showLoadingView();
-				checkPhoneVerifyCode(mPhone, mVerifyCode);*/
+				checkPhoneVerifyCode(mPhone, mVerifyCode);
 			}
 		});
 	}
@@ -439,6 +449,51 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		mPresent.startPresentServiceTask();
 	}
 	
+	private void requestUpdateSignInfo(){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UpdateSignetInfo";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetUpdateSignAction));
+		rpc.addProperty("signetId",mSealNumberText.getText());
+		rpc.addProperty("regDeptId",mSelectorInfo.get("getAllRegister").getSelectedId());
+		rpc.addProperty("content",mSealNeirongText.getText());
+		rpc.addProperty("foreignContent","waiwen");
+		rpc.addProperty("corpId",mSelectorInfo.get("GetCorporationInfo").getSelectedId());
+		rpc.addProperty("corpName",mSelectorInfo.get("GetCorporationInfo").getSelectedName());
+		rpc.addProperty("carveId",mSelectorInfo.get("GetAllCarveCorps").getSelectedId());
+		rpc.addProperty("carveName",mSelectorInfo.get("GetAllCarveCorps").getSelectedName());
+		rpc.addProperty("carveType",mSelectorInfo.get("GetGeneralCode"+TYPE_KL).getSelectedId());
+		rpc.addProperty("category",mSelectorInfo.get("GetGeneralCode"+TYPE_DL).getSelectedId());
+		rpc.addProperty("signetType",mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
+		rpc.addProperty("specification",mSelectorInfo.get("GetSignetSpecification").getSelectedName());
+		rpc.addProperty("carveLevel",mSelectorInfo.get("GetGeneralCode"+TYPE_UG).getSelectedId());
+		rpc.addProperty("material",mSelectorInfo.get("GetGeneralCode"+TYPE_SM).getSelectedId());
+		rpc.addProperty("applyer",mRealName.getEditableText().toString());
+		rpc.addProperty("applyerId",mRealId.getEditableText().toString());
+		rpc.addProperty("applyerPhone",mRegisterPhone.getEditableText().toString());
+		rpc.addProperty("creatorPhone",mRegisterPhone.getEditableText().toString());
+		Log.i("mingguo", "signetId "+mSealNumberText.getText()+
+				" regDeptId "+mSelectorInfo.get("getAllRegister").getSelectedId()+
+				" content "+mSealNeirongText.getText()+
+				" foreignContent "+"waiwen"+
+				" corpId "+mSelectorInfo.get("GetCorporationInfo").getSelectedId()+
+				" corpName "+mSelectorInfo.get("GetCorporationInfo").getSelectedName()+
+				" carveId "+mSelectorInfo.get("GetAllCarveCorps").getSelectedId()+
+				" carveName "+mSelectorInfo.get("GetAllCarveCorps").getSelectedName()+
+				" carveType "+mSelectorInfo.get("GetGeneralCode"+TYPE_KL).getSelectedId()+
+				" category "+mSelectorInfo.get("GetGeneralCode"+TYPE_DL).getSelectedId()+
+				" signetType "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId()+
+				" specification "+mSelectorInfo.get("GetSignetSpecification").getSelectedName()+
+				" carveLevel "+mSelectorInfo.get("GetGeneralCode"+TYPE_UG).getSelectedId()+
+				" material "+mSelectorInfo.get("GetGeneralCode"+TYPE_SM).getSelectedId()+
+				" applyer "+mRealName.getEditableText().toString()+
+				" applyerId "+mRealId.getEditableText().toString()+
+				" applyerPhone "+mRegisterPhone.getEditableText().toString()+
+				" creatorPhone "+mRegisterPhone.getEditableText().toString()
+				
+				);
+		mPresent.readyPresentServiceParams(mContext, url, mGetUpdateSignAction, rpc);
+		mPresent.startPresentServiceTask();
+	}
+	
 	private void requestDefaultSignetContent(){
 		if (mSelectorInfo.get("GetCorporationInfo") != null && mSelectorInfo.get("GetCorporationInfo").getSelectedId() != null){
 			if (mSelectorInfo.get("GetGeneralCode"+TYPE_ST)!= null && mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId() != null){
@@ -470,6 +525,8 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetAllCarveCorpsAction));
 		Log.i("mingguo", "add seal info get adll carvecorps  id  "+mSelectorInfo.get("getAllRegister").getSelectedId());
 		rpc.addProperty("regDeptId", mSelectorInfo.get("getAllRegister").getSelectedId());
+		SealInfoModel infoModel = new SealInfoModel();
+		mSelectorInfo.put("GetAllCarveCorps", infoModel);
 		mPresent.readyPresentServiceParams(mContext, url, mGetAllCarveCorpsAction, rpc);
 		mPresent.startPresentServiceTask();
 	}
@@ -531,6 +588,15 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		mPresent.startPresentServiceTask();
 	}
 	
+	private void requestCheckSealContentExist(String content){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetSpecification";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mCheckSignContentExistAction));
+		Log.i("mingguo", "check seal content exist    "+content);
+		rpc.addProperty("content", content);
+		mPresent.readyPresentServiceParams(mContext, url, mCheckSignContentExistAction, rpc);
+		mPresent.startPresentServiceTask();
+	}
+	
 
 	private void showAlertDialog(final TextView text, final String tag, final String[] items) {  
 		  AlertDialog.Builder builder =new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
@@ -555,6 +621,8 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	
 	private Handler mHandler = new Handler(){
 
+		
+
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
@@ -567,10 +635,12 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				}else if (msg.what == 201){
 					dismissLoadingView();
 					mSealNumberText.setText((String)msg.obj);
-					getAllCarveCorps();
+					mZhizhangDanweiText.setText("");
 				}else if (msg.what == 202){
 					dismissLoadingView();
-					mZhizhangDanweiText.setText(parseSealKezhiDanwei((String)msg.obj));
+					mSelectorInfo.get("GetAllCarveCorps").setHouseAllContent(parseSealKezhiDanwei((String)msg.obj).get(1));
+					mSelectorInfo.get("GetAllCarveCorps").setHouseAllId(parseSealKezhiDanwei((String)msg.obj).get(0));
+					showAlertDialog(mZhizhangDanweiText,"GetAllCarveCorps" , parseSealKezhiDanwei((String)msg.obj).get(1));
 				}else if (msg.what == 203){
 					dismissLoadingView();
 					if (mCurrentType == TYPE_ST){
@@ -613,6 +683,27 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					}
 				}else if (msg.what == 206){
 					mSealNeirongText.setText((String)msg.obj);
+					requestCheckSealContentExist((String)msg.obj);
+				}else if (msg.what == 207){
+					String ret = (String)msg.obj;
+					if (ret != null){
+						if (ret.equals("1")){
+							GlobalUtil.shortToast(mContext, "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
+							mExistSeal = true;
+						}else{
+							mExistSeal = false;
+						}
+					}
+				}else if (msg.what == 208){
+					dismissLoadingView();
+					String ret = (String)msg.obj;
+					if (ret != null){
+						if (ret.equals("0")){
+							
+						}else{
+							GlobalUtil.shortToast(mContext, "该印章内容保存失败！", getResources().getDrawable(R.drawable.ic_dialog_no));
+						}
+					}
 				}else if (msg.what == 1000){
 					Log.i("mingguo", "time count  "+mTimeCount);
 					
@@ -623,13 +714,14 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 						try {
 							json = new JSONObject((String)msg.obj);
 							String ret = json.optString("ret");
-							if (ret != null){
-								if (ret.equals("0")){
-									mAction.onNextFragment();
-								}else{
-									GlobalUtil.shortToast(mContext, getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
-								}
-							}
+//							if (ret != null){
+//								if (ret.equals("0")){
+									showLoadingView();
+									requestUpdateSignInfo();
+//								}else{
+//									GlobalUtil.shortToast(mContext, getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
+//								}
+//							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -704,25 +796,28 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		}
 	}
 	
-	private String parseSealKezhiDanwei(String value){
-		String kezhiDanwei = null;
+	private List<String[]> parseSealKezhiDanwei(String value){
+		String [] name = null;
+		String [] nameId;
+		List<String[]> list = new ArrayList<>();
 		try{
 			JSONArray array = new JSONArray(value);
 			if (array != null){
-//				name = new String[array.length()];
-//				nameId = new String[array.length()];
-//				for (int item = 0; item < array.length(); item++){
-				if (array.length() > 0){
-					JSONObject itemJsonObject = array.optJSONObject(0);
-					kezhiDanwei = itemJsonObject.optString("cac_corp_name");
-				}
+				name = new String[array.length()];
+				nameId = new String[array.length()];
+				for (int item = 0; item < array.length(); item++){
+					if (array.length() > 0){
+						JSONObject itemJsonObject = array.optJSONObject(item);
+						name[item] = itemJsonObject.optString("cac_corp_name");
+						nameId[item] = itemJsonObject.optString("cac_corp_id");
+					}
 
-//				}
-//				list.add(nameId);
-//				list.add(name);
+				}
+				list.add(nameId);
+				list.add(name);
 			}
 			
-			return kezhiDanwei;
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -823,6 +918,16 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			}else if (action.equals(mGetDefaultSignContentAction)){
 				Message message = mHandler.obtainMessage();
 				message.what = 206;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
+			}else if (action.equals(mCheckSignContentExistAction)){
+				Message message = mHandler.obtainMessage();
+				message.what = 207;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
+			}else if (action.equals(mGetUpdateSignAction)){
+				Message message = mHandler.obtainMessage();
+				message.what = 208;
 				message.obj = templateInfo;
 				mHandler.sendMessage(message);
 			}

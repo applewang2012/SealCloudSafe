@@ -6,20 +6,29 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import safe.cloud.seal.ApplyForSealActivity;
+import safe.cloud.seal.HomeActivity;
+import safe.cloud.seal.LoginUserActivity;
+import safe.cloud.seal.ModifyPasswordActivity;
 import safe.cloud.seal.R;
 import safe.cloud.seal.presenter.DataStatusInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
@@ -37,7 +46,7 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 	private TextView mUserAddress;
 	private HoursePresenter mPresent;
 	private FrameLayout mPublishHouse;
-	private FrameLayout mSearchHouse;
+	private FrameLayout mApplySeal;
 	private FrameLayout mPassword;
 	private FrameLayout mLogout;
 	//private String mUsername;
@@ -83,35 +92,33 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 //		mLoadingView = (View)mRootView.findViewById(R.id.id_data_loading);
 //		showLoadingView();
 //		mPublishHouse = (FrameLayout)mRootView.findViewById(R.id.id_user_publish_house);
-//		mSearchHouse = (FrameLayout)mRootView.findViewById(R.id.id_user_house_search);
-//		mPassword = (FrameLayout)mRootView.findViewById(R.id.id_userinfo_password_modify);
-//		mLogout = (FrameLayout)mRootView.findViewById(R.id.id_userinfo_logout);
+		mApplySeal = (FrameLayout)mRootView.findViewById(R.id.id_my_apply_for_seal);
+		mPassword = (FrameLayout)mRootView.findViewById(R.id.id_my_seal_modify_password);
+		mLogout = (FrameLayout)mRootView.findViewById(R.id.id_my_seal_exit_user);
 //		mChangeArea = (FrameLayout)mRootView.findViewById(R.id.id_userinfo_change_area);
-//		mPassword.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				startActivity(new Intent(mContext, ModifyPasswordActivity.class));
-//			}
-//		});
-//		
-//		mLogout.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				logoutUserDialog(0);
-//				
-//			}
-//		});
-//		mPublishHouse.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(mContext, AddHouseInfoActivity.class);
-//				intent.putExtra("user_name", CommonUtil.mUserLoginName);
-//				startActivity(intent);
-//			}
-//		});
+		mPassword.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(mContext, ModifyPasswordActivity.class));
+			}
+		});
+		
+		mLogout.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				logoutUserDialog(0);
+				
+			}
+		});
+		mApplySeal.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(mContext, ApplyForSealActivity.class));
+			}
+		});
 //		mChangeArea.setOnClickListener(new OnClickListener() {
 //			
 //			@Override
@@ -202,35 +209,36 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 		}
 	}
 	
-//	private void logoutUserDialog(final int position){
-//		new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT).setTitle(getString(R.string.user_logout)) 
-//		  
-//	     .setMessage(getString(R.string.user_logout_remind))//������ʾ������  
-//	  
-//	     .setPositiveButton(getString(R.string.button_ok),new DialogInterface.OnClickListener() {
-//	         @Override  
-//	  
-//	         public void onClick(DialogInterface dialog, int which) {
-//	        	 SharedPreferences sharedata = mContext.getSharedPreferences("user_info", 0);
-//					SharedPreferences.Editor editor = sharedata.edit();
-//				    editor.putString("user_name", "");
-//				    editor.putString("user_password", "");
-//				    editor.commit();
-//				    Intent intent = new Intent(mContext, LoginUserActivity.class);
-//		            startActivity(intent);    
-//		            MyFragment.this.getActivity().finish();
-//	         }  
-//	  
-//	     }).setNegativeButton(getString(R.string.button_cancel),new DialogInterface.OnClickListener() {//��ӷ��ذ�ť  
-//	  
-//	         @Override  
-//	  
-//	         public void onClick(DialogInterface dialog, int which) {//��Ӧ�¼�  
-//	             Log.i("alertdialog"," dialog interface ");  
-//	         }  
-//	  
-//	     }).show();
-//	}
+	@SuppressWarnings("deprecation")
+	private void logoutUserDialog(final int position){
+		new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT).setTitle(getString(R.string.user_logout)) 
+		  
+	     .setMessage(getString(R.string.user_logout_remind))  
+	  
+	     .setPositiveButton(getString(R.string.button_ok),new DialogInterface.OnClickListener() {
+	         @Override  
+	  
+	         public void onClick(DialogInterface dialog, int which) {
+	        	 SharedPreferences sharedata = mContext.getSharedPreferences("user_info", 0);
+					SharedPreferences.Editor editor = sharedata.edit();
+				    editor.putString("user_name", "");
+				    editor.putString("user_password", "");
+				    editor.commit();
+				    Intent intent = new Intent(mContext, LoginUserActivity.class);
+		            startActivity(intent);    
+		            MyFragment.this.getActivity().finish();
+	         }  
+	  
+	     }).setNegativeButton(getString(R.string.button_cancel),new DialogInterface.OnClickListener() {//��ӷ��ذ�ť  
+	  
+	         @Override  
+	  
+	         public void onClick(DialogInterface dialog, int which) {
+	             Log.i("alertdialog"," dialog interface ");  
+	         }  
+	  
+	     }).show();
+	}
 //	
 //	private void changeUserAreaDialog(){
 //		new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT).setTitle(getString(R.string.user_logout)) 

@@ -28,6 +28,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/base_dimen_26"
                 android:background="@drawable/item_red_shape_solid_corner"
+                android:visibility="gone"
                 android:padding="@dimen/base_dimen_10" >
 
                 <TextView

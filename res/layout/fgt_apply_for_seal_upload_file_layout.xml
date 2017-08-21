@@ -1,4 +1,4 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +8,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        
         android:paddingBottom="@dimen/base_dimen_20"
         android:orientation="vertical" >
 
@@ -26,6 +25,7 @@
             android:layout_gravity="center_horizontal"
             android:background="@drawable/item_red_shape_solid_corner"
             android:padding="@dimen/base_dimen_10"
+            android:visibility="gone"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -47,13 +47,11 @@
            
         </FrameLayout>
         
-        <LinearLayout 
+        <FrameLayout 
             android:layout_width="fill_parent"
 	        android:layout_height="fill_parent"
-	        android:background="#ffffff"
 	        android:orientation="vertical"
-	        android:paddingTop="@dimen/base_dimen_40"
-	        android:paddingBottom="@dimen/base_dimen_40"
+	        android:paddingBottom="@dimen/base_dimen_20"
 	        android:layout_marginTop="@dimen/base_dimen_40"
             >
             <TextView 
@@ -66,7 +64,19 @@
 	            android:textSize="@dimen/base_dimen_30"
 	            android:layout_marginLeft="@dimen/base_dimen_26"
 	            />
-            <LinearLayout 
+            <ListView
+	            android:id="@+id/id_seal_upload_file_list"
+	            android:layout_width="match_parent"
+	            android:layout_height="match_parent"
+	            android:layout_marginTop="@dimen/base_dimen_100"
+	            android:layout_marginBottom="@dimen/base_dimen_100"
+				android:cacheColorHint="#f1f2f3"
+				android:divider="#f1f2f3"
+			    android:fadingEdge="none"
+			    android:background="#f1f2f3"
+			    android:dividerHeight="@dimen/base_dimen_20"
+	             />
+            <!-- <LinearLayout 
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_dimen_150"
                 android:layout_marginTop="@dimen/base_dimen_40"
@@ -179,22 +189,26 @@
                 	android:background="@drawable/icon_addpic_unfocused"
                 	android:layout_marginLeft="@dimen/base_dimen_12"
                     />
-            </LinearLayout>
-        </LinearLayout>
+            </LinearLayout> -->
+            <Button
+	            android:id="@+id/id_aty_apply_seal_submit_file_button"
+	            android:layout_width="@dimen/base_dimen_520"
+	            android:layout_height="@dimen/base_dimen_80"
+	            android:layout_gravity="center_horizontal|bottom"
+	            android:background="@drawable/button_background_selector"
+	            android:gravity="center"
+	            android:text="确认上传"
+	            android:textColor="@drawable/button_text_selector"
+	            android:textSize="@dimen/base_dimen_30" />
+            
+        </FrameLayout>
         
-        
-        
-        <Button
-            android:id="@+id/id_aty_apply_seal_next_step_button"
-            android:layout_width="@dimen/base_dimen_520"
-            android:layout_height="@dimen/base_dimen_80"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/base_dimen_60"
-            android:background="@drawable/button_background_selector"
-            android:gravity="center"
-            android:text="确认上传"
-            android:textColor="@drawable/button_text_selector"
-            android:textSize="@dimen/base_dimen_30" />
     </LinearLayout>
+    
+    <include
+        android:id="@+id/id_data_loading"
+        android:visibility="invisible"
+        layout="@layout/layout_loading_dialog"
+       />
 
-</ScrollView>
+</FrameLayout>

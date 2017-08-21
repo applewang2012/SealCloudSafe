@@ -29,6 +29,7 @@ public class CommonUtil {
     public static double mCurrentLati, mCurrentLongi;
     public static int mScanCodeRequestCode = 1;
     public static int mSelectCityRequestCode = 2;
+    public static String mSignetNumberId = null;
     
     
     public static String getSoapName(String action){

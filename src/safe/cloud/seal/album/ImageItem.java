@@ -8,12 +8,15 @@ import safe.cloud.seal.util.GlobalUtil;
 
 
 public class ImageItem implements Serializable {
+	private String base64String = null;
 	public String imageId;
 	public String thumbnailPath;
 	public String imagePath;
 	private Bitmap bitmap;
 	//private String imageName;
 	public boolean isSelected = false;
+	private String typeName;
+	private String typeNameId;
 	
 	public String getImageId() {
 		return imageId;
@@ -67,6 +70,26 @@ public class ImageItem implements Serializable {
 		this.bitmap = bitmap;
 	}
 	
+	public void setTypeName(String name){
+		typeName = name;
+	}
 	
+	public String getTypeName(){
+		return typeName; 
+	}
+	public void setTypeNameId(String id){
+		typeNameId = id;
+	}
+	
+	public String getTypeNameId(){
+		return typeNameId; 
+	}
+	public String getBitmapBase64(){
+		return this.base64String;
+	}
+	
+	public void setBitmapBase64(String base){
+		base64String = base;
+	}
 	
 }

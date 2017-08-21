@@ -31,4 +31,7 @@
     <string name="button_ok">确定</string>
     <string name="button_udpate">升级</string>
     <string name="button_cancel">取消</string>
+    
+    <string name="upload_file_title">上传文件</string>
+    <string name="upload_file_content">请确认以上文件，提交后无法修改！</string>
 </resources>

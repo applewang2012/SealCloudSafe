@@ -165,33 +165,33 @@ public final class GlobalUtil {
 		context.startActivity(intent);
 	}
 
-	public static void shortToast(Context context, int resId) {
+	public static void shortToast(Activity context, int resId) {
 		// Toast.makeText(context, resId, Toast.LENGTH_SHORT).show();
 		newtoast(context, context.getString(resId), null, Toast.LENGTH_SHORT);
 	}
 
-	public static void shortToast(Context context, int resId, Drawable icon) {
+	public static void shortToast(Activity context, int resId, Drawable icon) {
 		newtoast(context, context.getString(resId), icon, Toast.LENGTH_SHORT);
 	}
 
-	public static void shortToast(Context context, CharSequence text,
+	public static void shortToast(Activity context, CharSequence text,
 			Drawable icon) {
 		newtoast(context, text, icon, Toast.LENGTH_LONG);
 	}
 
-	public static void shortToast(Context context, CharSequence text) {
+	public static void shortToast(Activity context, CharSequence text) {
 		newtoast(context, text, null, Toast.LENGTH_SHORT);
 	}
 
-	public static void longToast(Context context, int resId) {
+	public static void longToast(Activity context, int resId) {
 		newtoast(context, context.getString(resId), null, Toast.LENGTH_LONG);
 	}
 
-	public static void longToast(Context context, int resId, Drawable icon) {
+	public static void longToast(Activity context, int resId, Drawable icon) {
 		newtoast(context, context.getString(resId), icon, Toast.LENGTH_LONG);
 	}
 
-	public static void longToast(Context context, CharSequence text) {
+	public static void longToast(Activity context, CharSequence text) {
 		newtoast(context, text, null, Toast.LENGTH_LONG);
 	}
 
@@ -231,12 +231,12 @@ public final class GlobalUtil {
 		toast.show();
 	}
 	*/
-	public static void newtoast(Context context, CharSequence text,
+	public static void newtoast(Activity activity, CharSequence text,
 			Drawable icon, int duration) {
-		LayoutInflater inflate = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+//		LayoutInflater inflate = (LayoutInflater) context
+//				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-		View v = inflate.inflate(R.layout.toast, null);
+		View v = activity.getLayoutInflater().inflate(R.layout.toast, null);
 		((TextView) v.findViewById(android.R.id.message)).setText(text);
 		if (icon != null) {
 			ImageView imageView = (ImageView) v.findViewById(R.id.icon_image);
@@ -251,7 +251,7 @@ public final class GlobalUtil {
 			duration = 3000;
 			break;
 		}
-		NewToast toast = new NewToast(context);
+		NewToast toast = new NewToast(activity);
 		toast.setContentView(v);
 		toast.setDuration(duration);
 		toast.show();

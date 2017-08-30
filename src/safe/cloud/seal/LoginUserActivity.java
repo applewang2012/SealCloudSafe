@@ -94,11 +94,11 @@ public class LoginUserActivity extends BaseActivity{
 				mPassword = passwordEditText.getEditableText().toString();
 				
 				if (mUserName == null || mUserName.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mPassword == null || mPassword.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.please_input_username), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 //				if (CommonUtil.mUserHost == null || CommonUtil.mUserHost.equals("")){
@@ -178,7 +178,7 @@ public class LoginUserActivity extends BaseActivity{
 			@Override
 			public void onClick(View v) {
 				if (CommonUtil.mUserHost == null || CommonUtil.mUserHost.equals("")){
-					GlobalUtil.shortToast(getApplication(), "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(LoginUserActivity.this, "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				
@@ -190,7 +190,7 @@ public class LoginUserActivity extends BaseActivity{
 			@Override
 			public void onClick(View v) {
 				if (CommonUtil.mUserHost == null || CommonUtil.mUserHost.equals("")){
-					GlobalUtil.shortToast(getApplication(), "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(LoginUserActivity.this, "您尚未选择所在区域", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				//startActivityForResult(new Intent(LoginUserActivity.this, ModifyPasswordActivity.class), 1);
@@ -304,7 +304,7 @@ public class LoginUserActivity extends BaseActivity{
 			    editor.putString("user_name", mUserName);
 			    editor.putString("user_password", mPassword);
 			    editor.commit();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+				GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
 				intent.putExtra("user_name", mUserName);
 				intent.putExtra("user_password", mPassword);
@@ -314,7 +314,7 @@ public class LoginUserActivity extends BaseActivity{
 				finish();
 			}else if (msg.what == 101){
 				dismissLoadingView();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+				GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else if (msg.what == 110){
 //				dismissLoadingView();
 //				showSelectAlertDialog("请选择所在区域", parseCommonService((String)msg.obj));

@@ -122,7 +122,7 @@ public class ScanQrcodeActivity extends BaseActivity implements Callback {
 		String resultString = result.getText();
 		//FIXME
 		if (resultString.equals("")) {
-			GlobalUtil.shortToast(getApplication(), "Scan failed  !", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(ScanQrcodeActivity.this, "Scan failed  !", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 		}else {
 //			System.out.println("Result:"+resultString);
 			Intent resultIntent = new Intent();

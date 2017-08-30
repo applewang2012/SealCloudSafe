@@ -1,6 +1,13 @@
 package safe.cloud.seal.util;
 
+import java.io.File;
+
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
+import android.net.Uri;
+import android.os.Environment;
+import android.util.Log;
 
 /**
  * @author shenxiaolei
@@ -16,7 +23,7 @@ public class CommonUtil {
     private static  Canvas canvas;
     
     public static String DOWLOAD_URL = null; //"http://acj2.pc6.com/pc6_soure/2017-6/com.dybag_25.apk";
-    public static String GURADTS_DOWNLOAD_DIR = "guardtsdownload";
+    public static String SEAL_DOWNLOAD_DIR = "sealdownload";
     public static final String NAMESPACE = "http://tempuri.org/";
     
     public static final String UPDATE_VERSION_HOST = "http://www.guardts.com/";
@@ -45,5 +52,54 @@ public class CommonUtil {
     {
         return (d * Math.PI / 180.0);
     }
+    
+    public static String getDefaultDownloadPath(String downloadUrl){
+    	String path = null;
+
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            // 存在获取外部文件路径
+            File root = Environment.getExternalStorageDirectory();
+            File base = new File(root.getPath() + "/"+SEAL_DOWNLOAD_DIR);
+            if (!base.exists()){
+            	base.mkdir();
+            }
+        	
+        	File[] files = base.listFiles();
+        	for (int i = 0; i < files.length; i++) {
+        			String filename = files[i].getName();
+        			if (filename != null && downloadUrl != null){
+        				if (downloadUrl.endsWith(filename)){
+        					path = base.getPath()+File.separator+filename;
+        					break;
+        				}
+        			}
+        	}
+        	if (path == null){
+        		path = base.getPath();
+        	}
+        } else {
+            // 不存在获取内部存
+            return null;
+        }
+        Log.i("mingguo", "common util get default download path  "+path);
+       return path;
+    }
+    
+    
+    /* 安装apk */    
+    public static void installApk(Context context, String fileName) {    
+        Intent intent = new Intent();    
+        intent.setAction(Intent.ACTION_VIEW);    
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);    
+        intent.setDataAndType(Uri.parse("file://" + fileName),"application/vnd.android.package-archive");    
+        context.startActivity(intent);    
+    }    
+        
+    /* 卸载apk */    
+    public static void uninstallApk(Context context, String packageName) {    
+        Uri uri = Uri.parse("package:" + packageName);    
+        Intent intent = new Intent(Intent.ACTION_DELETE, uri);    
+        context.startActivity(intent);    
+    }  
     
 }

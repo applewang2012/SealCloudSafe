@@ -135,14 +135,14 @@ public class RegisterUserStep2Activity extends BaseActivity{
 				mRealName = realName.getEditableText().toString();
 				mIdCard = idCard.getEditableText().toString();
 				if (mRealName == null || mRealName.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.surface_name_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep2Activity.this, getString(R.string.surface_name_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mIdCard == null || mIdCard.equals("")){
-					GlobalUtil.shortToast(getApplication(),getString(R.string.id_card_not_null) , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep2Activity.this,getString(R.string.id_card_not_null) , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}else if (mIdCard.length() < 18){
-					GlobalUtil.shortToast(getApplication(),getString(R.string.id_card_input_error) , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep2Activity.this,getString(R.string.id_card_input_error) , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
@@ -247,7 +247,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 			 Log.w("mingguo", "activity result  width data   "+data);
 			 mSubHandler.sendEmptyMessage(1000);
 		}else{
-			GlobalUtil.shortToast(getApplication(), "头像采集失败", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(RegisterUserStep2Activity.this, "头像采集失败", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 		}
 	}
 
@@ -288,7 +288,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			if (msg.what == 100){
-//				GlobalUtil.shortToast(getApplication(), getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//				GlobalUtil.shortToast(RegisterUserStep2Activity.this, getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else if (msg.what == 200){
 				
 			}else if (msg.what == 102){
@@ -298,15 +298,15 @@ public class RegisterUserStep2Activity extends BaseActivity{
 					if (object != null){
 						String compareResult = object.optString("compareresult");
 						if (compareResult == null || compareResult.equals("")){
-							GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证失败 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+							GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 						}else{
 							if (compareResult.equals("0")){
-									GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+									GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 									registerUserName();
 									return;
 								
 							}else{
-								GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证失败  "+compareResult , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+								GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败  "+compareResult , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 							}
 						}
 					}
@@ -316,14 +316,14 @@ public class RegisterUserStep2Activity extends BaseActivity{
 				}
 			}else if (msg.what == 301){
 				ActivityController.finishAll();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.register_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+				GlobalUtil.shortToast(RegisterUserStep2Activity.this, getString(R.string.register_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 				Intent intent = new Intent(RegisterUserStep2Activity.this, RegisterUserFinishActivity.class);
 				intent.putExtra("user_name", mPhone);
 				intent.putExtra("user_password", mPassword);
 				startActivity(intent);
 				finish();
 			}else if (msg.what == 302){
-				GlobalUtil.shortToast(getApplication(), "登录失败,请重试！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+				GlobalUtil.shortToast(RegisterUserStep2Activity.this, "登录失败,请重试！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else if (msg.what == 500){
 				dismissLoadingView();
 				JSONObject object = null;
@@ -333,22 +333,22 @@ public class RegisterUserStep2Activity extends BaseActivity{
 						String status_code = object.optString("status_code");
 						if (status_code != null){
 							if (status_code.equals("200")){
-								GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+								GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 								registerUserName();
 							}else {
 								if (status_code.equals("111")){
 									String compareError = object.optString("error_code");
-									GlobalUtil.shortToast(getApplication(), status_code +"  "+compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+									GlobalUtil.shortToast(RegisterUserStep2Activity.this, status_code +"  "+compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 								}else{
 									String compareError = object.optString("msg");
-									GlobalUtil.shortToast(getApplication(), status_code +"  "+compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+									GlobalUtil.shortToast(RegisterUserStep2Activity.this, status_code +"  "+compareError, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 								}
 								
 							}
 						}
 							
 					}else{
-							GlobalUtil.shortToast(getApplication(), mRealName + " 身份认证失败  " , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+							GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败  " , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block

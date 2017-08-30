@@ -21,6 +21,10 @@
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    
+    <uses-permission android:name="safe.cloud.seal.download.permission.ACCESS_DOWNLOAD_MANAGER" />
+    <uses-permission android:name="safe.cloud.seal.download.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED" />
+    <uses-permission android:name="safe.cloud.seal.download.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
 
     <application
         android:allowBackup="true"
@@ -30,44 +34,61 @@
         <activity
             android:name=".WelcomeActivity"
             android:theme="@style/SealAppTheme"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden">
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden">
             <intent-filter>
-                
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <provider
+            android:name=".download.DownloadProvider"
+            android:authorities="safe.cloud.seal.download" />
+
+        <service android:name=".download.DownloadService" />
+
+        <receiver
+            android:name=".download.DownloadReceiver"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+        
          <activity android:name=".LoginUserActivity" 
-             android:windowSoftInputMode="adjustUnspecified|stateHidden"
+             android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
              android:screenOrientation="portrait"
              android:theme="@style/SealAppTheme"></activity>
-        <activity android:name=".ScanQrcodeActivity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
+        <activity android:name=".ScanQrcodeActivity" android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
-        <activity android:name=".RegisterUserStep1Activity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
+        <activity android:name=".RegisterUserStep1Activity" 
+           android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+           
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
-		<activity android:name=".RegisterUserStep2Activity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
+		<activity android:name=".RegisterUserStep2Activity" android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
 
-		<activity android:name=".ModifyPasswordActivity" android:windowSoftInputMode="adjustUnspecified|stateHidden"
+		<activity android:name=".ModifyPasswordActivity" android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
 
          <activity  
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
             android:theme="@style/SealAppTheme"
             android:screenOrientation="portrait"
             android:name=".RegisterUserFinishActivity" />
           <activity  
-           android:windowSoftInputMode="adjustUnspecified|stateHidden"
+           android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@android:style/Theme.NoTitleBar"
            android:screenOrientation="portrait"
            android:name=".HomeActivity" />
          
          <activity  
-           android:windowSoftInputMode="adjustUnspecified|stateHidden"
+           android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"
            android:name=".ApplyForSealActivity" />

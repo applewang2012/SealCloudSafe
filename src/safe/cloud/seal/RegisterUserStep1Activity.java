@@ -75,10 +75,10 @@ public class RegisterUserStep1Activity extends BaseActivity{
 			public void onClick(View v) {
 				mPhone = phone.getEditableText().toString();
 				if (mPhone == null || mPhone.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.phone_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.phone_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}else if (mPhone.length() < 11){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.phone_input_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.phone_input_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				Log.w("mingguo", "register step 1  phone  "+mPhone);
@@ -105,25 +105,25 @@ public class RegisterUserStep1Activity extends BaseActivity{
 				mVerifyCode = inputVerify.getEditableText().toString();
 				
 				if (mPhone == null || mPhone.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.user_name_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.user_name_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mPassword == null || mPassword.equals("")){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.pwd_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.pwd_not_null), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}else  if (mPassword.length() < 6){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.pwd_input_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.pwd_input_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mPasswordAgain == null || mPasswordAgain.equals("") || !mPassword.equals(mPasswordAgain)){
-					GlobalUtil.shortToast(getApplication(), getString(R.string.pwd_again_not_same), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.pwd_again_not_same), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				showLoadingView();
 				checkPhoneVerifyCode(mPhone, mVerifyCode);
 				
 //				if (!mUsernameValid){
-//					GlobalUtil.shortToast(getApplication(), getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 //					return;
 //				}
 				
@@ -189,7 +189,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			if (msg.what == 100){
-//				GlobalUtil.shortToast(getApplication(), getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//				GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else if (msg.what == 102){
 				dismissLoadingView();
 				if (msg.obj != null){
@@ -205,7 +205,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 								nextIntent.putExtra("user_password", mPassword);
 								startActivity(nextIntent);
 							}else{
-								GlobalUtil.shortToast(getApplication(), getString(R.string.verify_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+								GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.verify_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 							}
 						}
 					} catch (JSONException e) {

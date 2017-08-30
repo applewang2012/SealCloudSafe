@@ -34,4 +34,24 @@
     
     <string name="upload_file_title">上传文件</string>
     <string name="upload_file_content">请确认以上文件，提交后无法修改！</string>
+    
+    <string name="download_error">下载失败，请重新下载</string>
+    <string name="download_running" msgid="4656462962155580641">"正在下载"</string>
+    <string name="download_success" msgid="7006048006543495236">"已完成"</string>
+    <string name="download_queued" msgid="104973307780629904">"已加入队列"</string>
+    <string name="download_paused">暂停</string>
+    <string name="notification_need_wifi_for_size" msgid="5973127997598540499">"此大小的文件需要通过 Wi-Fi 下载"</string>
+    <string name="notification_filename_separator">", "</string>
+    <string name="notification_filename_extras">" 还有%1$d项"</string>
+    <string name="notification_download_failed" msgid="5343637375905111462">"下载失败"</string>
+    <string name="notification_download_complete">"下载完成"</string>
+    <string name="download_unknown_title">"&amp;lt;未命名&amp;gt;"</string>
+    <string name="missing_title" msgid="830115697868833773">"&amp;lt;未知&amp;gt;"</string>
+    <string name="button_queue_for_wifi" msgid="422576726189179221">"排队"</string>
+    <string name="wifi_required_title" msgid="1995971416871498179">"文件太大，不适于通过运营商网络下载"</string>
+    <string name="wifi_required_body" msgid="1675692697446715831">"您必须使用 Wi-Fi 才能完成此可在下次连接到 Wi-Fi 网络时开始此下载。"</string>
+    <string name="button_cancel_download" msgid="2430166148737975604">"取消"</string>
+    <string name="button_start_now" msgid="792123674007840864">"立即开始"</string>
+    <string name="wifi_recommended_title" msgid="7441589306734687400">"稍后再加入下载队列吗？"</string>
+    <string name="wifi_recommended_body" msgid="7574517147645381271">"立即开始此 %s 文件的下载可能会缩短电池的使用时间并/或导致超额使用移动数据连接（这会导致移动运营商依照流量套餐中的超额规定向您收费）。"\n\n"点击下面的可在下次连接到 Wi-Fi 网络时开始此下载。"</string>
 </resources>

@@ -14,7 +14,7 @@ public class BaseActivity extends Activity implements DataStatusInterface{
 		@Override
 		public void handleMessage(Message msg) {
 			
-			GlobalUtil.shortToast(getApplication(), "网络异常，请检查网络！"+msg.obj, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(BaseActivity.this, "网络异常，请检查网络！"+msg.obj, getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 		}
 		
 	};

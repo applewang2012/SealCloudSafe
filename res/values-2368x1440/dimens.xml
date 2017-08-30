@@ -721,4 +721,7 @@
 	<dimen name="base_dimen_718">1436px</dimen>
 	<dimen name="base_dimen_719">1438px</dimen>
 	<dimen name="base_dimen_720">1440px</dimen>
+	<dimen name="base_dimen_900">1800px</dimen>
+	<dimen name="base_dimen_840">1680px</dimen>
+	<dimen name="base_dimen_820">1640px</dimen>
 </resources>

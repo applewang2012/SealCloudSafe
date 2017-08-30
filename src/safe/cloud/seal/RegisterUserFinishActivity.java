@@ -106,7 +106,7 @@ public class RegisterUserFinishActivity extends BaseActivity{
 			    editor.putString("user_name", mUserName);
 			    editor.putString("user_password", mPassword);
 			    editor.commit();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+				GlobalUtil.shortToast(RegisterUserFinishActivity.this, getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 				Intent intent = new Intent(RegisterUserFinishActivity.this, HomeActivity.class);
 				intent.putExtra("user_name", mUserName);
 				intent.putExtra("user_password", mPassword);
@@ -116,7 +116,7 @@ public class RegisterUserFinishActivity extends BaseActivity{
 				finish();
 			}else if (msg.what == 101){
 				dismissLoadingView();
-				GlobalUtil.shortToast(getApplication(), getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+				GlobalUtil.shortToast(RegisterUserFinishActivity.this, getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else if (msg.what == 110){
 //				dismissLoadingView();
 //				showSelectAlertDialog("请选择所在区域", parseCommonService((String)msg.obj));

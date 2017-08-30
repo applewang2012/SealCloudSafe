@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/base_dimen_660"
+    android:layout_height="@dimen/base_dimen_900"
+    android:background="@drawable/item_shape_solid_corner" >
+
+        <TextView
+            android:id="@+id/id_dialog_title"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/base_dimen_80"
+            android:background="@null"
+            android:gravity="center"
+            android:text="dialog 标题"
+            android:textColor="#000000"
+            android:textStyle="normal"
+            android:textSize="@dimen/base_dimen_40" />
+
+        <GridView
+            android:id="@+id/id_dialog_gridview"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/base_dimen_820"
+            android:layout_marginTop="@dimen/base_dimen_80"
+            android:numColumns="2"
+            android:scrollbars="vertical"
+            android:horizontalSpacing="@dimen/base_dimen_5"
+            android:verticalSpacing="@dimen/base_dimen_5"
+             >
+        </GridView>
+
+</FrameLayout>

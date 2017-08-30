@@ -5,6 +5,7 @@ public class SealInfoModel {
 	private String selectName;
 	private String[] allValueId;
 	private String[] allValue;
+	private String[] allImageUrl;
 
 	public void setSelectedId(String id){
 		selectId = id;
@@ -22,20 +23,28 @@ public class SealInfoModel {
 		return selectName;
 	}
 	
-	public String [] getHouseAllContent() {
+	public String [] getSealAllContent() {
 		return allValue;
 	}
 
-	public void setHouseAllContent(String [] value) {
+	public void setSealAllContent(String [] value) {
 		this.allValue = value;
 	}
 	
-	public String [] getHouseAllId() {
+	public String [] getSealAllId() {
 		return allValueId;
 	}
 
-	public void setHouseAllId(String [] value) {
+	public void setSealAllId(String [] value) {
 		this.allValueId = value;
+	}
+	
+	public String [] getSealImageUrl() {
+		return allImageUrl;
+	}
+
+	public void setSealImageUrl(String [] value) {
+		this.allImageUrl = value;
 	}
 	
 }

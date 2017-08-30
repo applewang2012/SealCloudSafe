@@ -248,7 +248,7 @@ public class AddSealInfoStep2Fragment extends Fragment implements DataStatusInte
 				checkFile ++;
 			}
 			if (checkFile == 0){
-				GlobalUtil.shortToast(mContext, mDataList.get(index).getFileType()+" 未添加文件 ！", getResources().getDrawable(R.drawable.ic_dialog_no));
+				GlobalUtil.shortToast(getActivity(), mDataList.get(index).getFileType()+" 未添加文件 ！", getResources().getDrawable(R.drawable.ic_dialog_no));
 				allowUpload = false;
 				break;
 			}
@@ -287,7 +287,7 @@ public class AddSealInfoStep2Fragment extends Fragment implements DataStatusInte
 		mUploadNum++;
 		if (mUploadNum == mUploadList.size()){
 			submitUploadSignFile(CommonUtil.mSignetNumberId);
-//			GlobalUtil.shortToast(mContext, "上传文件成功！", getResources().getDrawable(R.drawable.ic_dialog_no));
+//			GlobalUtil.shortToast(getActivity(), "上传文件成功！", getResources().getDrawable(R.drawable.ic_dialog_no));
 //			getActivity().finish();
 		}
 	}
@@ -487,7 +487,7 @@ public class AddSealInfoStep2Fragment extends Fragment implements DataStatusInte
 						if (ret.equals("0")){
 							startUploadFile(mUploadNum);
 						}else {
-							GlobalUtil.shortToast(mContext, "文件上传失败！", getResources().getDrawable(R.drawable.ic_dialog_no));
+							GlobalUtil.shortToast(getActivity(), "文件上传失败！", getResources().getDrawable(R.drawable.ic_dialog_no));
 						}
 				}catch (Exception e) {
 						
@@ -503,7 +503,7 @@ public class AddSealInfoStep2Fragment extends Fragment implements DataStatusInte
 						object = new JSONObject(value);
 						String ret = object.optString("ret");
 						if (ret.equals("0")){
-							GlobalUtil.shortToast(mContext, "提交文件成功！", getResources().getDrawable(R.drawable.ic_dialog_no));
+							GlobalUtil.shortToast(getActivity(), "提交文件成功！", getResources().getDrawable(R.drawable.ic_dialog_no));
 							getActivity().finish();
 						}
 					}catch (Exception e) {

@@ -1,20 +1,28 @@
 package safe.cloud.seal.fragment;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.codec.StringEncoder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
+import org.w3c.dom.Text;
+
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.UrlConnectionDownloader;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -27,19 +35,27 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
+import safe.cloud.seal.MainActivity;
 import safe.cloud.seal.R;
 import safe.cloud.seal.model.SealInfoModel;
+import safe.cloud.seal.model.UniversalAdapter;
+import safe.cloud.seal.model.UniversalViewHolder;
 import safe.cloud.seal.presenter.ActionOperationInterface;
 import safe.cloud.seal.presenter.DataStatusInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
 import safe.cloud.seal.util.GlobalUtil;
 import safe.cloud.seal.widget.CircleFlowIndicator;
+import safe.cloud.seal.widget.GridViewAlertDialogBuilder;
 import safe.cloud.seal.widget.ViewFlow;
 
 public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInterface{
@@ -58,7 +74,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private ActionOperationInterface mAction;
 	private String mAllRegisterAction = "http://tempuri.org/GetAllRegisters";
 	private String mGetSignetIDAction = "http://tempuri.org/GetSignetID";
-	private String mGetSignetIDActionAgain = "http://tempuri.org/GetSignetID";
+	//private String mGetSignetIDActionAgain = "http://tempuri.org/GetSignetID";
 	private String mGetAllCarveCorpsAction = "http://tempuri.org/GetAllCarveCorps";
 	private String mGetGeneralCodeAction = "http://tempuri.org/GetGeneralCode";
 	private String mGetSealGuigeAction = "http://tempuri.org/GetSignetSpecification";
@@ -146,7 +162,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			@Override
 			public void onClick(View v) {
 			if (mSelectorInfo.get("getAllRegister") == null || mSelectorInfo.get("getAllRegister").getSelectedId() == null){
-				GlobalUtil.shortToast(mContext, "请首先选择所属区域", getResources().getDrawable(R.drawable.ic_dialog_no));
+				GlobalUtil.shortToast(getActivity(), "请首先选择所属区域", getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else{
 					getAllCarveCorps();
 				}
@@ -162,7 +178,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			@Override
 			public void onClick(View v) {
 //				if (mSelectorInfo.get("getAllRegister") == null || mSelectorInfo.get("getAllRegister").getSelectedId() == null){
-//					GlobalUtil.shortToast(mContext, "请首先选择所属区域", getResources().getDrawable(R.drawable.ic_dialog_no));
+//					GlobalUtil.shortToast(getActivity(), "请首先选择所属区域", getResources().getDrawable(R.drawable.ic_dialog_no));
 //				}else{
 					mCurrentType = TYPE_ST;
 					mSelectSealGuige.setText("");
@@ -217,7 +233,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			@Override
 			public void onClick(View v) {
 				if (mSelectorInfo.get("GetGeneralCode"+TYPE_ST) == null || mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId() == null){
-					GlobalUtil.shortToast(mContext, "请首先选择印章类型", getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), "请首先选择印章类型", getResources().getDrawable(R.drawable.ic_dialog_no));
 				}else{
 					getSealGuigeByType(mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
 				}
@@ -285,10 +301,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			public void onClick(View v) {
 				mPhone = mRegisterPhone.getEditableText().toString();
 				if (mPhone == null || mPhone.equals("")){
-					GlobalUtil.shortToast(mContext, getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}else if (mPhone.length() < 11){
-					GlobalUtil.shortToast(mContext, getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				Log.w("mingguo", "register step 1  phone  "+mPhone+" time count  "+mTimeCount);
@@ -318,29 +334,29 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				String name = mRealName.getEditableText().toString();
 				String idcard = mRealId.getEditableText().toString();
 				if (name == null || name.equals("")){
-					GlobalUtil.shortToast(mContext, "申请人姓名不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), "申请人姓名不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (idcard == null || idcard.equals("")){
-					GlobalUtil.shortToast(mContext, "申请人身份证号不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), "申请人身份证号不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}else  if (idcard.length() < 18){
-					GlobalUtil.shortToast(mContext, "申请人身份证号输入有误", getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), "申请人身份证号输入有误", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mExistSeal){
-					GlobalUtil.shortToast(mContext, "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mPhone == null || mPhone.equals("")){
-					GlobalUtil.shortToast(mContext, getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}else if (mPhone.length() < 11){
-					GlobalUtil.shortToast(mContext, getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				if (mVerifyCode == null || mVerifyCode.equals("")){
-					GlobalUtil.shortToast(mContext, "手机验证码不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
+					GlobalUtil.shortToast(getActivity(), "手机验证码不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
 				showLoadingView();
@@ -351,42 +367,42 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	
 	private boolean checkApplySealValid(){
 		if (mSelectQuyuText == null || mSelectQuyuText.length() < 2){
-			GlobalUtil.shortToast(mContext, "所属区域不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "所属区域不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mZhizhangDanweiText == null || mZhizhangDanweiText.length() < 2){
-			GlobalUtil.shortToast(mContext, "制章单位不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "制章单位不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSealUseDanweiEdit.getEditableText().toString() == null || mSealUseDanweiEdit.getEditableText().toString().length() < 2){
-			GlobalUtil.shortToast(mContext, "使用单位不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "使用单位不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSelectSealType == null || mSelectSealType.length() < 2){
-			GlobalUtil.shortToast(mContext, "印章类型不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "印章类型不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSelectSealGuige == null || mSelectSealGuige.length() < 2){
-			GlobalUtil.shortToast(mContext, "印章规格不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "印章规格不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSealNeirongText == null || mSealNeirongText.length() < 2){
-			GlobalUtil.shortToast(mContext, "使用单位输入有误！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "使用单位输入有误！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSelectKezhiType == null || mSelectKezhiType.length() < 2){
-			GlobalUtil.shortToast(mContext, "刻制类型不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "刻制类型不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSelectDengjiType == null || mSelectDengjiType.length() < 2){
-			GlobalUtil.shortToast(mContext, "登记类型不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "登记类型不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		if (mSelectZhizuoType == null || mSelectZhizuoType.length() < 2){
-			GlobalUtil.shortToast(mContext, "制作等级不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "制作等级不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}if (mSelectChaizhiType == null || mSelectChaizhiType.length() < 2){
-			GlobalUtil.shortToast(mContext, "章体材质不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
+			GlobalUtil.shortToast(getActivity(), "章体材质不能为空！", getResources().getDrawable(R.drawable.ic_dialog_no));
 			return false;
 		}
 		return true;
@@ -419,7 +435,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			mSelectorInfo.put("getAllRegister", infoModel);
 			requestAllRegister();
 		}else{
-			showAlertDialog(mSelectQuyuText, "getAllRegister", mSelectorInfo.get("getAllRegister").getHouseAllContent());
+			showAlertDialog(mSelectQuyuText, "getAllRegister", mSelectorInfo.get("getAllRegister").getSealAllContent(), null);
 		}
 	}
 	
@@ -450,18 +466,11 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		mPresent.startPresentServiceTask();
 	}
 	
-	private void requestGetSignetIdAgain(){
-		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetID";
-		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSignetIDActionAgain));
-		rpc.addProperty("regDeptId", mSelectorInfo.get("getAllRegister").getSelectedId());
-		mPresent.readyPresentServiceParams(mContext, url, mGetSignetIDActionAgain, rpc);
-		mPresent.startPresentServiceTask();
-	}
 	
-	private void requestUpdateSignInfo(){
+	private void requestUpdateSignInfo(String signId){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UpdateSignetInfo";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetUpdateSignAction));
-		rpc.addProperty("signetId",mSealNumberText.getText());
+		rpc.addProperty("signetId",signId);
 		rpc.addProperty("regDeptId",mSelectorInfo.get("getAllRegister").getSelectedId());
 		rpc.addProperty("content",mSealNeirongText.getText());
 		rpc.addProperty("foreignContent","waiwen");
@@ -525,7 +534,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			mSelectorInfo.put("getCarveCorps", infoModel);
 			requestGetAllCarveCorps();
 //		}else{
-//			showAlertDialog(mZhizhangDanweiText, "getCarveCorps", mSelectorInfo.get("getCarveCorps").getHouseAllContent());
+//			showAlertDialog(mZhizhangDanweiText, "getCarveCorps", mSelectorInfo.get("getCarveCorps").getSealAllContent(), null);
 //		}
 	}
 	
@@ -547,7 +556,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			mSelectorInfo.put("GetGeneralCode"+typeId, infoModel);
 			requestCommonData(typeId);
 		}else{
-			showAlertDialog(commonView, "GetGeneralCode"+typeId, mSelectorInfo.get("GetGeneralCode"+typeId).getHouseAllContent());
+			showAlertDialog(commonView, "GetGeneralCode"+typeId, mSelectorInfo.get("GetGeneralCode"+typeId).getSealAllContent(), null);
 		}
 	}
 	
@@ -575,7 +584,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			mSelectorInfo.put("GetSignetSpecification", infoModel);
 			requestSealGuige(typeId);
 //		}else{
-//			showAlertDialog(mSelectSealGuige, "GetSignetSpecification", mSelectorInfo.get("GetSignetSpecification").getHouseAllContent());
+//			showAlertDialog(mSelectSealGuige, "GetSignetSpecification", mSelectorInfo.get("GetSignetSpecification").getSealAllContent(), null);
 //		}
 	}
 	
@@ -607,26 +616,103 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	}
 	
 
-	private void showAlertDialog(final TextView text, final String tag, final String[] items) {  
-		  AlertDialog.Builder builder =new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
-		  builder.setItems(items, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				mSelectorInfo.get(tag).setSelectedId(mSelectorInfo.get(tag).getHouseAllId()[which]);
-				mSelectorInfo.get(tag).setSelectedName(items[which]);
-				text.setText(items[which]);
-				if (tag != null ){
-					if (tag.equals("getAllRegister")){
-						requestSignetId();
-					}else if (tag.equals("GetGeneralCode"+TYPE_ST)){
-						requestDefaultSignetContent();
+	private void showAlertDialog(final TextView text, final String tag, final String[] items, final List<String> images) {
+		if (images != null && images.size() > 0){
+			final GridViewAlertDialogBuilder builder = new GridViewAlertDialogBuilder(getActivity(), R.style.AlertDialog);
+			  View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_style_layout, null);
+			  TextView title = (TextView)view.findViewById(R.id.id_dialog_title);
+			  GridView gridView = (GridView) view.findViewById(R.id.id_dialog_gridview);	
+			  gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+			  builder.setView(view);
+			  title.setText(images.get(images.size() - 1));
+			  List<ImageListInfo> imageList = new ArrayList<>();
+			  for (int index = 0; index < items.length; index++){
+				  ImageListInfo info = new ImageListInfo();
+				  info.setImageName(items[index]);
+				  if (index < images.size() -1){
+					  info.setImageUrl(images.get(index));
+				  }
+				  imageList.add(info);
+			  }
+			  UniversalAdapter adapter = new UniversalAdapter<ImageListInfo>(getActivity(), R.layout.dialog_style_item_layout, imageList) {
+
+					@Override
+					public void convert(UniversalViewHolder holder, ImageListInfo info) {
+						View holderView = holder.getConvertView();
+						TextView sealName = (TextView)holderView.findViewById(R.id.item_gridview_text);
+						sealName.setText(info.getImageName());
+						ImageView sealImage = (ImageView)holderView.findViewById(R.id.item_gridview_image);
+						Log.i("mingguo", "convert  url  "+info.getImageUrl());
+						Picasso.with(getActivity()).load(info.getImageUrl()).into(sealImage);
 					}
-				}
+				};
 				
-			}
-		});
-		builder.show();
-}
+				gridView.setAdapter(adapter);
+				
+				gridView.setOnItemClickListener(new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+
+						mSelectorInfo.get(tag).setSelectedId(mSelectorInfo.get(tag).getSealAllId()[arg2]);
+						mSelectorInfo.get(tag).setSelectedName(items[arg2]);
+						text.setText(items[arg2]);
+						if (tag != null ){
+							if (tag.equals("getAllRegister")){
+								requestSignetId();
+							}else if (tag.equals("GetGeneralCode"+TYPE_ST)){
+								requestDefaultSignetContent();
+							}
+						}
+						
+						//Toast.makeText(getActivity(), "item click  position  "+arg2, Toast.LENGTH_SHORT).show();
+						
+						builder.dimissDialog();
+					}
+				});
+
+			builder.showDialog();
+		}else{
+			AlertDialog.Builder builder =new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT);
+			  builder.setItems(items, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					mSelectorInfo.get(tag).setSelectedId(mSelectorInfo.get(tag).getSealAllId()[which]);
+					mSelectorInfo.get(tag).setSelectedName(items[which]);
+					text.setText(items[which]);
+					if (tag != null ){
+						if (tag.equals("getAllRegister")){
+							requestSignetId();
+						}else if (tag.equals("GetGeneralCode"+TYPE_ST)){
+							requestDefaultSignetContent();
+						}
+					}
+					
+				}
+			});
+			builder.show();
+		}
+	}
+	
+	public class ImageListInfo{
+		private String imageName;
+		private String imageUrl;
+
+		public void setImageName(String name){
+			imageName = name;
+		}
+		public void setImageUrl(String url){
+			imageUrl = url;
+		}
+		
+		public String getImageName(){
+			return imageName;
+		}
+		
+		public String getImageUrl(){
+			return imageUrl;
+		}
+	}
 	
 	private Handler mHandler = new Handler(){
 
@@ -638,58 +724,53 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			if (msg.obj != null){
 				if (msg.what == 200){
 					dismissLoadingView();
-					mSelectorInfo.get("getAllRegister").setHouseAllContent(parseAllRegisterReturn((String)msg.obj).get(1));
-					mSelectorInfo.get("getAllRegister").setHouseAllId(parseAllRegisterReturn((String)msg.obj).get(0));
-					showAlertDialog(mSelectQuyuText,"getAllRegister" , parseAllRegisterReturn((String)msg.obj).get(1));
+					mSelectorInfo.get("getAllRegister").setSealAllContent(parseAllRegisterReturn((String)msg.obj).get(1));
+					mSelectorInfo.get("getAllRegister").setSealAllId(parseAllRegisterReturn((String)msg.obj).get(0));
+					showAlertDialog(mSelectQuyuText,"getAllRegister" , parseAllRegisterReturn((String)msg.obj).get(1), null);
 				}else if (msg.what == 201){
 					dismissLoadingView();
 					if (mIsReGetSignetId){
 						CommonUtil.mSignetNumberId = (String)msg.obj;
 						showLoadingView();
-						requestUpdateSignInfo();
+						requestUpdateSignInfo(CommonUtil.mSignetNumberId);
 					}else{
 						mSealNumberText.setText((String)msg.obj);
 						mZhizhangDanweiText.setText("");
 					}
-				}else if (msg.what == 301){
-					//mSealNumberText.setText((String)msg.obj);
-					CommonUtil.mSignetNumberId = (String)msg.obj;
-					showLoadingView();
-					requestUpdateSignInfo();
 				}else if (msg.what == 202){
 					dismissLoadingView();
-					mSelectorInfo.get("GetAllCarveCorps").setHouseAllContent(parseSealKezhiDanwei((String)msg.obj).get(1));
-					mSelectorInfo.get("GetAllCarveCorps").setHouseAllId(parseSealKezhiDanwei((String)msg.obj).get(0));
-					showAlertDialog(mZhizhangDanweiText,"GetAllCarveCorps" , parseSealKezhiDanwei((String)msg.obj).get(1));
+					mSelectorInfo.get("GetAllCarveCorps").setSealAllContent(parseSealKezhiDanwei((String)msg.obj).get(1));
+					mSelectorInfo.get("GetAllCarveCorps").setSealAllId(parseSealKezhiDanwei((String)msg.obj).get(0));
+					showAlertDialog(mZhizhangDanweiText,"GetAllCarveCorps" , parseSealKezhiDanwei((String)msg.obj).get(1), null);
 				}else if (msg.what == 203){
 					dismissLoadingView();
 					if (mCurrentType == TYPE_ST){
-						mSelectorInfo.get("GetGeneralCode"+TYPE_ST).setHouseAllContent(parseSealTypeSTReturn((String)msg.obj).get(1));
-						mSelectorInfo.get("GetGeneralCode"+TYPE_ST).setHouseAllId(parseSealTypeSTReturn((String)msg.obj).get(0));
-						showAlertDialog(mSelectSealType,"GetGeneralCode"+TYPE_ST , parseSealTypeSTReturn((String)msg.obj).get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_ST).setSealAllContent(parseSealTypeSTReturn((String)msg.obj).get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_ST).setSealAllId(parseSealTypeSTReturn((String)msg.obj).get(0));
+						showAlertDialog(mSelectSealType,"GetGeneralCode"+TYPE_ST , parseSealTypeSTReturn((String)msg.obj).get(1), null);
 					}else if (mCurrentType == TYPE_KL){
-						mSelectorInfo.get("GetGeneralCode"+TYPE_KL).setHouseAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
-						mSelectorInfo.get("GetGeneralCode"+TYPE_KL).setHouseAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
-						showAlertDialog(mSelectKezhiType,"GetGeneralCode"+TYPE_KL, parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_KL).setSealAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_KL).setSealAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
+						showAlertDialog(mSelectKezhiType,"GetGeneralCode"+TYPE_KL, parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1), null);
 					}else if (mCurrentType == TYPE_DB){
-						mSelectorInfo.get("GetGeneralCode"+TYPE_DB).setHouseAllContent(new String[]{"企业登记章"});
-						mSelectorInfo.get("GetGeneralCode"+TYPE_DB).setHouseAllId(new String[]{"3"});
-						showAlertDialog(mSelectDengjiType,"GetGeneralCode"+TYPE_DB, new String[]{"企业登记章"});
+						mSelectorInfo.get("GetGeneralCode"+TYPE_DB).setSealAllContent(new String[]{"企业登记章"});
+						mSelectorInfo.get("GetGeneralCode"+TYPE_DB).setSealAllId(new String[]{"3"});
+						showAlertDialog(mSelectDengjiType,"GetGeneralCode"+TYPE_DB, new String[]{"企业登记章"}, null);
 					}else if (mCurrentType == TYPE_UG){
-						mSelectorInfo.get("GetGeneralCode"+TYPE_UG).setHouseAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
-						mSelectorInfo.get("GetGeneralCode"+TYPE_UG).setHouseAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
-						showAlertDialog(mSelectZhizuoType,"GetGeneralCode"+TYPE_UG, parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_UG).setSealAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_UG).setSealAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
+						showAlertDialog(mSelectZhizuoType,"GetGeneralCode"+TYPE_UG, parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1), null);
 					}else if (mCurrentType == TYPE_SM){
-						mSelectorInfo.get("GetGeneralCode"+TYPE_SM).setHouseAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
-						mSelectorInfo.get("GetGeneralCode"+TYPE_SM).setHouseAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
-						showAlertDialog(mSelectChaizhiType,"GetGeneralCode"+TYPE_SM, parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_SM).setSealAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
+						mSelectorInfo.get("GetGeneralCode"+TYPE_SM).setSealAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
+						showAlertDialog(mSelectChaizhiType,"GetGeneralCode"+TYPE_SM, parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1), null);
 					}
 					
 				}else if (msg.what == 204){
 					dismissLoadingView();
-					mSelectorInfo.get("GetSignetSpecification").setHouseAllContent(parseSealReturn((String)msg.obj, "ss_specification", "ss_signet_type").get(1));
-					mSelectorInfo.get("GetSignetSpecification").setHouseAllId(parseSealReturn((String)msg.obj,"ss_specification", "ss_signet_type").get(0));
-					showAlertDialog(mSelectSealGuige,"GetSignetSpecification" , parseSealReturn((String)msg.obj, "ss_specification", "ss_signet_type").get(1));
+					mSelectorInfo.get("GetSignetSpecification").setSealAllContent(parseSealReturn((String)msg.obj, "ss_specification", "ss_signet_type").get(1));
+					mSelectorInfo.get("GetSignetSpecification").setSealAllId(parseSealReturn((String)msg.obj,"ss_specification", "ss_signet_type").get(0));
+					showAlertDialog(mSelectSealGuige,"GetSignetSpecification" , parseSealReturn((String)msg.obj, "ss_specification", "ss_signet_type").get(1), parseSealImageUrl((String)msg.obj, "Model"));
 				}else if (msg.what == 205){
 					dismissLoadingView();
 					String corpId = parseSealShiyongDanwei((String)msg.obj);
@@ -698,7 +779,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 						getSealCommonCode(mSelectSealType, TYPE_ST);
 						//requestDefaultSignetContent();
 					}else{
-						GlobalUtil.shortToast(mContext, "使用单位输入有误，请重新输入！", getResources().getDrawable(R.drawable.ic_dialog_no));
+						GlobalUtil.shortToast(getActivity(), "使用单位输入有误，请重新输入！", getResources().getDrawable(R.drawable.ic_dialog_no));
 						mSealNeirongText.setText("");
 					}
 				}else if (msg.what == 206){
@@ -708,7 +789,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					String ret = (String)msg.obj;
 					if (ret != null){
 						if (ret.equals("1")){
-							GlobalUtil.shortToast(mContext, "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
+							GlobalUtil.shortToast(getActivity(), "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
 							mExistSeal = true;
 						}else{
 							mExistSeal = false;
@@ -725,7 +806,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 							if (ret.equals("0")){
 								mAction.onNextFragment();
 							}else{
-								GlobalUtil.shortToast(mContext, "该印章内容保存失败！"+object.optString("msg"), getResources().getDrawable(R.drawable.ic_dialog_no));
+								GlobalUtil.shortToast(getActivity(), "该印章内容保存失败！"+object.optString("msg"), getResources().getDrawable(R.drawable.ic_dialog_no));
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -749,7 +830,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 									requestSignetId();
 								}else{
 									mIsReGetSignetId = false;
-									GlobalUtil.shortToast(mContext, getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
+									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
 								}
 							}
 						} catch (JSONException e) {
@@ -904,6 +985,31 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		}
 	}
 	
+	private List<String> parseSealImageUrl(String value, String urlId) {
+		List<String> urlList = new ArrayList<>();
+		String title = null;
+		try{
+			JSONArray array = new JSONArray(value);
+			if (array != null){
+				for (int item = 0; item < array.length(); item++){
+					JSONObject itemJsonObject = array.optJSONObject(item);
+					if (itemJsonObject.optString(urlId) != null && !itemJsonObject.optString(urlId).equals("null")){
+						title = itemJsonObject.optString("st_description");
+						urlList.add(CommonUtil.mUserHost + itemJsonObject.optString(urlId));
+					}
+				}
+			}
+			if (urlList.size() > 0){
+				urlList.add(title);
+				return urlList;
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
@@ -960,11 +1066,6 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				message.what = 208;
 				message.obj = templateInfo;
 				mHandler.sendMessage(message);
-			}else if (action.equals(mGetSignetIDActionAgain)){
-				Message msgMessage = mHandler.obtainMessage();
-				msgMessage.what = 301;
-				msgMessage.obj = templateInfo;
-				msgMessage.sendToTarget();
 			}
 		}
 		

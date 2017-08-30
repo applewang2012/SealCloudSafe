@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="@dimen/base_dimen_300"
+    android:layout_height="@dimen/base_dimen_333"
+    android:orientation="vertical"
+    android:background="#ffffff"
+     >
+	
+    <ImageView
+        android:id="@+id/item_gridview_image"
+        android:layout_width="@dimen/base_dimen_300"
+        android:layout_height="@dimen/base_dimen_300"
+        android:scaleType="fitXY"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/seal_default_image" />
+    
+     <TextView
+        android:id="@+id/item_gridview_text"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/base_dimen_60"
+        android:layout_marginTop="@dimen/base_dimen_270"
+        android:scaleType="fitXY"
+        android:gravity="center"
+        android:textSize="@dimen/base_dimen_32"
+        android:textColor="#000000"
+        android:text="标题" />
+     
+</FrameLayout>

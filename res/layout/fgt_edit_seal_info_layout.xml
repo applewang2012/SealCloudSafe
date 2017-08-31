@@ -23,6 +23,34 @@
                 android:background="@drawable/apply_seal_step_title" />
 
             <FrameLayout
+                android:layout_width="@dimen/base_dimen_680"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/base_dimen_26"
+                android:background="@drawable/item_red_shape_solid_corner"
+                android:padding="@dimen/base_dimen_10" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="退回原因"
+                    android:textColor="#d43c33"
+                    android:textSize="@dimen/base_dimen_30"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/id_show_reject_reason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/base_dimen_120"
+                    android:text="身份证信息上传有误"
+                    android:textColor="#555555"
+                    android:textSize="@dimen/base_dimen_28" />
+            </FrameLayout>
+
+            <FrameLayout
                 android:id="@+id/id_aty_apply_seal_select_quyu"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/base_dimen_80"

@@ -93,6 +93,18 @@
            android:screenOrientation="portrait"
            android:name=".ApplyForSealActivity" />
          
+         <activity  
+           android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+           android:theme="@style/SealAppTheme"
+           android:screenOrientation="portrait"
+           android:name=".EditSealInfoActivity" />
+         
+         <activity  
+           android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+           android:theme="@style/SealAppTheme"
+           android:screenOrientation="portrait"
+           android:name=".ShowSealInfoActivity" />
+         
           <activity
             android:name=".AlbumActivity"
             android:theme="@android:style/Theme.NoTitleBar"

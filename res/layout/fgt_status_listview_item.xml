@@ -30,7 +30,7 @@
 	    	android:layout_height="fill_parent"
 	    	android:layout_marginRight="@dimen/base_dimen_40"
 	    	android:layout_gravity="right"
-	    	android:textColor="#d43c33"
+	    	android:textColor="#2cc55e"
 	    	android:textSize="@dimen/base_dimen_26"
 	    	android:text="未通过"
 	    	android:gravity="right|center_vertical"

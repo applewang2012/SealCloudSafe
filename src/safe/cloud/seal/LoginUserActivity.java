@@ -1,6 +1,7 @@
 package safe.cloud.seal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -47,7 +48,7 @@ public class LoginUserActivity extends BaseActivity{
 	private EditText passwordEditText;
 	private boolean mValidUserPassword = false;
 	private String mPhone , mRealName;;
-	
+	private String mUserInfoAction = "http://tempuri.org/GetUserInfo";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -289,7 +290,40 @@ public class LoginUserActivity extends BaseActivity{
 		}
 	}
 
+	private  HashMap<String,String> parseUserInfo(String value) {
+		HashMap<String,String> userInfo = null;
+		try{
+			JSONArray array = new JSONArray(value);
+			if (array != null){
+				Log.i("house", "parse house info "+array.length());
+				//for (int item = 0; item < array.length(); item++){
+					
+					JSONObject itemJsonObject = array.optJSONObject(0);
+					userInfo = new HashMap<>();
+					userInfo.put("NickName", itemJsonObject.optString("NickName"));
+					userInfo.put("LoginName", itemJsonObject.optString("LoginName"));
+					userInfo.put("Address", itemJsonObject.optString("Address"));
+					userInfo.put("IDCard", itemJsonObject.optString("IDCard"));
+					userInfo.put("Phone", itemJsonObject.optString("Phone"));
+					userInfo.put("QQ", itemJsonObject.optString("QQ"));
+					//CommonUtil.mRegisterName = itemJsonObject.optString("RealName");
+					//CommonUtil.mRegisterIdcard = itemJsonObject.optString("IDCard");
+			}
+			return userInfo;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return userInfo;
+		}
+	}
+	
 
+	private void getUserInfo(){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetUserInfo";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mUserInfoAction));
+		rpc.addProperty("username", CommonUtil.mRegisterRealName);
+		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mUserInfoAction, rpc);
+		mPresenter.startPresentServiceTask();
+	}
 
 	private Handler mHandler = new Handler(){
 
@@ -299,25 +333,34 @@ public class LoginUserActivity extends BaseActivity{
 			super.handleMessage(msg);
 			if (msg.what == 100){
 				dismissLoadingView();
-				SharedPreferences sharedata = getApplicationContext().getSharedPreferences("user_info", 0);
-				SharedPreferences.Editor editor = sharedata.edit();
-			    editor.putString("user_name", mUserName);
-			    editor.putString("user_password", mPassword);
-			    editor.commit();
-				GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
-				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
-				intent.putExtra("user_name", mUserName);
-				intent.putExtra("user_password", mPassword);
-				intent.putExtra("user_phone", mPhone);
-				intent.putExtra("user_realname", mRealName);
-				startActivity(intent);
-				finish();
+				
+				
+				
+			    getUserInfo();
 			}else if (msg.what == 101){
 				dismissLoadingView();
 				GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.login_failed), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 			}else if (msg.what == 110){
 //				dismissLoadingView();
 //				showSelectAlertDialog("请选择所在区域", parseCommonService((String)msg.obj));
+			}else if (msg.what == 111){
+				HashMap<String, String> userMap = parseUserInfo((String)msg.obj);
+				GlobalUtil.shortToast(LoginUserActivity.this, getString(R.string.login_success), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+				Intent intent = new Intent(LoginUserActivity.this, HomeActivity.class);
+				intent.putExtra("user_name", mUserName);
+				intent.putExtra("user_password", mPassword);
+				intent.putExtra("user_phone", mPhone);
+				intent.putExtra("user_realname", mRealName);
+				SharedPreferences sharedata = getApplicationContext().getSharedPreferences("user_info", 0);
+				SharedPreferences.Editor editor = sharedata.edit();
+			    editor.putString("user_name", mUserName);
+			    editor.putString("user_password", mPassword);
+			    editor.putString("user_idcard", mPassword);
+			    editor.commit();
+			    CommonUtil.mRegisterRealName = mUserName;
+			    CommonUtil.mRegisterIdcard = userMap.get("QQ");
+				startActivity(intent);
+				finish();
 			}
 		}
 	};
@@ -371,6 +414,11 @@ public class LoginUserActivity extends BaseActivity{
 			}else if (action.equals(mCommonServiceAction)){
 				Message msg = mHandler.obtainMessage();
 				msg.what = 110;
+				msg.obj = templateInfo;
+				mHandler.sendMessage(msg);
+			}else if (action.equals(mUserInfoAction)){
+				Message msg = mHandler.obtainMessage();
+				msg.what = 111;
 				msg.obj = templateInfo;
 				mHandler.sendMessage(msg);
 			}

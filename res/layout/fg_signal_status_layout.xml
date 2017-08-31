@@ -59,6 +59,10 @@
 		    android:background="#f1f2f3"
 		    android:dividerHeight="@dimen/base_dimen_10"
              />
+   
+   <include
+            android:id="@+id/id_data_loading"
+            layout="@layout/layout_loading_dialog" />
      
 	  
 </FrameLayout>

@@ -56,11 +56,12 @@ import safe.cloud.seal.presenter.DataStatusInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
 import safe.cloud.seal.util.GlobalUtil;
+import safe.cloud.seal.util.ViewUtil;
 import safe.cloud.seal.widget.CircleFlowIndicator;
 import safe.cloud.seal.widget.GridViewAlertDialogBuilder;
 import safe.cloud.seal.widget.ViewFlow;
 
-public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInterface{
+public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInterface{
 	
 
 	
@@ -86,6 +87,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private String mCheckSignContentExistAction = "http://tempuri.org/IsExsitsSameContent";
 	private String mGetCorpInfoAction = "http://tempuri.org/GetCorporationInfo";
 	private String mGetUpdateSignAction = "http://tempuri.org/UpdateSignetInfo";
+	private String mGetSealDetailInfoAction = "http://tempuri.org/GetSignetDetailInfo";
 	private Map<String, SealInfoModel> mSelectorInfo = new HashMap<>();
 	private View mLoadingView;
 	private TextView mSelectQuyuText, mSealNumberText, mSelectSealType;
@@ -103,8 +105,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private TextView mSealNeirongText;
 	private EditText mSealUseDanweiEdit;
 	private boolean mExistSeal;
-	private EditText mRegisterPhone, mRealName, mRealId, mWaiWenEditView;
+	private EditText mRegisterPhone, mRealName, mRealId;
 	private boolean mIsReGetSignetId;
+	private TextView mRejectReason;
+	private EditText mWaiWenEditView;
 	
 	public  void setFragmentActionListener(ActionOperationInterface action) {
 		mAction = action;
@@ -115,7 +119,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mContext = getActivity().getApplicationContext();
-		mPresent = new HoursePresenter(mContext, AddSealInfoStep1Fragment.this);
+		mPresent = new HoursePresenter(mContext, EditSealInfoStep1Fragment.this);
 	}
 
 	@Override
@@ -123,7 +127,8 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		Log.i("fragmenttest", "homefragment onCreateView ");
-		mRootView = inflater.inflate(R.layout.fgt_apply_for_seal_info_layout, container, false);
+		mRootView = inflater.inflate(R.layout.fgt_edit_seal_info_layout, container, false);
+		
 		initTitleBar();
 		initView();
 		initData();
@@ -147,16 +152,23 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		mLoadingView = mRootView.findViewById(R.id.id_data_loading);
 		mLoadingView.setVisibility(View.INVISIBLE);
 		
-		mWaiWenEditView = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_waiwen);
+		mRejectReason = (TextView)mRootView.findViewById(R.id.id_show_reject_reason);
 		mSelectQuyuText = (TextView)mRootView.findViewById(R.id.id_aty_apply_seal_quyu_content);
 		FrameLayout quyuContent = (FrameLayout)mRootView.findViewById(R.id.id_aty_apply_seal_select_quyu);
-		quyuContent.setOnClickListener(new OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				getAllRegister();
-			}
-		});
+//		quyuContent.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				getAllRegister();
+//			}
+//		});
+//		SealInfoModel infoModel = new SealInfoModel();
+//		infoModel.setSelectedId(id);
+//		infoModel.setSelectedName(name);
+//		mSelectorInfo.put("getAllRegister", infoModel);
+		
+		mWaiWenEditView = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_waiwen);
+		
 		
 		FrameLayout zhizhangLayout = (FrameLayout)mRootView.findViewById(R.id.id_aty_apply_seal_zhizhang_danwei);
 		mZhizhangDanweiText = (TextView)mRootView.findViewById(R.id.id_aty_apply_seal_zhizhang_danwei_content);
@@ -186,7 +198,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					mCurrentType = TYPE_ST;
 					mSelectSealGuige.setText("");
 					mSelectorInfo.remove("GetSignetSpecification");
-					showLoadingView();
+					ViewUtil.showLoadingView(mContext, mLoadingView);
 					requestGetCorInfo(mSealUseDanweiEdit.getEditableText().toString());
 					
 //				}
@@ -251,6 +263,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			public void onClick(View v) {
 				mCurrentType = TYPE_KL;
 				getSealCommonCode(mSelectKezhiType, TYPE_KL);
+				
 			}
 		});
 		
@@ -359,7 +372,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					GlobalUtil.shortToast(getActivity(), "手机验证码不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
-				showLoadingView();
+				ViewUtil.showLoadingView(mContext, mLoadingView);
 				checkPhoneVerifyCode(mPhone, mVerifyCode);
 			}
 		});
@@ -408,29 +421,15 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		return true;
 	}
 	
-	private void showLoadingView(){
-		if (mLoadingView != null) {
-			mLoadingView.setVisibility(View.VISIBLE);
-        	ImageView imageView = (ImageView) mLoadingView.findViewById(R.id.id_progressbar_img);
-        	if (imageView != null) {
-        		RotateAnimation rotate = (RotateAnimation) AnimationUtils.loadAnimation(mContext, R.anim.anim_rotate);
-        		imageView.startAnimation(rotate);
-        	}
-		}
-	}
-	private void dismissLoadingView(){
-		if (mLoadingView != null) {
-			mLoadingView.setVisibility(View.INVISIBLE);
-		}
-	}
 	
 	private void initData(){
-		
+		ViewUtil.showLoadingView(mContext, mLoadingView);
+		requestGetSignDetailInfo(getArguments().getString("sealNo"));
 	}
 	
 	private void getAllRegister(){
 		if (!mSelectorInfo.containsKey("getAllRegister")){
-			showLoadingView();
+			ViewUtil.showLoadingView(mContext, mLoadingView);
 			SealInfoModel infoModel = new SealInfoModel();
 			mSelectorInfo.put("getAllRegister", infoModel);
 			requestAllRegister();
@@ -471,7 +470,6 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UpdateSignetInfo";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetUpdateSignAction));
 		rpc.addProperty("signetId",signId);
-		rpc.addProperty("regDetpName",mSelectorInfo.get("getAllRegister").getSelectedName());
 		rpc.addProperty("regDeptId",mSelectorInfo.get("getAllRegister").getSelectedId());
 		rpc.addProperty("content",mSealNeirongText.getText());
 		rpc.addProperty("foreignContent",mWaiWenEditView.getEditableText().toString());
@@ -491,7 +489,6 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		rpc.addProperty("creatorPhone",mRegisterPhone.getEditableText().toString());
 		Log.i("mingguo", "signetId "+mSealNumberText.getText()+
 				" regDeptId "+mSelectorInfo.get("getAllRegister").getSelectedId()+
-				" regDeptName "+mSelectorInfo.get("getAllRegister").getSelectedName()+
 				" content "+mSealNeirongText.getText()+
 				" foreignContent "+"waiwen"+
 				" corpId "+mSelectorInfo.get("GetCorporationInfo").getSelectedId()+
@@ -531,7 +528,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private void getAllCarveCorps(){
 		
 		//if (!mSelectorInfo.containsKey("getCarveCorps")){
-			showLoadingView();
+			ViewUtil.showLoadingView(mContext, mLoadingView);
 			SealInfoModel infoModel = new SealInfoModel();
 			mSelectorInfo.put("getCarveCorps", infoModel);
 			requestGetAllCarveCorps();
@@ -552,19 +549,19 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	}
 	
 	private void getSealCommonCode(TextView commonView, String typeId){
-		if (!mSelectorInfo.containsKey("GetGeneralCode"+typeId)){
-			showLoadingView();
+		//if (!mSelectorInfo.containsKey("GetGeneralCode"+typeId)){
+			ViewUtil.showLoadingView(mContext, mLoadingView);
 			SealInfoModel infoModel = new SealInfoModel();
 			mSelectorInfo.put("GetGeneralCode"+typeId, infoModel);
 			requestCommonData(typeId);
-		}else{
-			showAlertDialog(commonView, "GetGeneralCode"+typeId, mSelectorInfo.get("GetGeneralCode"+typeId).getSealAllContent(), null);
-		}
+//		}else{
+//			showAlertDialog(commonView, "GetGeneralCode"+typeId, mSelectorInfo.get("GetGeneralCode"+typeId).getSealAllContent(), null);
+//		}
 	}
 	
 	private void getSealChaizhi(TextView chaizhiView){
 //		if (!mSelectorInfo.containsKey("GetMaterials")){
-			showLoadingView();
+			ViewUtil.showLoadingView(mContext, mLoadingView);
 			SealInfoModel infoModel = new SealInfoModel();
 			mSelectorInfo.put("GetMaterials", infoModel);
 			requestGetMaterials();
@@ -602,7 +599,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	
 	private void getSealGuigeByType(String typeId){
 //		if (!mSelectorInfo.containsKey("GetSignetSpecification")){
-			showLoadingView();
+			ViewUtil.showLoadingView(mContext, mLoadingView);
 			SealInfoModel infoModel = new SealInfoModel();
 			mSelectorInfo.put("GetSignetSpecification", infoModel);
 			requestSealGuige(typeId);
@@ -635,6 +632,14 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		Log.i("mingguo", "check seal content exist    "+content);
 		rpc.addProperty("content", content);
 		mPresent.readyPresentServiceParams(mContext, url, mCheckSignContentExistAction, rpc);
+		mPresent.startPresentServiceTask();
+	}
+	
+	private void requestGetSignDetailInfo(String signId){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetDetailInfo";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSealDetailInfoAction));
+		rpc.addProperty("signetId", signId);
+		mPresent.readyPresentServiceParams(mContext, url, mGetSealDetailInfoAction, rpc);
 		mPresent.startPresentServiceTask();
 	}
 	
@@ -745,27 +750,27 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			// TODO Auto-generated method stub
 			if (msg.obj != null){
 				if (msg.what == 200){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					mSelectorInfo.get("getAllRegister").setSealAllContent(parseAllRegisterReturn((String)msg.obj).get(1));
 					mSelectorInfo.get("getAllRegister").setSealAllId(parseAllRegisterReturn((String)msg.obj).get(0));
 					showAlertDialog(mSelectQuyuText,"getAllRegister" , parseAllRegisterReturn((String)msg.obj).get(1), null);
 				}else if (msg.what == 201){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					if (mIsReGetSignetId){
 						CommonUtil.mSignetNumberId = (String)msg.obj;
-						showLoadingView();
+						ViewUtil.showLoadingView(mContext, mLoadingView);
 						requestUpdateSignInfo(CommonUtil.mSignetNumberId);
 					}else{
 						mSealNumberText.setText((String)msg.obj);
 						mZhizhangDanweiText.setText("");
 					}
 				}else if (msg.what == 202){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					mSelectorInfo.get("GetAllCarveCorps").setSealAllContent(parseSealKezhiDanwei((String)msg.obj).get(1));
 					mSelectorInfo.get("GetAllCarveCorps").setSealAllId(parseSealKezhiDanwei((String)msg.obj).get(0));
 					showAlertDialog(mZhizhangDanweiText,"GetAllCarveCorps" , parseSealKezhiDanwei((String)msg.obj).get(1), null);
 				}else if (msg.what == 203){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					if (mCurrentType == TYPE_ST){
 						mSelectorInfo.get("GetGeneralCode"+TYPE_ST).setSealAllContent(parseSealTypeSTReturn((String)msg.obj).get(1));
 						mSelectorInfo.get("GetGeneralCode"+TYPE_ST).setSealAllId(parseSealTypeSTReturn((String)msg.obj).get(0));
@@ -785,17 +790,17 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					}
 					
 				}else if (msg.what == 209){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					mSelectorInfo.get("GetMaterials").setSealAllContent(parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1));
 					mSelectorInfo.get("GetMaterials").setSealAllId(parseSealReturn((String)msg.obj,"gc_name", "gc_id").get(0));
 					showAlertDialog(mSelectChaizhiType,"GetMaterials", parseSealReturn((String)msg.obj, "gc_name", "gc_id").get(1), parseSealImageUrl((String)msg.obj, "MaterialUrl"));
 				}else if (msg.what == 204){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					mSelectorInfo.get("GetSignetSpecification").setSealAllContent(parseSealReturn((String)msg.obj, "ss_specification", "ss_signet_type").get(1));
 					mSelectorInfo.get("GetSignetSpecification").setSealAllId(parseSealReturn((String)msg.obj,"ss_specification", "ss_signet_type").get(0));
 					showAlertDialog(mSelectSealGuige,"GetSignetSpecification" , parseSealReturn((String)msg.obj, "ss_specification", "ss_signet_type").get(1), parseSealImageUrl((String)msg.obj, "Model"));
 				}else if (msg.what == 205){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					String corpId = parseSealShiyongDanwei((String)msg.obj);
 					if (corpId != null){
 						mSelectorInfo.get("GetCorporationInfo").setSelectedId(corpId);
@@ -819,7 +824,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 						}
 					}
 				}else if (msg.what == 208){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					String value = (String)msg.obj;
 					if (value != null){
 						JSONObject object;
@@ -840,7 +845,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					Log.i("mingguo", "time count  "+mTimeCount);
 					
 				}else if (msg.what == 1002){
-					dismissLoadingView();
+					ViewUtil.dismissLoadingView(mLoadingView);
 					if (msg.obj != null){
 						JSONObject json;
 						try {
@@ -849,7 +854,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 							if (ret != null){
 								if (ret.equals("0")){
 									mIsReGetSignetId = true;
-									showLoadingView();
+									ViewUtil.showLoadingView(mContext, mLoadingView);
 									requestSignetId();
 								}else{
 									mIsReGetSignetId = false;
@@ -861,6 +866,9 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 							e.printStackTrace();
 						}
 					}
+				}else if (msg.what == 2000){
+					ViewUtil.dismissLoadingView(mLoadingView);
+					parseSealDetailData((String)msg.obj);
 				}
 			}else{
 				if (msg.what == 1000){
@@ -927,6 +935,96 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		} catch (Exception e) {
 			e.printStackTrace();
 			return list;
+		}
+	}
+	
+	private List<String[]> parseSealDetailData(String value){
+		List<String[]> list = new ArrayList<>();
+		try{
+			JSONObject object = new JSONObject(value);
+			if (object != null){
+				mRejectReason.setText(object.optString("RejectReason"));
+				
+				mSealNumberText.setText(object.optString("SignetID"));
+				
+				mWaiWenEditView.setText(object.optString("ForeignContent"));
+				
+				SealInfoModel allRegister = new SealInfoModel();
+				allRegister.setSelectedId(object.optString("RegionId"));
+				allRegister.setSelectedName(object.optString("RegionName"));
+				mSelectorInfo.put("getAllRegister", allRegister);
+				mSelectQuyuText.setText(object.optString("RegionName"));
+				//使用单位
+				SealInfoModel copInfo = new SealInfoModel();
+				copInfo.setSelectedId(object.optString("CorpID"));
+				copInfo.setSelectedName(object.optString("CorpName"));
+				mSelectorInfo.put("GetCorporationInfo", copInfo);
+				mSealUseDanweiEdit.setText(object.optString("CorpName"));
+				//印章规格
+				SealInfoModel specificationInfo = new SealInfoModel();
+				//sealtypeInfo.setSelectedId(object.optString("CorpID"));
+				specificationInfo.setSelectedName(object.optString("Specification"));
+				mSelectorInfo.put("GetSignetSpecification", specificationInfo);
+				mSelectSealGuige.setText(object.optString("Specification"));
+				
+				//印章类型
+				SealInfoModel guigeInfo = new SealInfoModel();
+				guigeInfo.setSelectedId(object.optString("SignetType"));
+				guigeInfo.setSelectedName(object.optString("SignetTypeName"));
+				mSelectorInfo.put("GetGeneralCode"+TYPE_ST, guigeInfo);
+				mSelectSealType.setText(object.optString("SignetTypeName"));
+				
+				//印章内容
+//				SealInfoModel sealContent = new SealInfoModel();
+//				//guigeInfo.setSelectedId(object.optString("SignetType"));
+//				guigeInfo.setSelectedName(object.optString("SignetContent"));
+//				mSelectorInfo.put("GetGeneralCode"+TYPE_ST, guigeInfo);
+//				mSelectSealType.setText(object.optString("SignetTypeName"));
+				mSealNeirongText.setText(object.optString("SignetContent"));
+				
+				//制章单位
+				SealInfoModel carveInfo = new SealInfoModel();
+				carveInfo.setSelectedId(object.optString("CarveCorpID"));
+				carveInfo.setSelectedName(object.optString("CarveCorpName"));
+				mSelectorInfo.put("GetAllCarveCorps", carveInfo);
+				mZhizhangDanweiText.setText(object.optString("CarveCorpName"));
+				//刻制类型
+				SealInfoModel carveTypeInfo = new SealInfoModel();
+				carveTypeInfo.setSelectedId(object.optString("IsUpdate"));
+				carveTypeInfo.setSelectedName(object.optString("CarveTypeDesc"));
+				mSelectorInfo.put("GetGeneralCode"+TYPE_KL, carveTypeInfo);
+				mSelectKezhiType.setText(object.optString("CarveTypeDesc"));
+				
+				//登记类型
+				SealInfoModel dengjiType = new SealInfoModel();
+				dengjiType.setSelectedId(object.optString("PackageID"));
+				dengjiType.setSelectedName(object.optString("RegisterDesc"));
+				mSelectorInfo.put("GetGeneralCode"+TYPE_DB, dengjiType);
+				mSelectDengjiType.setText(object.optString("RegisterDesc"));
+				
+				//制作等级
+				SealInfoModel zhizuoLevel = new SealInfoModel();
+				zhizuoLevel.setSelectedId(object.optString("IsUrgent"));
+				zhizuoLevel.setSelectedName(object.optString("CarveLevelDesc"));
+				mSelectorInfo.put("GetGeneralCode"+TYPE_DB, zhizuoLevel);
+				mSelectZhizuoType.setText(object.optString("CarveLevelDesc"));
+				
+				//章体材质
+				SealInfoModel chaizhiInfo = new SealInfoModel();
+				chaizhiInfo.setSelectedId(object.optString("Material"));
+				chaizhiInfo.setSelectedName(object.optString("MaterialDesc"));
+				mSelectorInfo.put("GetMaterials", chaizhiInfo);
+				mSelectChaizhiType.setText(object.optString("MaterialDesc"));
+				
+				mRealName.setText(object.optString("Applyer"));
+				mRealId.setText(object.optString("ApplyerIDCard"));
+				mRegisterPhone.setText(object.optString("LinkWay"));
+			}
+			
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -1094,9 +1192,13 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				message.what = 209;
 				message.obj = templateInfo;
 				mHandler.sendMessage(message);
+			}else if (action.equals(mGetSealDetailInfoAction)){
+				Message message = mHandler.obtainMessage();
+				message.what = 2000;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
 			}
 		}
-		
 	}
 
 	@Override

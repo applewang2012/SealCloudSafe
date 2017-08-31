@@ -1,16 +1,23 @@
 package safe.cloud.seal;
 
 
+import java.util.HashMap;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import safe.cloud.seal.util.CommonUtil;
 
 public class WelcomeActivity extends BaseActivity {
 	private LinearLayout mLoading_data;
@@ -34,10 +41,7 @@ public class WelcomeActivity extends BaseActivity {
 		
 	}
 	
-	public void changeAlpha() {
-        	
-           
-    }
+	
 	private Handler mHandler = new Handler(){
 
 		@Override
@@ -50,6 +54,7 @@ public class WelcomeActivity extends BaseActivity {
 					intent.putExtra("user_name", mUsername);
 					intent.putExtra("user_password", mPassword);
 					startActivity(intent);
+					
 //				}else{
 //					Intent intent = new Intent(WelcomeActivity.this, RegisterUserActivity.class);
 //					startActivity(intent);
@@ -57,7 +62,6 @@ public class WelcomeActivity extends BaseActivity {
 				finish();
 				break;
 			case 200:
-				changeAlpha();
 				mHandler.sendEmptyMessageDelayed(100, 3000);
 				break;
 			case 201:

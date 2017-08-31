@@ -120,7 +120,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_seal_use_danwei"
                     android:layout_width="@dimen/base_dimen_560"
                     android:layout_height="wrap_content"
@@ -172,6 +172,7 @@
                     android:layout_height="@dimen/base_dimen_15"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="@dimen/base_dimen_36"
+                    android:visibility="invisible"
                     android:background="@drawable/select_content_more" />
             </FrameLayout>
 
@@ -214,6 +215,7 @@
                     android:layout_height="@dimen/base_dimen_15"
                     android:layout_gravity="right|center_vertical"
                     android:layout_marginRight="@dimen/base_dimen_36"
+                    android:visibility="invisible"
                     android:background="@drawable/select_content_more" />
             </FrameLayout>
 
@@ -241,7 +243,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_seal"
                     android:layout_width="@dimen/base_dimen_560"
                     android:layout_height="wrap_content"
@@ -296,7 +298,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_waiwen"
                     android:layout_width="wrap_content"
                     android:layout_height="fill_parent"
@@ -343,6 +345,7 @@
                         android:layout_height="@dimen/base_dimen_15"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="@dimen/base_dimen_36"
+                        android:visibility="invisible"
                         android:background="@drawable/select_content_more" />
                 
             </FrameLayout>
@@ -393,6 +396,7 @@
                         android:layout_height="@dimen/base_dimen_15"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="@dimen/base_dimen_16"
+                        android:visibility="invisible"
                         android:background="@drawable/select_content_more" />
                 </FrameLayout>
 
@@ -427,6 +431,7 @@
                         android:layout_height="@dimen/base_dimen_15"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="@dimen/base_dimen_36"
+                        android:visibility="invisible"
                         android:background="@drawable/select_content_more" />
                 </FrameLayout>
             </LinearLayout>
@@ -477,6 +482,7 @@
                         android:layout_height="@dimen/base_dimen_15"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="@dimen/base_dimen_16"
+                        android:visibility="invisible"
                         android:background="@drawable/select_content_more" />
                 </FrameLayout>
 
@@ -513,6 +519,7 @@
                         android:layout_height="@dimen/base_dimen_15"
                         android:layout_gravity="right|center_vertical"
                         android:layout_marginRight="@dimen/base_dimen_36"
+                        android:visibility="invisible"
                         android:background="@drawable/select_content_more" />
                 </FrameLayout>
             </LinearLayout>
@@ -534,7 +541,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_idname"
                     android:layout_width="@dimen/base_dimen_560"
                     android:layout_height="wrap_content"
@@ -571,7 +578,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_idcard_number"
                     android:layout_width="@dimen/base_dimen_560"
                     android:layout_height="wrap_content"
@@ -610,7 +617,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_phone_number"
                     android:layout_width="@dimen/base_dimen_280"
                     android:layout_height="wrap_content"
@@ -634,45 +641,7 @@
                     android:gravity="center"
                     android:text="获取验证码"
                     android:textColor="#ef1619"
-                    android:textSize="@dimen/base_dimen_28" />
-            </FrameLayout>
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/base_dimen_1"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginLeft="@dimen/base_dimen_26"
-                android:layout_marginRight="@dimen/base_dimen_26"
-                android:background="#cccccc" />
-
-            <FrameLayout
-                android:id="@+id/id_aty_apply_seal_input_verifycode_content"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/base_dimen_80"
-                android:background="#ffffff"
-                android:orientation="horizontal" >
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/base_dimen_26"
-                    android:text="验  证  码"
-                    android:textColor="#000000"
-                    android:textSize="@dimen/base_dimen_30" />
-
-                <EditText
-                    android:id="@+id/id_aty_apply_seal_input_phone_yanzhengma"
-                    android:layout_width="@dimen/base_dimen_560"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginLeft="@dimen/base_dimen_165"
-                    android:background="#00000000"
-                    android:hint="请输入手机验证码"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:textColor="#555555"
-                    android:textColorHint="#b2b2b2"
+                    android:visibility="invisible"
                     android:textSize="@dimen/base_dimen_28" />
             </FrameLayout>
 

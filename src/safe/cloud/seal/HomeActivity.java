@@ -1,12 +1,10 @@
 package safe.cloud.seal;
 
 
-import android.Manifest;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -23,7 +21,7 @@ public class HomeActivity extends BaseActivity {
 	private HoursePresenter mPresenter;
 	//private String mLoginAction = "http://tempuri.org/ValidateLogin";
 	private String mUpdateAction="http://tempuri.org/CheckUpgrade";
-	private String mUserInfoAction = "http://tempuri.org/GetUserInfo";;
+	private String mUserInfoAction = "http://tempuri.org/GetUserInfo";
 	private String mUserName, mPassword;
 	private String mUserInfoString = null;
 	private String mCity = null;
@@ -43,8 +41,7 @@ public class HomeActivity extends BaseActivity {
 		mPhone = getIntent().getStringExtra("user_phone");
 		mRealName = getIntent().getStringExtra("user_realname");
 		initView();
-//		getUserInfo();
-		
+		//getUserInfo();
 	}
 	
 	private void initView(){
@@ -129,6 +126,7 @@ public class HomeActivity extends BaseActivity {
 			}
 		});
 	}
+	
 	
 	
 	private void hideAllFragments(FragmentTransaction transaction) {

@@ -5,7 +5,25 @@ public class SealStatusInfo {
 	private String sealType;
 	private String sealCorp;
 	private String sealDate;
+	private String showStatus;
+	private String sealNo;
 
+	public void setSealNo(String no){
+		sealNo = no;
+	}
+	
+	public String getSealNo(){
+		return sealNo;
+	}
+	
+	public void setShowSealStatus(String status){
+		showStatus = status;
+	}
+	
+	public String getShowSealStaus(){
+		return showStatus;
+	}
+	
 	public void setSealStatus(String status){
 		sealStatus = status;
 	}

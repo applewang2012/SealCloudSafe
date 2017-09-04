@@ -204,7 +204,7 @@ public class ShowSealInfoStep1Fragment extends Fragment implements DataStatusInt
 
 			@Override
 			public void onClick(View v) {
-				mAction.onNextFragment();
+				mAction.onNextFragment(null, mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
 //				if (!checkApplySealValid()){
 //					return;
 //				}
@@ -622,9 +622,8 @@ public class ShowSealInfoStep1Fragment extends Fragment implements DataStatusInt
 				}else if (msg.what == 201){
 					ViewUtil.dismissLoadingView(mLoadingView);
 					if (mIsReGetSignetId){
-						CommonUtil.mSignetNumberId = (String)msg.obj;
 						ViewUtil.showLoadingView(mContext, mLoadingView);
-						requestUpdateSignInfo(CommonUtil.mSignetNumberId);
+						requestUpdateSignInfo((String)msg.obj);
 					}else{
 						mSealNumberText.setText((String)msg.obj);
 						mZhizhangDanweiText.setText("");
@@ -697,7 +696,7 @@ public class ShowSealInfoStep1Fragment extends Fragment implements DataStatusInt
 							object = new JSONObject(value);
 							String ret = object.optString("ret");
 							if (ret.equals("0")){
-								mAction.onNextFragment();
+								mAction.onNextFragment(null, mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
 							}else{
 								GlobalUtil.shortToast(getActivity(), "该印章内容保存失败！"+object.optString("msg"), getResources().getDrawable(R.drawable.ic_dialog_no));
 							}

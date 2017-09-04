@@ -333,9 +333,6 @@ public class LoginUserActivity extends BaseActivity{
 			super.handleMessage(msg);
 			if (msg.what == 100){
 				dismissLoadingView();
-				
-				
-				
 			    getUserInfo();
 			}else if (msg.what == 101){
 				dismissLoadingView();
@@ -357,7 +354,7 @@ public class LoginUserActivity extends BaseActivity{
 			    editor.putString("user_password", mPassword);
 			    editor.putString("user_idcard", mPassword);
 			    editor.commit();
-			    CommonUtil.mRegisterRealName = mUserName;
+			    CommonUtil.mUserLoginName = mUserName;
 			    CommonUtil.mRegisterIdcard = userMap.get("QQ");
 				startActivity(intent);
 				finish();

@@ -38,7 +38,8 @@ public final class GlobalUtil {
 	// This class should not be instantiated, hence the private constructor
 	private GlobalUtil() {
 	}
-
+	
+	public static String SEAL_DOWNLOAD_DIR = "sealdownload";
 
 	/**
 	 * Get version code for this application.
@@ -83,6 +84,23 @@ public final class GlobalUtil {
 
 		return versionCode;
 	}
+	
+	public static boolean deleteInstalledApkFile(){
+   	 File root = Environment.getExternalStorageDirectory();
+        File base = new File(root.getPath() + "/"+SEAL_DOWNLOAD_DIR);
+        if (!base.exists()){
+        	base.mkdir();
+        }
+    	
+    	File[] files = base.listFiles();
+    	for (int i = 0; i < files.length; i++) {
+			String filename = files[i].getName();
+			if (filename.endsWith(".apk")){
+				return new File(base.getPath()+File.separator+filename).delete();
+			}
+    	}
+    	return false;
+   }
 
 	/**
 	 * Get version name for this application.

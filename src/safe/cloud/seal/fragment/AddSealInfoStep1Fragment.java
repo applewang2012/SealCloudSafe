@@ -132,13 +132,6 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	
 	private void initTitleBar(){
 		
-//		View titlebarView = (View)mRootView.findViewById(R.id.id_common_title_bar);
-//		TextView titleText = (TextView) titlebarView.findViewById(R.id.id_titlebar);
-//		titleText.setText("印章状态");
-//		titleText.setTextColor(Color.parseColor("#ffffff"));
-//		Button backButton = (Button)titlebarView.findViewById(R.id.id_titlebar_back);
-//		backButton.setVisibility(View.INVISIBLE);
-//		View titleBarBg = (View)mRootView.findViewById(R.id.id_titlebar_background);
 	}
 	
 	
@@ -488,7 +481,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		rpc.addProperty("applyer",mRealName.getEditableText().toString());
 		rpc.addProperty("applyerId",mRealId.getEditableText().toString());
 		rpc.addProperty("applyerPhone",mRegisterPhone.getEditableText().toString());
-		rpc.addProperty("creatorPhone",mRegisterPhone.getEditableText().toString());
+		rpc.addProperty("creatorPhone",CommonUtil.mUserLoginName);
 		Log.i("mingguo", "signetId "+mSealNumberText.getText()+
 				" regDeptId "+mSelectorInfo.get("getAllRegister").getSelectedId()+
 				" regDeptName "+mSelectorInfo.get("getAllRegister").getSelectedName()+
@@ -507,7 +500,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				" applyer "+mRealName.getEditableText().toString()+
 				" applyerId "+mRealId.getEditableText().toString()+
 				" applyerPhone "+mRegisterPhone.getEditableText().toString()+
-				" creatorPhone "+mRegisterPhone.getEditableText().toString()
+				" creatorPhone "+CommonUtil.mUserLoginName
 				
 				);
 		mPresent.readyPresentServiceParams(mContext, url, mGetUpdateSignAction, rpc);
@@ -752,9 +745,8 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				}else if (msg.what == 201){
 					dismissLoadingView();
 					if (mIsReGetSignetId){
-						CommonUtil.mSignetNumberId = (String)msg.obj;
 						showLoadingView();
-						requestUpdateSignInfo(CommonUtil.mSignetNumberId);
+						requestUpdateSignInfo((String)msg.obj);
 					}else{
 						mSealNumberText.setText((String)msg.obj);
 						mZhizhangDanweiText.setText("");
@@ -827,7 +819,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 							object = new JSONObject(value);
 							String ret = object.optString("ret");
 							if (ret.equals("0")){
-								mAction.onNextFragment();
+								mAction.onNextFragment(mSealNumberText.getText()+"", mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
 							}else{
 								GlobalUtil.shortToast(getActivity(), "该印章内容保存失败！"+object.optString("msg"), getResources().getDrawable(R.drawable.ic_dialog_no));
 							}
@@ -847,14 +839,14 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 							json = new JSONObject((String)msg.obj);
 							String ret = json.optString("ret");
 							if (ret != null){
-								if (ret.equals("0")){
+								//if (ret.equals("0")){
 									mIsReGetSignetId = true;
 									showLoadingView();
 									requestSignetId();
-								}else{
-									mIsReGetSignetId = false;
-									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
-								}
+//								}else{
+//									mIsReGetSignetId = false;
+//									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
+//								}
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block

@@ -92,11 +92,16 @@ public class EditSealInfoActivity extends BaseActivity {
 			mAddInfoFragment.setFragmentActionListener(new ActionOperationInterface() {
 				
 				@Override
-				public void onNextFragment() {
+				public void onNextFragment(String signid, String signType) {
+					// TODO Auto-generated method stub
 					FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 					if (mUploadInfoFragment == null){
 						hideAllFragments(fragmentTransaction);
 						mUploadInfoFragment = new EditSealInfoStep2Fragment();
+						Bundle bundle = new Bundle();  
+			            bundle.putString("sealNo", mSealNo);
+			            bundle.putString("sealType", signType);
+			            mUploadInfoFragment.setArguments(bundle);
 						fragmentTransaction.add(R.id.id_add_seal_content, mUploadInfoFragment);
 						fragmentTransaction.commitAllowingStateLoss();
 					}else{

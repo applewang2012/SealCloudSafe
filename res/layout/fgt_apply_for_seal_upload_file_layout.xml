@@ -70,10 +70,10 @@
 	            android:layout_height="match_parent"
 	            android:layout_marginTop="@dimen/base_dimen_100"
 	            android:layout_marginBottom="@dimen/base_dimen_100"
-				android:cacheColorHint="#f1f2f3"
 				android:divider="#f1f2f3"
 			    android:fadingEdge="none"
 			    android:background="#f1f2f3"
+			    android:cacheColorHint="#00000000"
 			    android:dividerHeight="@dimen/base_dimen_20"
 	             />
             <!-- <LinearLayout 

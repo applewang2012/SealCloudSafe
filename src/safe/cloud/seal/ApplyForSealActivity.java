@@ -60,7 +60,7 @@ public class ApplyForSealActivity extends BaseActivity {
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		TextView tilebar = (TextView)findViewById(R.id.id_titlebar);
 		tilebar.setText("申请印章");
-		
+		//mSealNo = getIntent().getStringExtra("seal_no");
 		mUserName = getIntent().getStringExtra("user_name");
 		mPassword = getIntent().getStringExtra("user_password");
 		initHandler();
@@ -87,13 +87,18 @@ public class ApplyForSealActivity extends BaseActivity {
 			fragmentTransaction.add(R.id.id_add_seal_content, mAddInfoFragment);
 			fragmentTransaction.commitAllowingStateLoss();
 			mAddInfoFragment.setFragmentActionListener(new ActionOperationInterface() {
-				
+
 				@Override
-				public void onNextFragment() {
+				public void onNextFragment(String signId, String signType) {
+					// TODO Auto-generated method stub
 					FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
 					if (mUploadInfoFragment == null){
 						hideAllFragments(fragmentTransaction);
 						mUploadInfoFragment = new AddSealInfoStep2Fragment();
+						Bundle bundle = new Bundle();  
+			            bundle.putString("sealNo", signId); 
+			            bundle.putString("sealType", signType);
+			            mUploadInfoFragment.setArguments(bundle);
 						fragmentTransaction.add(R.id.id_add_seal_content, mUploadInfoFragment);
 						fragmentTransaction.commitAllowingStateLoss();
 					}else{

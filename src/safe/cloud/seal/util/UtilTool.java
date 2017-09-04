@@ -137,7 +137,7 @@ public class UtilTool {
     
     public static String stampToNormalDate(String s){
         String res;
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         long lt = new Long(s);
         Date date = new Date(lt);
         res = simpleDateFormat.format(date);

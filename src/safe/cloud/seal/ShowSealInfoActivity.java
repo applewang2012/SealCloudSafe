@@ -22,6 +22,7 @@ import safe.cloud.seal.fragment.EditSealInfoStep1Fragment;
 import safe.cloud.seal.fragment.EditSealInfoStep2Fragment;
 import safe.cloud.seal.fragment.SealStatusFragment;
 import safe.cloud.seal.fragment.ShowSealInfoStep1Fragment;
+import safe.cloud.seal.fragment.ShowSealInfoStep2Fragment;
 import safe.cloud.seal.presenter.ActionOperationInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.GlobalUtil;
@@ -53,7 +54,7 @@ public class ShowSealInfoActivity extends BaseActivity {
 	private ImageView danweijieshaoxin2;
 
 	private ShowSealInfoStep1Fragment mShowInfoFragment ;
-	private EditSealInfoStep2Fragment mUploadInfoFragment;
+	private ShowSealInfoStep2Fragment mShowInfoFragment2;
 	private String mSealNo = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +76,8 @@ public class ShowSealInfoActivity extends BaseActivity {
 		if (mShowInfoFragment != null && !mShowInfoFragment.isHidden()) {
 			transaction.hide(mShowInfoFragment);
 		}
-		if (mUploadInfoFragment != null && !mUploadInfoFragment.isHidden()) {
-			transaction.hide(mUploadInfoFragment);
+		if (mShowInfoFragment2 != null && !mShowInfoFragment2.isHidden()) {
+			transaction.hide(mShowInfoFragment2);
 		}
 		
 	}
@@ -92,16 +93,22 @@ public class ShowSealInfoActivity extends BaseActivity {
 			fragmentTransaction.commitAllowingStateLoss();
 			mShowInfoFragment.setFragmentActionListener(new ActionOperationInterface() {
 				
+
 				@Override
-				public void onNextFragment() {
+				public void onNextFragment(String signId, String signType) {
+					// TODO Auto-generated method stub
 					FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-					if (mUploadInfoFragment == null){
+					if (mShowInfoFragment2 == null){
 						hideAllFragments(fragmentTransaction);
-						mUploadInfoFragment = new EditSealInfoStep2Fragment();
-						fragmentTransaction.add(R.id.id_add_seal_content, mUploadInfoFragment);
+						mShowInfoFragment2 = new ShowSealInfoStep2Fragment();
+						Bundle bundle = new Bundle();  
+			            bundle.putString("sealNo", mSealNo); 
+			            bundle.putString("sealType", signType);
+						mShowInfoFragment2.setArguments(bundle);
+						fragmentTransaction.add(R.id.id_add_seal_content, mShowInfoFragment2);
 						fragmentTransaction.commitAllowingStateLoss();
 					}else{
-						fragmentTransaction.show(mUploadInfoFragment);
+						fragmentTransaction.show(mShowInfoFragment2);
 						fragmentTransaction.commitAllowingStateLoss();
 					}
 				}

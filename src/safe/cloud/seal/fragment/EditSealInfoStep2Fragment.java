@@ -12,6 +12,7 @@ import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
 import com.google.zxing.oned.rss.FinderPattern;
+import com.squareup.picasso.Picasso;
 
 import android.R.integer;
 import android.app.Activity;
@@ -54,6 +55,7 @@ import android.widget.Toast;
 import safe.cloud.seal.AlbumActivity;
 import safe.cloud.seal.LoginUserActivity;
 import safe.cloud.seal.R;
+import safe.cloud.seal.R.id;
 import safe.cloud.seal.album.ImageItem;
 import safe.cloud.seal.model.SealInfoModel;
 import safe.cloud.seal.model.SealStatusInfo;
@@ -90,12 +92,15 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 	private int mSelectPhotoFlag = 0;
 	private View mLoadingView;
 	private String mUploadFileAction = "http://tempuri.org/AddSignetFile";
-	private String mGetGeneralCodeAction = "http://tempuri.org/GetGeneralCode";
+	private String mUpdateFileAction = "http://tempuri.org/UpdateSignetFile";
+	private String mGetSignetFileAction = "http://tempuri.org/GetSignetsFiles";
 	private String mSubmitFileAction = "http://tempuri.org/SubmitSignet";
 	private List<SealUploadFileType> mDataList = new ArrayList<>();
 	private UniversalAdapter mAdapter;
 	private int mUploadNum = 0;
 	private List<ImageItem> mUploadList = new ArrayList<>();
+	private String mSignetNo;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -110,16 +115,31 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 		// TODO Auto-generated method stub
 		Log.i("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fgt_apply_for_seal_upload_file_layout, container, false);
+		mSignetNo = getArguments().getString("sealNo");
 		initTitleBar();
 		initHandler();
 		initView();
-		requestCommonData("CE");
+		requestData(mSignetNo);
 		return mRootView;
 	}
 	
 	private void initTitleBar(){
 
 		
+	}
+	
+	private void requestUpdateSignFile(String signId, String type, String file, String data, String demo, String id){
+		showLoadingView();
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UpdateSignetFile";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mUpdateFileAction));
+		rpc.addProperty("signetId",signId);
+		rpc.addProperty("type",type);
+		rpc.addProperty("file",file);
+		rpc.addProperty("data",data);
+		rpc.addProperty("demo",demo);
+		rpc.addProperty("id",id);
+		mPresent.readyPresentServiceParams(mContext, url, mUpdateFileAction, rpc);
+		mPresent.startPresentServiceTask();
 	}
 	
 	private void requestUploadSignFile(String signId, String type, String file, String data, String demo){
@@ -232,8 +252,11 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 				item.setImagePath(mDataList.get(index).getImagePath());
 				item.setBitmap(mDataList.get(index).getImageBitmap());
 				item.setTypeName(mDataList.get(index).getFileType());
-				item.setTypeNameId(mDataList.get(index).getFileId());
+				item.setTypeNameId(mDataList.get(index).getFileTypeId());
 				item.setBitmapBase64(mDataList.get(index).getBitmapBase64());
+				if (mDataList.get(index).getFileID() != null){
+					item.setFileId(mDataList.get(index).getFileID());
+				}
 				mUploadList.add(item);
 				checkFile ++;
 			}
@@ -242,21 +265,25 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 				item2.setImagePath(mDataList.get(index).getImage2Path());
 				item2.setBitmap(mDataList.get(index).getImage2Bitmap());
 				item2.setTypeName(mDataList.get(index).getFileType());
-				item2.setTypeNameId(mDataList.get(index).getFileId());
+				item2.setTypeNameId(mDataList.get(index).getFileTypeId());
 				item2.setBitmapBase64(mDataList.get(index).getBitmap2Base64());
+				if (mDataList.get(index).getFileID2() != null){
+					item2.setFileId(mDataList.get(index).getFileID());
+				}
 				mUploadList.add(item2);
 				checkFile ++;
 			}
-			if (checkFile == 0){
-				GlobalUtil.shortToast(getActivity(), mDataList.get(index).getFileType()+" 未添加文件 ！", getResources().getDrawable(R.drawable.ic_dialog_no));
-				allowUpload = false;
-				break;
-			}
+//			if (checkFile == 0){
+//				GlobalUtil.shortToast(getActivity(), mDataList.get(index).getFileType()+" 未添加文件 ！", getResources().getDrawable(R.drawable.ic_dialog_no));
+//				allowUpload = false;
+//				break;
+//			}
 		}
-		if (mUploadList.size() > 0 && allowUpload){
+//		if (mUploadList.size() > 0 && allowUpload){
 			showUploadDialog();
-			
-		}
+//		}else{
+//			GlobalUtil.shortToast(getActivity(), "您未修改 任何文件！", getResources().getDrawable(R.drawable.ic_dialog_no));
+//		}
 	}
 	
 	private void showLoadingView(){
@@ -276,20 +303,26 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 	}
 	
 	private void startUploadFile(int startIndex){
-		Log.e("mingguo", "need to upload num  "+mUploadList.size());
+		Log.e("mingguo", "need to upload num  "+mUploadList.size()+"  current upload  "+mUploadNum);
+		if (mUploadNum >= mUploadList.size()){
+			submitUploadSignFile(mSignetNo);
+			return;
+		}
 		for (int index = 0; index < mUploadList.size(); index++){
 			if (startIndex == index){
-				Log.e("mingguo", "signet id  "+CommonUtil.mSignetNumberId+"  upload  name   "+mUploadList.get(index).getTypeNameId()+"  path "+mUploadList.get(index).getImageName());
-				requestUploadSignFile(CommonUtil.mSignetNumberId, mUploadList.get(index).getTypeNameId(), 
-						mUploadList.get(index).getImageName(), mUploadList.get(index).getBitmapBase64(), "demo");
+				Log.e("mingguo", "signet id  "+mSignetNo+"  mUploadList.get(index).getFileId()  "+mUploadList.get(index).getFileId()+
+						"  upload  name   "+mUploadList.get(index).getTypeNameId()+"  path "+mUploadList.get(index).getImageName());
+				if (mUploadList.get(index).getFileId() == null){
+					requestUploadSignFile(mSignetNo, mUploadList.get(index).getTypeNameId(), 
+							mUploadList.get(index).getImageName(), mUploadList.get(index).getBitmapBase64(), "demo");
+				}else{
+					requestUpdateSignFile(mSignetNo, mUploadList.get(index).getTypeNameId(), 
+							mUploadList.get(index).getImageName(), mUploadList.get(index).getBitmapBase64(), "demo", mUploadList.get(index).getFileId());
+				}
 			}
 		}
 		mUploadNum++;
-		if (mUploadNum == mUploadList.size()){
-			submitUploadSignFile(CommonUtil.mSignetNumberId);
-//			GlobalUtil.shortToast(getActivity(), "上传文件成功！", getResources().getDrawable(R.drawable.ic_dialog_no));
-//			getActivity().finish();
-		}
+		
 	}
 
 	private void initAdapter(){
@@ -304,12 +337,17 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 				ImageView addFile1 = (ImageView)holderView.findViewById(R.id.id_seal_upload_add_file1);
 				ImageView addFile2 = (ImageView)holderView.findViewById(R.id.id_seal_upload_add_file2);
 				typeName.setText(info.getFileType());
+				
+				if (info.getImageUrl() != null){
+					Picasso.with(mContext).load(info.getImageUrl()).into(addFile1);
+				}
+				if (info.getImageUrl2() != null){
+					Picasso.with(mContext).load(info.getImageUrl2()).into(addFile2);
+				}
 				if (info.getImageBitmap() != null){
 					addFile1.setImageBitmap(info.getImageBitmap());
 				}
-				
 				if (info.getImage2Bitmap() != null){
-					Log.e("mingguo", "info.getImageBitmap2()  "+info.getImage2Bitmap());
 					addFile2.setImageBitmap(info.getImage2Bitmap());
 				}
 				addFile1.setOnClickListener(new OnClickListener() {
@@ -319,10 +357,9 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 						//mSelectPhotoFlag  = 1000*(holder.getPosition()+1)+1;
 						//info.setImageId(1000*(holder.getPosition()+1)+1);
 						mSelectPhotoFlag = info.getImaged();
-						Log.w("mingguo", "select  flag  "+mSelectPhotoFlag);
+						Log.w("mingguo", "select  flag  "+mSelectPhotoFlag+" server  file id  "+info.getFileID());
 						ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.activity_translate_in));
 						pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
-						
 					}
 				});
 				addFile2.setOnClickListener(new OnClickListener() {
@@ -331,7 +368,7 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 					public void onClick(View v) {
 						//info.setImageId(1000*(holder.getPosition()+1)+2);
 						mSelectPhotoFlag = info.getImaged2();
-						Log.w("mingguo", "select  flag2  "+mSelectPhotoFlag);
+						Log.w("mingguo", "select  flag2  "+mSelectPhotoFlag+" server  file id2  "+info.getFileID2());
 						ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.activity_translate_in));
 						pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
 						
@@ -386,7 +423,7 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
                 Bitmap rotationBitmap = GlobalUtil.rotaingImageView(degree, BitmapFactory.decodeFile((String)msg.obj, null));
    			 	Log.w("mingguo", "onActivityResult  before compress image  "+rotationBitmap.getWidth()+" height  "+rotationBitmap.getHeight()+"  byte  ");
    			 	Bitmap newBitmap = GlobalUtil.compressScale(rotationBitmap);
-   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  ");
+   			 	
    			 	String base64Image = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
    			 	ImageItem item = new ImageItem();
    			 	item.setBitmap(newBitmap);
@@ -396,30 +433,51 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
    			 	message.what  = msg.what;
    			 	message.obj = item;
    			 	mHandler.sendMessage(message);
+   			 Log.e("mingguo", "init file  message  what =   "+msg.what);
             }
         };
     }
 	
-	private void requestCommonData(String typeId){
-		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetGeneralCode";
-		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetGeneralCodeAction));
-		rpc.addProperty("typeId", typeId);
-		mPresent.readyPresentServiceParams(mContext, url, mGetGeneralCodeAction, rpc);
+	private void requestData(String signId){
+		showLoadingView();
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetsFiles";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSignetFileAction));
+		rpc.addProperty("signetId", signId);
+		mPresent.readyPresentServiceParams(mContext, url, mGetSignetFileAction, rpc);
 		mPresent.startPresentServiceTask();
 	}
 	
 	private void parseGetUploadFileType(String value) {
 		try{
 			JSONArray array = new JSONArray(value);
+			boolean isFind = false;
 			if (array != null){
 				for (int item = 0; item < array.length(); item++){
 					JSONObject itemJsonObject = array.optJSONObject(item);
-					SealUploadFileType fileInfo = new SealUploadFileType();
-					fileInfo.setFileType(itemJsonObject.optString("gc_name"));
-					fileInfo.setFileId(itemJsonObject.optString("gc_id"));
-					fileInfo.setImageId(item*2);
-					fileInfo.setImageId2(item*2+1);
-					mDataList.add(fileInfo);
+					for (int index = 0; index < mDataList.size(); index++){
+						if (mDataList.get(index).getFileTypeId().equals(itemJsonObject.optString("FileType"))){
+							mDataList.get(index).setImageId2(index*2+1);
+							mDataList.get(index).setFileID2(itemJsonObject.optString("ID"));
+							mDataList.get(index).setImageUrl2(CommonUtil.mUserHost+itemJsonObject.optString("ImageUrl").replace("\\", "/"));
+							isFind = true;
+							//Log.w("mingguo", "file  image id   "+index+"  imageid  "+(index*2+1));
+						}
+					}
+					if (!isFind){
+						SealUploadFileType fileInfo = new SealUploadFileType();
+						fileInfo.setFileType(itemJsonObject.optString("FileTypeDesc"));
+						fileInfo.setFileTypeId(itemJsonObject.optString("FileType"));
+						if (itemJsonObject.optString("ImageUrl") != null){
+							fileInfo.setImageUrl(CommonUtil.mUserHost+itemJsonObject.optString("ImageUrl").replace("\\", "/"));
+						}
+						fileInfo.setFileID(itemJsonObject.optString("ID"));
+						//fileInfo.setFileID2(itemJsonObject.optString("ID"));
+						fileInfo.setImageId(mDataList.size()*2);
+						fileInfo.setImageId2(mDataList.size()*2+1);
+						mDataList.add(fileInfo);
+						//Log.e("mingguo", "file  image id   "+mDataList.size()+"  imageid  "+item*2);
+					}
+					isFind = false;
 				}
 				Log.i("mingguo", "add seal step  data size  "+mDataList.size());
 			}
@@ -437,6 +495,7 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 	        @Override  
 	 
 	        public void onClick(DialogInterface dialog, int which) {
+	        	mUploadNum = 0;
 				startUploadFile(0);
 	        }  
 	 
@@ -471,9 +530,9 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 					mDataList.get(position).setImage2Path(item.getImagePath());
 					mDataList.get(position).setBitmap2Base64(item.getBitmapBase64());
 				}
-				
 				mAdapter.notifyDataSetChanged();
 			}else if (msg.what == 100){
+				dismissLoadingView();
 				parseGetUploadFileType((String)msg.obj);
 				mAdapter.notifyDataSetChanged();
 			}else if (msg.what == 120){
@@ -490,10 +549,9 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 							GlobalUtil.shortToast(getActivity(), "文件上传失败！", getResources().getDrawable(R.drawable.ic_dialog_no));
 						}
 				}catch (Exception e) {
-						
+						e.printStackTrace();
 					}
 				}
-				
 			}else if (msg.what == 130){
 				String value = (String)msg.obj;
 				if (value != null){
@@ -520,12 +578,12 @@ public class EditSealInfoStep2Fragment extends Fragment implements DataStatusInt
 		// TODO Auto-generated method stub
 		Log.e("mingguo", "action   "+action + "  success "+templateInfo);
 		if (action != null){
-			if (action.equals(mGetGeneralCodeAction)){
+			if (action.equals(mGetSignetFileAction)){
 				Message msgMessage = mHandler.obtainMessage();
 				msgMessage.what = 100;
 				msgMessage.obj = templateInfo;
 				msgMessage.sendToTarget();
-			}else if (action.equals(mUploadFileAction)){
+			}else if (action.equals(mUploadFileAction) || action.equals(mUpdateFileAction)){
 				Message msgMessage = mHandler.obtainMessage();
 				msgMessage.what = 120;
 				msgMessage.obj = templateInfo;

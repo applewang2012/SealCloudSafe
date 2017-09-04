@@ -106,7 +106,6 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 	private EditText mSealUseDanweiEdit;
 	private boolean mExistSeal;
 	private EditText mRegisterPhone, mRealName, mRealId;
-	private boolean mIsReGetSignetId;
 	private TextView mRejectReason;
 	private EditText mWaiWenEditView;
 	
@@ -338,7 +337,7 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 
 			@Override
 			public void onClick(View v) {
-				//mAction.onNextFragment();
+				//mAction.onNextFragment(null, mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
 				if (!checkApplySealValid()){
 					return;
 				}
@@ -466,10 +465,10 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 	}
 	
 	
-	private void requestUpdateSignInfo(String signId){
+	private void requestUpdateSignInfo(){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UpdateSignetInfo";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetUpdateSignAction));
-		rpc.addProperty("signetId",signId);
+		rpc.addProperty("signetId",mSealNumberText.getText().toString());
 		rpc.addProperty("regDeptId",mSelectorInfo.get("getAllRegister").getSelectedId());
 		rpc.addProperty("content",mSealNeirongText.getText());
 		rpc.addProperty("foreignContent",mWaiWenEditView.getEditableText().toString());
@@ -486,7 +485,7 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 		rpc.addProperty("applyer",mRealName.getEditableText().toString());
 		rpc.addProperty("applyerId",mRealId.getEditableText().toString());
 		rpc.addProperty("applyerPhone",mRegisterPhone.getEditableText().toString());
-		rpc.addProperty("creatorPhone",mRegisterPhone.getEditableText().toString());
+		rpc.addProperty("creatorPhone",CommonUtil.mUserLoginName);
 		Log.i("mingguo", "signetId "+mSealNumberText.getText()+
 				" regDeptId "+mSelectorInfo.get("getAllRegister").getSelectedId()+
 				" content "+mSealNeirongText.getText()+
@@ -504,7 +503,7 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 				" applyer "+mRealName.getEditableText().toString()+
 				" applyerId "+mRealId.getEditableText().toString()+
 				" applyerPhone "+mRegisterPhone.getEditableText().toString()+
-				" creatorPhone "+mRegisterPhone.getEditableText().toString()
+				" creatorPhone "+CommonUtil.mUserLoginName
 				
 				);
 		mPresent.readyPresentServiceParams(mContext, url, mGetUpdateSignAction, rpc);
@@ -687,9 +686,10 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 						mSelectorInfo.get(tag).setSelectedName(items[arg2]);
 						text.setText(items[arg2]);
 						if (tag != null ){
-							if (tag.equals("getAllRegister")){
-								requestSignetId();
-							}else if (tag.equals("GetGeneralCode"+TYPE_ST)){
+//							if (tag.equals("getAllRegister")){
+//								requestSignetId();
+//							}else 
+							if (tag.equals("GetGeneralCode"+TYPE_ST)){
 								requestDefaultSignetContent();
 							}
 						}
@@ -755,15 +755,14 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 					mSelectorInfo.get("getAllRegister").setSealAllId(parseAllRegisterReturn((String)msg.obj).get(0));
 					showAlertDialog(mSelectQuyuText,"getAllRegister" , parseAllRegisterReturn((String)msg.obj).get(1), null);
 				}else if (msg.what == 201){
-					ViewUtil.dismissLoadingView(mLoadingView);
-					if (mIsReGetSignetId){
-						CommonUtil.mSignetNumberId = (String)msg.obj;
-						ViewUtil.showLoadingView(mContext, mLoadingView);
-						requestUpdateSignInfo(CommonUtil.mSignetNumberId);
-					}else{
-						mSealNumberText.setText((String)msg.obj);
-						mZhizhangDanweiText.setText("");
-					}
+//					ViewUtil.dismissLoadingView(mLoadingView);
+//					if (mIsReGetSignetId){
+//						ViewUtil.showLoadingView(mContext, mLoadingView);
+//						requestUpdateSignInfo((String)msg.obj);
+//					}else{
+//						mSealNumberText.setText((String)msg.obj);
+//						mZhizhangDanweiText.setText("");
+//					}
 				}else if (msg.what == 202){
 					ViewUtil.dismissLoadingView(mLoadingView);
 					mSelectorInfo.get("GetAllCarveCorps").setSealAllContent(parseSealKezhiDanwei((String)msg.obj).get(1));
@@ -832,7 +831,7 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 							object = new JSONObject(value);
 							String ret = object.optString("ret");
 							if (ret.equals("0")){
-								mAction.onNextFragment();
+								mAction.onNextFragment(null, mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
 							}else{
 								GlobalUtil.shortToast(getActivity(), "该印章内容保存失败！"+object.optString("msg"), getResources().getDrawable(R.drawable.ic_dialog_no));
 							}
@@ -852,14 +851,12 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 							json = new JSONObject((String)msg.obj);
 							String ret = json.optString("ret");
 							if (ret != null){
-								if (ret.equals("0")){
-									mIsReGetSignetId = true;
-									ViewUtil.showLoadingView(mContext, mLoadingView);
-									requestSignetId();
-								}else{
-									mIsReGetSignetId = false;
-									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
-								}
+								//if (ret.equals("0")){
+									requestUpdateSignInfo();
+//								}else{
+//									
+//									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
+//								}
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block
@@ -953,7 +950,7 @@ public class EditSealInfoStep1Fragment extends Fragment implements DataStatusInt
 				allRegister.setSelectedId(object.optString("RegionId"));
 				allRegister.setSelectedName(object.optString("RegionName"));
 				mSelectorInfo.put("getAllRegister", allRegister);
-				mSelectQuyuText.setText(object.optString("RegionName"));
+				mSelectQuyuText.setText(object.optString("RegDeptName"));
 				//使用单位
 				SealInfoModel copInfo = new SealInfoModel();
 				copInfo.setSelectedId(object.optString("CorpID"));

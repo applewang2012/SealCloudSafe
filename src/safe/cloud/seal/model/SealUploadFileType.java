@@ -6,7 +6,7 @@ import android.graphics.Bitmap;
 
 public class SealUploadFileType {
 	private String fileName ;
-	private String fileId;
+	private String fileTypeId;
 	private int imageId, imageId2;
 	private Bitmap imageBitmap;
 	private Bitmap imageBitmap2;
@@ -14,6 +14,10 @@ public class SealUploadFileType {
 	public String imagePath;
 	private String base64String2;
 	private String imagePath2;
+	private String imageUrl;
+	private String imageUrl2;
+	private String fileId2;
+	private String fileId;
 	
 	public void setFileType(String name){
 		fileName = name;
@@ -23,12 +27,44 @@ public class SealUploadFileType {
 		return fileName;
 	}
 	
-	public void setFileId(String id){
+	public void setFileID(String id){
 		fileId = id;
 	}
 	
-	public String getFileId(){
+	public String getFileID(){
 		return fileId;
+	}
+	
+	public void setFileID2(String id){
+		fileId2 = id;
+	}
+	
+	public String getFileID2(){
+		return fileId2;
+	}
+	
+	public void setFileTypeId(String id){
+		fileTypeId = id;
+	}
+	
+	public String getFileTypeId(){
+		return fileTypeId;
+	}
+	
+	public void setImageUrl(String url){
+		imageUrl = url;
+	}
+	
+	public String getImageUrl(){
+		return imageUrl;
+	}
+	
+	public void setImageUrl2(String url){
+		imageUrl2 = url;
+	}
+	
+	public String getImageUrl2(){
+		return imageUrl2;
 	}
 	
 	public void setImageId(int id){

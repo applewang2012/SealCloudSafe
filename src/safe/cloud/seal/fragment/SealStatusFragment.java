@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -85,17 +86,26 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		// TODO Auto-generated method stub
 		Log.i("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fg_signal_status_layout, container, false);
-		if (getArguments() != null) {  
+		if (getArguments() != null) {
 	        mPhoneNumber = getArguments().getString("phone");
 	        Log.i("mingguo", "framgent user phone  "+mPhoneNumber);
 		}
 		initTitleBar();
 		initAdapter();
 		initBanner();
-		initData();
+		
 		return mRootView;
 	}
 	
+	
+	
+	@Override
+	public void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		initData();
+	}
+
 	private void initData(){
 //		for (int i = 0; i < 5; i++){
 //			SealStatusInfo info = new SealStatusInfo();
@@ -183,14 +193,14 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 	}
 	
 	private void requestGetSignetsList(){
+		Log.w("mingguo", "request signet  list  username   "+CommonUtil.mUserLoginName);
 		ViewUtil.showLoadingView(mContext, mLoadingView);
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetsListByApplyer";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSignetsListAction));
-		rpc.addProperty("applyerId", CommonUtil.mRegisterIdcard);
+		rpc.addProperty("applyerId", CommonUtil.mUserLoginName);
 		mPresent.readyPresentServiceParams(mContext, url, mGetSignetsListAction, rpc);
 		mPresent.startPresentServiceTask();
 	}
-	
 	
 	
 
@@ -301,12 +311,13 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		try{
 			JSONArray array = new JSONArray(value);
 			if (array != null){
+				mDataList.clear();
 				Log.i("house", "parse house info "+array.length());
 				for (int item = 0; item < array.length(); item++){
 					JSONObject itemJsonObject = array.optJSONObject(item);
 					SealStatusInfo  statusInfo = new SealStatusInfo();
 					statusInfo.setSealCorp(itemJsonObject.optString("co_corp_name"));
-					statusInfo.setSealType(itemJsonObject.optString("se_content"));
+					statusInfo.setSealType(itemJsonObject.optString("RegCategory"));
 					statusInfo.setShowSealStatus(itemJsonObject.optString("Status"));
 					statusInfo.setSealStatus(itemJsonObject.optString("se_status"));
 					statusInfo.setSealNo(itemJsonObject.optString("se_signet_id"));
@@ -314,7 +325,6 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 					//UtilTool.stampToNormalDate(s)
 					mDataList.add(statusInfo);
 				}
-					
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

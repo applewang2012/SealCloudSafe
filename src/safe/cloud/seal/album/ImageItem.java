@@ -17,6 +17,7 @@ public class ImageItem implements Serializable {
 	public boolean isSelected = false;
 	private String typeName;
 	private String typeNameId;
+	private String fileId;
 	
 	public String getImageId() {
 		return imageId;
@@ -81,9 +82,19 @@ public class ImageItem implements Serializable {
 		typeNameId = id;
 	}
 	
+	
 	public String getTypeNameId(){
 		return typeNameId; 
 	}
+	
+	public void setFileId(String id){
+		fileId = id;
+	}
+	
+	public String getFileId(){
+		return fileId; 
+	}
+	
 	public String getBitmapBase64(){
 		return this.base64String;
 	}

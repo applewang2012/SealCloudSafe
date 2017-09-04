@@ -16,6 +16,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import safe.cloud.seal.presenter.HoursePresenter;
@@ -44,7 +45,7 @@ public class RegisterUserFinishActivity extends BaseActivity{
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		mTitleBar = (TextView)findViewById(R.id.id_titlebar);
 		mTitleBar.setText("注册完成");
-		Button back = (Button)findViewById(R.id.id_titlebar_back);
+		FrameLayout back = (FrameLayout)findViewById(R.id.id_titlebar_back);
 		back.setVisibility(View.INVISIBLE);
 		mUserName = getIntent().getStringExtra("user_name");
 		mPassword = getIntent().getStringExtra("user_password");

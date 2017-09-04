@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="safe.cloud.seal"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.1" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -72,6 +72,12 @@
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>
 
+		<activity
+            android:name=".DownloadAppActivity"
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+            android:theme="@style/SealAppTheme" >
+        </activity>
+        
 		<activity android:name=".ModifyPasswordActivity" android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@style/SealAppTheme"
            android:screenOrientation="portrait"></activity>

@@ -221,10 +221,11 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 	         @Override  
 	  
 	         public void onClick(DialogInterface dialog, int which) {
-	        	 SharedPreferences sharedata = mContext.getSharedPreferences("user_info", 0);
+					SharedPreferences sharedata = mContext.getSharedPreferences("user_info", 0);
 					SharedPreferences.Editor editor = sharedata.edit();
 				    editor.putString("user_name", "");
 				    editor.putString("user_password", "");
+				    editor.putString("user_idcard", "");
 				    editor.commit();
 				    Intent intent = new Intent(mContext, LoginUserActivity.class);
 		            startActivity(intent);    

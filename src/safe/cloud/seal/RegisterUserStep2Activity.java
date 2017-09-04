@@ -49,7 +49,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	private HoursePresenter mPresenter;
 	private String mPhone;
 	private String mPassword, mPasswordIndentify;
-	private String mValidAction = "http://tempuri.org/ValidateLoginName";
+	private String mValidIDcardAction = "http://tempuri.org/IsExistsIDCard";
 	private boolean mUsernameValid;
 	private View mLoadingView;
 	private String mRealName, mIdCard;
@@ -86,7 +86,13 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		
 	}
 
-
+	private void checkUserIDcardValid(String idcard){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=IsExistsIDCard";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mValidIDcardAction));
+		rpc.addProperty("idcard", idcard); 
+		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mValidIDcardAction, rpc);
+		mPresenter.startPresentServiceTask();
+	}
 
 	private void initData(){
 		publicFilePath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath())
@@ -145,7 +151,8 @@ public class RegisterUserStep2Activity extends BaseActivity{
 					GlobalUtil.shortToast(RegisterUserStep2Activity.this,getString(R.string.id_card_input_error) , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
-				AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
+				showLoadingView();
+				checkUserIDcardValid(mIdCard);
 			}
 		});
 	}
@@ -272,13 +279,6 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	}
 	
     	
-	private void checkUserNameValid(String username){
-		String url = CommonUtil.mUserHost+"services.asmx?op=ValidateLoginName";
-		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mValidAction));
-		rpc.addProperty("loginName", username); 
-		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mValidAction, rpc);
-		mPresenter.startPresentServiceTask();
-	}
 	
 	
 	private Handler mHandler = new Handler(){
@@ -288,7 +288,25 @@ public class RegisterUserStep2Activity extends BaseActivity{
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			if (msg.what == 100){
-//				GlobalUtil.shortToast(RegisterUserStep2Activity.this, getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+				dismissLoadingView();
+				if (msg.obj != null){
+					JSONObject json;
+					try {
+						json = new JSONObject((String)msg.obj);
+						String ret = json.optString("ret");
+						if (ret != null){
+							if (ret.equals("0")){
+								//showLoadingView();
+								AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
+							}else{
+								GlobalUtil.shortToast(RegisterUserStep2Activity.this, "该身份证号已被注册！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+							}
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}else if (msg.what == 200){
 				
 			}else if (msg.what == 102){
@@ -393,14 +411,11 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	public void onStatusSuccess(String action, String templateInfo) {
 		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		if (action != null && templateInfo != null){
-			if (action.equals(mValidAction)){
-				Log.i("mingguo", "on success  action valid ");
-				if (templateInfo.equals("false")){
-					mHandler.sendEmptyMessage(100);
-					mUsernameValid = false;
-				}else{
-					mUsernameValid = true;
-				}
+			if (action.equals(mValidIDcardAction)){
+				Message message = mHandler.obtainMessage();
+				message.what = 100;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
 			}else if (action.equals(mIdentifyAction)){
 				Message message = mHandler.obtainMessage();
 				message.what = 102;

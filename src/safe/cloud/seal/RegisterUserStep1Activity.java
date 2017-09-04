@@ -29,7 +29,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 	private TextView mTitleBar;
 	private HoursePresenter mPresenter;
 	private String mPhone, mPassword, mPasswordAgain, mVerifyCode;
-	private String mValidAction = "http://tempuri.org/ValidateLoginName";
+	private String mValidAction = "http://tempuri.org/IsExistsLoginName";
 	private boolean mUsernameValid;
 	private String mSendVerifyCodeAction = "http://tempuri.org/SendIdentifyCodeMsg";
 	private String mCheckVerifyCodeAction = "http://tempuri.org/ValidateIdentifyCode";
@@ -120,20 +120,16 @@ public class RegisterUserStep1Activity extends BaseActivity{
 					return;
 				}
 				showLoadingView();
-				checkPhoneVerifyCode(mPhone, mVerifyCode);
 				
-//				if (!mUsernameValid){
-//					GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-//					return;
-//				}
+				checkUserNameValid(mPhone);
 				
-//				Intent nextIntent = new Intent(RegisterUserStep1Activity.this, RegisterUserStep2Activity.class);
-//				nextIntent.putExtra("username", mPhone);
-//				nextIntent.putExtra("password", mPassword);
-//				startActivity(nextIntent);
+//				checkPhoneVerifyCode(mPhone, mVerifyCode);
+
 			}
 		});
 	}
+	
+	
 	
 	private void checkPhoneVerifyCode(String phone, String code){
 		String url = "http://www.guardts.com/COMMONSERVICE/COMMONSERVICES.ASMX?op=ValidateIdentifyCode";
@@ -174,7 +170,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 
     	
 	private void checkUserNameValid(String username){
-		String url = CommonUtil.mUserHost+"services.asmx?op=ValidateLoginName";
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=IsExistsLoginName";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mValidAction));
 		rpc.addProperty("loginName", username); 
 		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mValidAction, rpc);
@@ -189,7 +185,25 @@ public class RegisterUserStep1Activity extends BaseActivity{
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			if (msg.what == 100){
-//				GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.username_register_again), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+				dismissLoadingView();
+				if (msg.obj != null){
+					JSONObject json;
+					try {
+						json = new JSONObject((String)msg.obj);
+						String ret = json.optString("ret");
+						if (ret != null){
+							if (ret.equals("0")){
+								showLoadingView();
+								checkPhoneVerifyCode(mPhone, mVerifyCode);
+							}else{
+								GlobalUtil.shortToast(RegisterUserStep1Activity.this, "用户名已存在！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+							}
+						}
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}else if (msg.what == 102){
 				dismissLoadingView();
 				if (msg.obj != null){
@@ -252,13 +266,10 @@ public class RegisterUserStep1Activity extends BaseActivity{
 		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		if (action != null && templateInfo != null){
 			if (action.equals(mValidAction)){
-				Log.i("mingguo", "on success  action valid ");
-				if (templateInfo.equals("false")){
-					mHandler.sendEmptyMessage(100);
-					mUsernameValid = false;
-				}else{
-					mUsernameValid = true;
-				}
+				Message message = mHandler.obtainMessage();
+				message.what = 100;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
 			}else if (action.equals(mCheckVerifyCodeAction)){
 				Message message = mHandler.obtainMessage();
 				message.what = 102;

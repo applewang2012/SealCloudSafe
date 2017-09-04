@@ -25,6 +25,9 @@
     <uses-permission android:name="safe.cloud.seal.download.permission.ACCESS_DOWNLOAD_MANAGER" />
     <uses-permission android:name="safe.cloud.seal.download.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED" />
     <uses-permission android:name="safe.cloud.seal.download.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
+   <!--  定位权限 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -35,10 +38,10 @@
             android:name=".WelcomeActivity"
             android:theme="@style/SealAppTheme"
             android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden">
-            <intent-filter>
+            <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         
         <provider
@@ -149,6 +152,22 @@
             android:name="cn.cloudwalk.libproject.TemplatedActivity"
             android:theme="@android:style/Theme.NoTitleBar"
             android:screenOrientation="portrait"/>
+        
+         <activity
+            android:name=".GalleryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name=".SelectPhotoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         
     </application>
 

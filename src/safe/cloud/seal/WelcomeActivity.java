@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import safe.cloud.seal.util.CommonUtil;
+import safe.cloud.seal.util.UtilTool;
 
 public class WelcomeActivity extends BaseActivity {
 	private LinearLayout mLoading_data;
@@ -39,6 +40,7 @@ public class WelcomeActivity extends BaseActivity {
 		
 		mHandler.sendEmptyMessageDelayed(200, 100);
 		
+		UtilTool.getCururentLocation(WelcomeActivity.this);
 	}
 	
 	

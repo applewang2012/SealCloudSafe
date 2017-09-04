@@ -64,8 +64,6 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 		mContext = getActivity().getApplicationContext();
 		mPresent = new HoursePresenter(mContext, MyFragment.this);
 		
-		
-
 	}
 
 	@Override
@@ -295,5 +293,8 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 		// TODO Auto-generated method stub
 		
 	}
+	
+	
+	
 	
 }

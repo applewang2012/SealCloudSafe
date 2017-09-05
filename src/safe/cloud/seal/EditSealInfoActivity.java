@@ -16,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import safe.cloud.seal.album.ImageItem;
-import safe.cloud.seal.fragment.AddSealInfoStep1Fragment;
-import safe.cloud.seal.fragment.AddSealInfoStep2Fragment;
 import safe.cloud.seal.fragment.EditSealInfoStep1Fragment;
 import safe.cloud.seal.fragment.EditSealInfoStep2Fragment;
 import safe.cloud.seal.fragment.SealStatusFragment;
@@ -27,17 +25,6 @@ import safe.cloud.seal.util.GlobalUtil;
 
 public class EditSealInfoActivity extends BaseActivity {
 
-	private HoursePresenter mPresenter;
-	//private String mLoginAction = "http://tempuri.org/ValidateLogin";
-	private String mUpdateAction="http://tempuri.org/CheckUpgrade";
-	private String mUserInfoAction = "http://tempuri.org/GetUserInfo";;
-	private String mUserName, mPassword;
-	private String mUserInfoString = null;
-	private String mCity = null;
-	private int mVersionCode = -1;
-	private SealStatusFragment mStatusFragment;
-	private PopupWindow pop = null;
-	private LinearLayout ll_popup;
 	private final int TAKE_PICTURE = 1, SELECT_PICTURE = 2;
 	private HandlerThread myHandlerThread ;
 	private Handler mSubHandler;

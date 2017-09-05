@@ -16,7 +16,8 @@ import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
-import safe.cloud.seal.SelectPhotoActivity;
+import safe.cloud.seal.AddSealTraceActivity;
+import safe.cloud.seal.R;
 
 public class BitmapCache extends Activity {
 
@@ -83,7 +84,8 @@ public class BitmapCache extends Activity {
 					
 				}
 				if (thumb == null) {
-					thumb = SelectPhotoActivity.mAddImageBitmap;
+					thumb = BitmapFactory.decodeResource(getResources(),
+							R.drawable.seal_default_image);
 				}
 				Log.e(TAG, "-------thumb------"+thumb);
 				put(path, thumb);

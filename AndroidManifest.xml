@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="safe.cloud.seal"
-    android:versionCode="1"
-    android:versionName="1.1" >
+    android:versionCode="3"
+    android:versionName="1.0.3" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -38,10 +38,10 @@
             android:name=".WelcomeActivity"
             android:theme="@style/SealAppTheme"
             android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden">
-            <!-- <intent-filter>
+		  <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter> -->
+            </intent-filter>
         </activity>
         
         <provider
@@ -120,6 +120,12 @@
             android:screenOrientation="portrait">
         </activity>
         
+          <activity
+            android:name=".MoreAlbumActivity"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:screenOrientation="portrait">
+        </activity>
+        
         <activity
             android:name="cn.cloudwalk.libproject.LiveStartActivity"
             android:theme="@android:style/Theme.NoTitleBar"
@@ -158,15 +164,36 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
-            android:name=".SelectPhotoActivity"
+         <activity
+            android:name=".AddSealTraceActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
-            <intent-filter>
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+           android:theme="@style/SealAppTheme" />
+         <activity
+            android:name=".AboutUsActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+            android:theme="@style/SealAppTheme" />
+         <activity
+            android:name=".PersonalInfoActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+            android:theme="@style/SealAppTheme" >
+        </activity>
+        <activity
+            android:name=".ShowSealTraceActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+           android:theme="@style/SealAppTheme"
+            >
+         <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         
     </application>

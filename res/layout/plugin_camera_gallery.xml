@@ -2,26 +2,31 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" 
-    android:background="#E1E0DE"
+    android:background="#f1f2f3"
     >
 
     <FrameLayout
         android:id="@+id/headview"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/base_dimen_90"
-        android:background="#337ffd"
+        android:background="#d43c33"
         android:gravity="center_vertical"
         >
-        <Button  
-           android:id="@+id/gallery_back"
-           android:layout_width="@dimen/base_dimen_42"
-           android:layout_height="@dimen/base_dimen_60"
-           android:background="@drawable/custom_title_back"
-           android:layout_gravity="center_vertical"
-           android:clickable="true"
-           android:onClick="backFinish"
-           android:layout_marginLeft="@dimen/base_dimen_20"
-            />
+        <FrameLayout
+          android:id="@+id/id_titlebar_back"
+	       android:layout_width="@dimen/base_dimen_100"
+	       android:layout_height="@dimen/base_dimen_90"
+	       android:clickable="true"
+	       android:focusable="true"
+	       android:onClick="backFinish" >
+	      <ImageView 
+	           android:layout_width="@dimen/base_dimen_60"
+	           android:layout_height="@dimen/base_dimen_60"
+	           android:background="@drawable/short_lease_back"
+	           android:layout_gravity="center_vertical"
+	           android:layout_marginLeft="@dimen/base_dimen_20"
+	          />
+      </FrameLayout>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,15 +51,15 @@
     </FrameLayout>
     
     
-    <tenant.guardts.house.bannerview.ViewPagerFixed
+    <safe.cloud.seal.shotview.ViewPagerFixed
       android:id="@+id/gallery01" 
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content"
-      android:layout_marginTop="60dp"
+      android:layout_marginTop="@dimen/base_dimen_90"
       android:layout_centerHorizontal="true"
-      android:background="#000000"
+      android:background="#f1f2f3"
       android:unselectedAlpha="1">
-   	</tenant.guardts.house.bannerview.ViewPagerFixed>
+   	</safe.cloud.seal.shotview.ViewPagerFixed>
    	
 </FrameLayout>
   

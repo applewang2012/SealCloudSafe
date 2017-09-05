@@ -206,7 +206,6 @@ public class UtilTool {
             	locationXY.clear();
                 latitude = location.getLatitude();  
                 longitude = location.getLongitude();  
-                Log.e("mingguo", "location from gps latitude  "+latitude+"  longitude  "+longitude);
                 locationXY.add(latitude+"");
                 locationXY.add(longitude+"");
                 }  
@@ -247,11 +246,12 @@ public class UtilTool {
             	locationXY.clear();
                 latitude = location.getLatitude(); //经度     
                 longitude = location.getLongitude(); //纬度  
-                Log.e("mingguo", "loaction from network   latitude  "+latitude+"  longitude  "+longitude);
                 locationXY.add(latitude+"");
                 locationXY.add(longitude+"");
             }     
         }  
+        locationXY.add(latitude+"");
+        locationXY.add(longitude+"");
         return locationXY;
     }
     

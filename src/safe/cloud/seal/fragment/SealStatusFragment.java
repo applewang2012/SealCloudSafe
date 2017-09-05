@@ -71,6 +71,7 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 	private String mGetSignetsListAction = "http://tempuri.org/GetSignetsListByApplyer";
 	private UniversalAdapter mAdapter;
 	private View mLoadingView;
+	private TextView mEmptyContent;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -163,7 +164,8 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 	private void initAdapter(){
 		mLoadingView = mRootView.findViewById(R.id.id_data_loading);
 		mLoadingView.setVisibility(View.INVISIBLE);
-		
+		mEmptyContent = (TextView)mRootView.findViewById(R.id.id_seal_status_fragment_empty);
+		mEmptyContent.setVisibility(View.INVISIBLE);
 		ListView showList = (ListView)mRootView.findViewById(R.id.id_seal_status_fragment_list);
 		mAdapter = new UniversalAdapter<SealStatusInfo>(mContext, R.layout.fgt_status_listview_item, mDataList) {
 
@@ -299,15 +301,20 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 			if (msg.what == 100){
 				ViewUtil.dismissLoadingView(mLoadingView);
 				if (msg.obj != null){
-					parseSealStausInfo((String)msg.obj);
-					mAdapter.notifyDataSetChanged();
+					if (parseSealStausInfo((String)msg.obj) > 0){
+						mEmptyContent.setVisibility(View.INVISIBLE);
+						mAdapter.notifyDataSetChanged();
+					}else{
+						mEmptyContent.setVisibility(View.VISIBLE);
+					}
+					
 				}
 			}
 
 		}
 	};
 	
-	private  void parseSealStausInfo(String value) {
+	private  int parseSealStausInfo(String value) {
 		try{
 			JSONArray array = new JSONArray(value);
 			if (array != null){
@@ -329,6 +336,7 @@ public class SealStatusFragment extends Fragment implements DataStatusInterface,
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return mDataList.size();
 	}
 	
 

@@ -30,7 +30,6 @@ public class HomeActivity extends BaseActivity {
 	private HoursePresenter mPresenter;
 	//private String mLoginAction = "http://tempuri.org/ValidateLogin";
 	private String mUpdateAction="http://tempuri.org/CheckUpgrade";
-	private String mUserInfoAction = "http://tempuri.org/GetUserInfo";
 	private String mUserName, mPassword;
 	private String mUserInfoString = null;
 	private String mCity = null;

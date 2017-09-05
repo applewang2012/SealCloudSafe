@@ -356,6 +356,7 @@ public class LoginUserActivity extends BaseActivity{
 			    editor.commit();
 			    CommonUtil.mUserLoginName = mUserName;
 			    CommonUtil.mRegisterIdcard = userMap.get("QQ");
+			    CommonUtil.mRegisterRealName = mRealName;
 				startActivity(intent);
 				finish();
 			}

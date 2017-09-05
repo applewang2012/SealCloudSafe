@@ -1,5 +1,7 @@
 package safe.cloud.seal;
 
+import java.util.ArrayList;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
@@ -23,18 +25,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import cn.cloudwalk.libproject.util.Util;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 import safe.cloud.seal.album.ImageItem;
 import safe.cloud.seal.presenter.HoursePresenter;
@@ -43,6 +49,8 @@ import safe.cloud.seal.shotview.Bimp;
 import safe.cloud.seal.shotview.FileUpLoadUtils;
 import safe.cloud.seal.shotview.PublicWay;
 import safe.cloud.seal.util.CommonUtil;
+import safe.cloud.seal.util.UtilTool;
+import safe.cloud.seal.widget.MeasureGridView;
 
 
 /**
@@ -52,38 +60,43 @@ import safe.cloud.seal.util.CommonUtil;
  * @QQ:595163260
  * @version 2014年10月18日  下午11:48:34
  */
-public class SelectPhotoActivity extends BaseActivity {
+public class AddSealTraceActivity extends BaseActivity {
 
-	private GridView noScrollgridview;
+	private MeasureGridView noScrollgridview;
 	private GridAdapter adapter;
 	private View parentView;
 	private PopupWindow pop = null;
 	private LinearLayout ll_popup;
-	public static Bitmap mAddImageBitmap ;
-	private  String mAddImageAction = "http://tempuri.org/AddRentImage";
+	
+	private  String mAddSpecialPointAction = "http://tempuri.org/UploadSpecialPoint";
 	private HoursePresenter mPresenter;
 	private int mUploadNum = 0;
 	private String mRentNo = "";
 	private View mLoadingView;
+	private EditText mFileNameEditView;
+	private EditText mSealNameEditView;
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mAddImageBitmap = BitmapFactory.decodeResource(
-				getResources(),
-				R.drawable.icon_addpic_unfocused);
-		PublicWay.activityList.add(this);	
+		Bimp.tempSelectBitmap.clear();
+		requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 		parentView = getLayoutInflater().inflate(R.layout.activity_selectimg, null);
 		setContentView(parentView);
+		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
+		TextView tilebar = (TextView)findViewById(R.id.id_titlebar);
+		tilebar.setText("添加印记");
 		Init();
 	}
 
 	public void Init() {
 		mRentNo = getIntent().getStringExtra("rentNo");
 		mPresenter = new HoursePresenter(getApplicationContext(), this);
-		pop = new PopupWindow(SelectPhotoActivity.this);
+		pop = new PopupWindow(AddSealTraceActivity.this);
 		mLoadingView = (View)findViewById(R.id.id_data_loading);
 		mLoadingView.setVisibility(View.INVISIBLE);
 		View view = getLayoutInflater().inflate(R.layout.item_popupwindows, null);
-
+		mFileNameEditView = (EditText)findViewById(R.id.id_add_seal_track_input_file_name);
+		mSealNameEditView = (EditText)findViewById(R.id.id_add_seal_track_input_seal_name);
 		ll_popup = (LinearLayout) view.findViewById(R.id.ll_popup);
 		
 		pop.setWidth(LayoutParams.MATCH_PARENT);
@@ -118,13 +131,14 @@ public class SelectPhotoActivity extends BaseActivity {
 		});
 		bt2.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent intent = new Intent(SelectPhotoActivity.this,
-						AlbumActivity.class);
-				startActivity(intent);
+				Intent intent = new Intent(AddSealTraceActivity.this,
+						MoreAlbumActivity.class);
+				
 				overridePendingTransition(R.anim.activity_translate_in, R.anim.activity_translate_out);
 				pop.dismiss();
 				ll_popup.clearAnimation();
-				finish();
+				startActivityForResult(intent, TAKE_AlBUM);
+				//finish();
 			}
 		});
 		bt3.setOnClickListener(new OnClickListener() {
@@ -134,7 +148,7 @@ public class SelectPhotoActivity extends BaseActivity {
 			}
 		});
 		
-		noScrollgridview = (GridView) findViewById(R.id.noScrollgridview);	
+		noScrollgridview = (MeasureGridView) findViewById(R.id.noScrollgridview);	
 		noScrollgridview.setSelector(new ColorDrawable(Color.TRANSPARENT));
 		adapter = new GridAdapter(this);
 		adapter.update();
@@ -143,14 +157,13 @@ public class SelectPhotoActivity extends BaseActivity {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				if (arg2 == Bimp.tempSelectBitmap.size()) {
+				if (arg2 == Bimp.tempSelectBitmap.size() && arg2 < PublicWay.num) {
 					Log.i("ddddddd", "----------");
-					ll_popup.startAnimation(AnimationUtils.loadAnimation(SelectPhotoActivity.this,R.anim.activity_translate_in));
+					ll_popup.startAnimation(AnimationUtils.loadAnimation(AddSealTraceActivity.this,R.anim.activity_translate_in));
 					pop.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
-				} else {
-					Intent intent = new Intent(SelectPhotoActivity.this, GalleryActivity.class);
+				} else if (arg2 != PublicWay.num){
+					Intent intent = new Intent(AddSealTraceActivity.this, GalleryActivity.class);
 					startActivity(intent);
-					finish();
 				}
 			}
 		});
@@ -160,19 +173,26 @@ public class SelectPhotoActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
+				if (mFileNameEditView.getText().toString() == null || mFileNameEditView.getText().toString().equals("")){
+					Toast.makeText(getApplicationContext(), "文件名字不能为空！", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				if (mSealNameEditView.getText().toString() == null || mSealNameEditView.getText().toString().equals("")){
+					Toast.makeText(getApplicationContext(), "印章名字不能为空！", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				mUploadNum = 1;
-				startAddRentHouseImage(mUploadNum);
+				startAddSpecialPointImage(mUploadNum);
 			}
 		});
 	}
 	
-	private void startAddRentHouseImage(int num){
+	private void startAddSpecialPointImage(int num){
 		if (Bimp.tempSelectBitmap.size() < 1){
-			Log.i("mingguo", "onclick  bitmap size  "+Bimp.tempSelectBitmap.size());
 			Toast.makeText(getApplicationContext(), "请先选择图片", Toast.LENGTH_SHORT).show();
 		}else{
 			showLoadingView();
-			addRentHouseImageRequest(num);
+			addSpecialPointRequest(num);
 			
 		}
 	}
@@ -193,16 +213,22 @@ public class SelectPhotoActivity extends BaseActivity {
 		}
 	}
 	
-	private void addRentHouseImageRequest(int num){
-		String url = "http://qxw2332340157.my3w.com/services.asmx?op=AddRentImage";
-		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mAddImageAction));
-		rpc.addProperty("RentNO", mRentNo);
-		rpc.addProperty("fileName", Bimp.tempSelectBitmap.get(num-1).getImageName());
-		rpc.addProperty("memo", "");
-		rpc.addProperty("userId", CommonUtil.mUserLoginName);
-		rpc.addProperty("imageStr", BMapUtil.bitmapToBase64(Bimp.tempSelectBitmap.get(num-1).getBitmap()));
-		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddImageAction, rpc);
+	private void addSpecialPointRequest(int num){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UploadSpecialPoint";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mAddSpecialPointAction));
+		rpc.addProperty("signetId", "");
+		rpc.addProperty("content", mSealNameEditView.getText().toString());
+		rpc.addProperty("data", BMapUtil.bitmapToBase64(Bimp.tempSelectBitmap.get(num-1).getBitmap()));
+		rpc.addProperty("type", "0");
+		rpc.addProperty("lon", UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
+		rpc.addProperty("lat", UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0));
+		rpc.addProperty("uploadedBy", CommonUtil.mUserLoginName);
+		rpc.addProperty("memo", mFileNameEditView.getText().toString());
+		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddSpecialPointAction, rpc);
 		mPresenter.startPresentServiceTask();
+		Log.i("mingguo", "add seal trace  special point request lati  "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0)+" long "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
+		Log.i("mingguo", "add seal trace  special point request username  "+CommonUtil.mUserLoginName+" bitmap  width   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getWidth()
+				+" bitmap  height   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getHeight());
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -265,8 +291,8 @@ public class SelectPhotoActivity extends BaseActivity {
 
 			if (position == Bimp.tempSelectBitmap.size()) {
 				holder.image.setImageBitmap(BitmapFactory.decodeResource(
-						getResources(), R.drawable.icon_addpic_unfocused));
-				if (position == 6) {
+						getResources(), R.drawable.add_seal_icon_image));
+				if (position == PublicWay.num) {
 					holder.image.setVisibility(View.GONE);
 				}
 			} else {
@@ -321,14 +347,16 @@ public class SelectPhotoActivity extends BaseActivity {
 		}
 		return path;
 	}
-
+	
+	@Override
 	protected void onRestart() {
 		adapter.update();
 		super.onRestart();
 	}
 
 	private static final int TAKE_PICTURE = 0x000001;
-
+	private static final int TAKE_AlBUM = 0x000002;
+	
 	public void photo() {
 		Intent openCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		startActivityForResult(openCameraIntent, TAKE_PICTURE);
@@ -336,33 +364,36 @@ public class SelectPhotoActivity extends BaseActivity {
 	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		switch (requestCode) {
-		case TAKE_PICTURE:
-			if (Bimp.tempSelectBitmap.size() < 6 && resultCode == RESULT_OK) {
-				
-				String fileName = String.valueOf(System.currentTimeMillis());
-				Bitmap bm = (Bitmap) data.getExtras().get("data");
-				FileUpLoadUtils.saveBitmap(bm, fileName);
-				
-				ImageItem takePhoto = new ImageItem();
-				takePhoto.setBitmap(bm);
-				Bimp.tempSelectBitmap.add(takePhoto);
-			}
-			break;
-		}
-	}
-	
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			for(int i=0;i<PublicWay.activityList.size();i++){
-				if (null != PublicWay.activityList.get(i)) {
-					PublicWay.activityList.get(i).finish();
+			case TAKE_PICTURE:
+				if (Bimp.tempSelectBitmap.size() < 5 && resultCode == RESULT_OK) {
+					
+					String fileName = String.valueOf(System.currentTimeMillis());
+					Bitmap bm = (Bitmap) data.getExtras().get("data");
+					FileUpLoadUtils.saveBitmap(bm, fileName);
+					
+					ImageItem takePhoto = new ImageItem();
+					takePhoto.setBitmap(bm);
+					Bimp.tempSelectBitmap.add(takePhoto);
 				}
-			}
-			System.exit(0);
+				break;
+			case TAKE_AlBUM:
+				if (resultCode == RESULT_OK){
+					Bimp.tempSelectBitmap.addAll((ArrayList<ImageItem>) data.getExtras().getSerializable("image_shot"));
+					adapter.notifyDataSetChanged();
+				}
+				
+				break;
 		}
-		return true;
+	
 	}
 	
+	
+	@Override
+	protected void onDestroy() {
+		Bimp.tempSelectBitmap.clear();
+		super.onDestroy();
+	}
+
 	private Handler mHandler = new Handler(){
 
 		@Override
@@ -380,11 +411,11 @@ public class SelectPhotoActivity extends BaseActivity {
 							mUploadNum++;
 							Log.e("mingguo", "  upload num  "+mUploadNum);
 							if (mUploadNum <= Bimp.tempSelectBitmap.size()){
-								startAddRentHouseImage(mUploadNum);
+								addSpecialPointRequest(mUploadNum);
 							}else if (mUploadNum > Bimp.tempSelectBitmap.size()){
 								Log.e("mingguo", "  upload Bimp.tempSelectBitmap.size()  "+Bimp.tempSelectBitmap.size());
 								Toast.makeText(getApplicationContext(), "上传图片完成！", Toast.LENGTH_SHORT).show();
-								SelectPhotoActivity.this.finish();
+								AddSealTraceActivity.this.finish();
 							}
 						}else{
 							Toast.makeText(getApplicationContext(), "上传图片失败！", Toast.LENGTH_SHORT).show();
@@ -401,9 +432,9 @@ public class SelectPhotoActivity extends BaseActivity {
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "select photeo upload  status  success  "+templateInfo);
+		Log.i("mingguo", "select photeo upload  status  success  action "+action+" temp info "+templateInfo);
 		if (action != null && templateInfo != null){
-			if (action.equals(mAddImageAction)){
+			if (action.equals(mAddSpecialPointAction)){
 				Message message = mHandler.obtainMessage();
 				message.what = 100;
 				message.obj = templateInfo;

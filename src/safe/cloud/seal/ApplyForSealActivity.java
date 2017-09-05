@@ -27,15 +27,7 @@ public class ApplyForSealActivity extends BaseActivity {
 
 	private HoursePresenter mPresenter;
 	//private String mLoginAction = "http://tempuri.org/ValidateLogin";
-	private String mUpdateAction="http://tempuri.org/CheckUpgrade";
-	private String mUserInfoAction = "http://tempuri.org/GetUserInfo";;
 	private String mUserName, mPassword;
-	private String mUserInfoString = null;
-	private String mCity = null;
-	private int mVersionCode = -1;
-	private SealStatusFragment mStatusFragment;
-	private PopupWindow pop = null;
-	private LinearLayout ll_popup;
 	private final int TAKE_PICTURE = 1, SELECT_PICTURE = 2;
 	private HandlerThread myHandlerThread ;
 	private Handler mSubHandler;

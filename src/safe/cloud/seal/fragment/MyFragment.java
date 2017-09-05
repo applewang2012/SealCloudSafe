@@ -15,7 +15,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,15 +22,18 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.RotateAnimation;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
-import safe.cloud.seal.LoginUserActivity;
+import android.widget.Toast;
+import safe.cloud.seal.AboutUsActivity;
 import safe.cloud.seal.ApplyForSealActivity;
-import safe.cloud.seal.HomeActivity;
 import safe.cloud.seal.LoginUserActivity;
 import safe.cloud.seal.ModifyPasswordActivity;
+import safe.cloud.seal.PersonalInfoActivity;
 import safe.cloud.seal.R;
+import safe.cloud.seal.ShowSealTraceActivity;
 import safe.cloud.seal.presenter.DataStatusInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
@@ -47,15 +49,19 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 	private View mLoadingView;
 	private TextView mUserAddress;
 	private HoursePresenter mPresent;
-	private FrameLayout mPublishHouse;
+	private FrameLayout mSealTraceUpload;
 	private FrameLayout mApplySeal;
 	private FrameLayout mPassword;
 	private FrameLayout mLogout;
 	//private String mUsername;
-	private FrameLayout mChangeArea;
+	private FrameLayout mAboutUs;
 	private String mPhone;
 	private String mRealName;
-	
+	private Button mImageAvator;
+	private String phone;
+	private String realName;
+	private String idCard;
+
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -87,15 +93,15 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 		TextView name = (TextView)mRootView.findViewById(R.id.id_my_fragment_name);
 		phone.setText(mPhone);
 		name.setText(mRealName);
-//		//mUserId = (TextView)mRootView.findViewById(R.id.id_user_id);
+		mImageAvator = (Button) mRootView.findViewById(R.id.img_avator);// 头像
 //		mUserAddress = (TextView)mRootView.findViewById(R.id.id_user_address);
 //		mLoadingView = (View)mRootView.findViewById(R.id.id_data_loading);
 //		showLoadingView();
-//		mPublishHouse = (FrameLayout)mRootView.findViewById(R.id.id_user_publish_house);
+		mSealTraceUpload = (FrameLayout)mRootView.findViewById(R.id.id_my_seal_upload);
 		mApplySeal = (FrameLayout)mRootView.findViewById(R.id.id_my_apply_for_seal);
 		mPassword = (FrameLayout)mRootView.findViewById(R.id.id_my_seal_modify_password);
 		mLogout = (FrameLayout)mRootView.findViewById(R.id.id_my_seal_exit_user);
-//		mChangeArea = (FrameLayout)mRootView.findViewById(R.id.id_userinfo_change_area);
+		mAboutUs = (FrameLayout)mRootView.findViewById(R.id.id_my_seal_about_us);
 		mPassword.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -119,23 +125,39 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 				startActivity(new Intent(mContext, ApplyForSealActivity.class));
 			}
 		});
-//		mChangeArea.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				changeUserAreaDialog();
-//			}
-//		});
-//		mSearchHouse.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent intent = new Intent(mContext, HouseSearchActivity.class);
-//				startActivity(intent);
-//				
-//			}
-//		});
-//		showLoadingView();
+		mSealTraceUpload.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				startActivity(new Intent(mContext, ShowSealTraceActivity.class));
+			}
+		});
+		mImageAvator.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				
+					//if (realName != null && mPhone != null && idCard != null) {
+						Intent intent = new Intent(mContext, PersonalInfoActivity.class);
+						intent.putExtra("RealName", CommonUtil.mRegisterRealName);
+						intent.putExtra("Phone", mPhone);
+						intent.putExtra("IDCard", CommonUtil.mRegisterIdcard);
+						startActivity(intent);
+					//}
+
+			}
+		});
+		
+		mAboutUs.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(mContext, AboutUsActivity.class));
+				
+			}
+		});
+
 	}
 	
 	private void initData(){
@@ -170,6 +192,7 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 	
 	private Handler mHandler = new Handler(){
 
+		
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
@@ -179,7 +202,11 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 			if (infoModel != null){
 				mUserNickname.setText(CommonUtil.mRegisterRealName);
 				mUserAddress.setText(infoModel.get("Phone"));
-				//mUserId.setText(infoModel.get("NickName"));
+				phone = infoModel.get("Phone");
+				mUserAddress.setText(phone);// 显示手机号
+				realName = infoModel.get("RealName");
+				mUserNickname.setText(realName);// 显示姓名
+				idCard = infoModel.get("IDCard");
 			}
 		}
 	};

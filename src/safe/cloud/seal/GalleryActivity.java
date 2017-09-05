@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -91,7 +92,7 @@ public class GalleryActivity extends Activity {
 		mSelectedViewNum.setText((location+1) + "/"+mTotalNum);
 		//isShowOkBt();
 		// 为发送按钮设置文字
-		Button back = (Button)findViewById(R.id.gallery_back);
+		FrameLayout back = (FrameLayout)findViewById(R.id.id_titlebar_back);
 		back.setOnClickListener(new OnClickListener() {
 			
 			@Override

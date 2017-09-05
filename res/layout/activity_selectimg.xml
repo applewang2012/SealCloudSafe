@@ -1,91 +1,105 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffffff"
+    android:background="#f1f1f1"
      >
-    <ScrollView 
+     <FrameLayout 
         android:layout_width="match_parent"
    		android:layout_height="match_parent"
-   		android:layout_marginBottom="65dp"
-        >
+   		android:layout_marginBottom="@dimen/base_dimen_50"
+        > 
 		<LinearLayout
 		    android:layout_width="match_parent"
-	   		android:layout_height="wrap_content" 
+	   		android:layout_height="match_parent" 
 	   		android:orientation="vertical"
+	   		android:layout_marginTop="@dimen/base_dimen_20"
 		    >
 		    <EditText
+		        android:id="@+id/id_add_seal_track_input_file_name"
 	            android:layout_width="match_parent"
-	            android:layout_height="@dimen/base_dimen_90"
-        		android:background="#337ffd"
-	            android:text="请输入文件名"
-	            android:textColor="#ffffff"
-	            android:gravity="center"
-	            android:textStyle="bold"
-	            android:textSize="@dimen/base_dimen_38" />
+	            android:layout_height="@dimen/base_dimen_80"
+	            android:hint="请输入文件名"
+	            android:textColor="#444444"
+	            android:textColorHint="#999999"
+	            android:gravity="center_vertical"
+	            android:background="#ffffff"
+	            android:paddingLeft="@dimen/base_dimen_30"
+	            android:layout_marginTop="@dimen/base_dimen_20"
+	            android:textSize="@dimen/base_dimen_30" />
 			 <EditText
-		        android:layout_width="fill_parent"
-		        android:layout_height="100dp"
-		        android:layout_margin="8dp"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginTop="10dp"
-		        android:gravity="center_vertical"
-		        android:textSize="18dp"
-		        android:text="请输入印张名"       
-		        android:background="@null" />
+			     android:id="@+id/id_add_seal_track_input_seal_name"
+		        android:layout_width="match_parent"
+	            android:layout_height="@dimen/base_dimen_80"
+	            android:gravity="center_vertical"
+		        android:textColor="#444444"
+	            android:textColorHint="#999999"
+		        android:paddingLeft="@dimen/base_dimen_30"
+		        android:textSize="@dimen/base_dimen_30"
+		        android:layout_marginTop="@dimen/base_dimen_20"
+		        android:hint="请输入印张名"       
+		        android:background="#ffffff" />
 			 
 			 <TextView
 	            android:layout_width="match_parent"
-	            android:layout_height="@dimen/base_dimen_90"
-        		android:background="#337ffd"
+	            android:layout_height="@dimen/base_dimen_80"
 	            android:text="请添加文件（建议少于5张）"
-	            android:textColor="#ffffff"
-	            android:gravity="center"
+	            android:layout_marginTop="@dimen/base_dimen_20"
+	            android:textColor="#444444"
+	            android:gravity="center_vertical"
 	            android:textStyle="bold"
-	            android:textSize="@dimen/base_dimen_38" />
+	            android:background="#ffffff"
+	            android:paddingLeft="@dimen/base_dimen_30"
+	            android:textSize="@dimen/base_dimen_30" />
 			 
 			 <TextView
 	            android:layout_width="match_parent"
-	            android:layout_height="@dimen/base_dimen_90"
-        		android:background="#337ffd"
+	            android:layout_height="@dimen/base_dimen_80"
 	            android:text="建议保存文件头、尾、骑缝及关键敏感内容"
-	            android:textColor="#ffffff"
-	            android:gravity="center"
+	            android:textColor="#c4c4c4"
+	            android:gravity="center_vertical"
 	            android:textStyle="bold"
-	            android:textSize="@dimen/base_dimen_38" />
+	            android:background="#ffffff"
+	            android:paddingLeft="@dimen/base_dimen_30"
+	            android:textSize="@dimen/base_dimen_26" />
+			 
 		
-		    <GridView 
+		    <safe.cloud.seal.widget.MeasureGridView 
 		        android:id="@+id/noScrollgridview"
 		        android:layout_width="match_parent"
-		        android:layout_height="400dp"
-		        android:layout_marginLeft="10dp"
-		        android:layout_marginRight="10dp"
-		        android:horizontalSpacing="5dp"    
-		        android:verticalSpacing="10dp"    
+		        android:layout_height="wrap_content"
+		        android:layout_marginTop="@dimen/base_dimen_20"
+		        android:layout_marginLeft="@dimen/base_dimen_20"
+		        android:layout_marginRight="@dimen/base_dimen_20"
+		        android:horizontalSpacing="@dimen/base_dimen_15"    
+		        android:verticalSpacing="@dimen/base_dimen_20"    
 		        android:numColumns="2"
 		        android:scrollbars="none"
 		        >
-	    	</GridView>
+	    	</safe.cloud.seal.widget.MeasureGridView>
+	    	
+		    <Button 
+		        android:id="@+id/id_upload_selected_image"
+		        android:layout_width="@dimen/base_dimen_520"
+				android:layout_height="@dimen/base_dimen_80"
+				android:layout_gravity="bottom|center_horizontal"
+				android:layout_marginBottom="@dimen/base_dimen_50"
+				android:layout_marginTop="@dimen/base_dimen_50"
+				android:text="上		传"
+				android:textColor="@drawable/button_text_selector"
+				android:textSize="@dimen/base_dimen_30"
+				android:gravity="center"
+				android:background="@drawable/button_background_selector"
+		      />
 		</LinearLayout>
-	</ScrollView>
-    
-    
-   <Button 
-        android:id="@+id/id_upload_selected_image"
-        android:layout_width="@dimen/base_dimen_520"
-		android:layout_height="@dimen/base_dimen_80"
-		android:layout_gravity="bottom|center_horizontal"
-		android:layout_marginBottom="@dimen/base_dimen_50"
-		android:text="上		传"
-		android:textColor="@drawable/button_text_selector"
-		android:textSize="@dimen/base_dimen_30"
-		android:gravity="center"
-		android:background="@drawable/button_background_selector"
-      />
-   
-    <include
-        android:id="@+id/id_data_loading"
-        layout="@layout/layout_loading_dialog"
-       />
+		
+		   <include
+		        android:id="@+id/id_data_loading"
+		        layout="@layout/layout_loading_dialog"
+	       />
 
 </FrameLayout>
+</ScrollView>
+    
+   
+   

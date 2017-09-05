@@ -3,7 +3,7 @@
        xmlns:android="http://schemas.android.com/apk/res/android"
        android:layout_width="fill_parent"
        android:layout_height="@dimen/base_dimen_90"
-       android:background="#337ffd"  
+       android:background="#d43c33"  
        >
       <FrameLayout
           android:id="@+id/id_titlebar_back"
@@ -32,12 +32,12 @@
            android:textStyle="bold"
        /> 
        
-       <!-- <ImageView 
-           android:id="@+id/id_titlebar_right_search"
-           android:layout_width="@dimen/base_dimen_44"
-           android:layout_height="@dimen/base_dimen_44" 
-           android:src="@drawable/short_lease_search"
-           android:layout_gravity="center_vertical"
-           android:layout_marginLeft="@dimen/base_dimen_650"
-           /> -->
+       <Button 
+           android:id="@+id/id_titlebar_button_add_function"
+           android:layout_width="@dimen/base_dimen_90"
+           android:layout_height="@dimen/base_dimen_90" 
+           android:background="@drawable/title_bar_add_function"
+           android:layout_gravity="center_vertical|right"
+           android:visibility="invisible"
+           />
 </FrameLayout>

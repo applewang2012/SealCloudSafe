@@ -189,12 +189,18 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
            android:theme="@style/SealAppTheme"
-            >
+            />
+         <activity
+            android:name=".SealTraceDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateUnspecified|stateAlwaysHidden"
+           android:theme="@style/SealAppTheme"
+            />
          <!-- <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter> -->
-        </activity>
         
     </application>
 

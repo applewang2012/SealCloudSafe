@@ -69,12 +69,14 @@ public class AddSealTraceActivity extends BaseActivity {
 	private LinearLayout ll_popup;
 	
 	private  String mAddSpecialPointAction = "http://tempuri.org/UploadSpecialPoint";
+	private  String mAddSpecialPointFileAction = "http://tempuri.org/UploadSpecialPointFiles";
 	private HoursePresenter mPresenter;
 	private int mUploadNum = 0;
 	private String mRentNo = "";
 	private View mLoadingView;
 	private EditText mFileNameEditView;
 	private EditText mSealNameEditView;
+	private String mFildId = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -181,7 +183,7 @@ public class AddSealTraceActivity extends BaseActivity {
 					Toast.makeText(getApplicationContext(), "印章名字不能为空！", Toast.LENGTH_SHORT).show();
 					return;
 				}
-				mUploadNum = 1;
+				mUploadNum = 0;
 				startAddSpecialPointImage(mUploadNum);
 			}
 		});
@@ -218,7 +220,7 @@ public class AddSealTraceActivity extends BaseActivity {
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mAddSpecialPointAction));
 		rpc.addProperty("signetId", "");
 		rpc.addProperty("content", mSealNameEditView.getText().toString());
-		rpc.addProperty("data", BMapUtil.bitmapToBase64(Bimp.tempSelectBitmap.get(num-1).getBitmap()));
+		//rpc.addProperty("data", BMapUtil.bitmapToBase64(Bimp.tempSelectBitmap.get(num-1).getBitmap()));
 		rpc.addProperty("type", "0");
 		rpc.addProperty("lon", UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
 		rpc.addProperty("lat", UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0));
@@ -227,6 +229,18 @@ public class AddSealTraceActivity extends BaseActivity {
 		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddSpecialPointAction, rpc);
 		mPresenter.startPresentServiceTask();
 		Log.i("mingguo", "add seal trace  special point request lati  "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0)+" long "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
+	}
+	
+	private void addSpecialPointFileRequest(int num){
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=UploadSpecialPointFiles";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mAddSpecialPointFileAction));
+		rpc.addProperty("fileId", mFildId);
+		rpc.addProperty("data", BMapUtil.bitmapToBase64(Bimp.tempSelectBitmap.get(num-1).getBitmap()));
+		rpc.addProperty("type", "0");
+		rpc.addProperty("uploadedBy", CommonUtil.mUserLoginName);
+		rpc.addProperty("memo", "");
+		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddSpecialPointFileAction, rpc);
+		mPresenter.startPresentServiceTask();
 		Log.i("mingguo", "add seal trace  special point request username  "+CommonUtil.mUserLoginName+" bitmap  width   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getWidth()
 				+" bitmap  height   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getHeight());
 	}
@@ -408,15 +422,13 @@ public class AddSealTraceActivity extends BaseActivity {
 						object = new JSONObject((String)msg.obj);
 						String ret = object.optString("ret");
 						if (ret != null && ret.equals("0")){
-							mUploadNum++;
-							Log.e("mingguo", "  upload num  "+mUploadNum);
-							if (mUploadNum <= Bimp.tempSelectBitmap.size()){
-								addSpecialPointRequest(mUploadNum);
-							}else if (mUploadNum > Bimp.tempSelectBitmap.size()){
-								Log.e("mingguo", "  upload Bimp.tempSelectBitmap.size()  "+Bimp.tempSelectBitmap.size());
-								Toast.makeText(getApplicationContext(), "上传图片完成！", Toast.LENGTH_SHORT).show();
-								AddSealTraceActivity.this.finish();
+							mFildId = object.optString("ID");
+							if (mFildId != null){
+								mUploadNum = 1;
+								Log.w("mingguo", "upload file field id  "+mFildId);
+								addSpecialPointFileRequest(mUploadNum);
 							}
+							
 						}else{
 							Toast.makeText(getApplicationContext(), "上传图片失败！", Toast.LENGTH_SHORT).show();
 						}
@@ -425,6 +437,28 @@ public class AddSealTraceActivity extends BaseActivity {
 						e.printStackTrace();
 					}
 					
+				}
+			}else if (msg.what == 101){
+				if (msg.obj != null){
+					JSONObject object;
+					try {
+						object = new JSONObject((String)msg.obj);
+						String ret = object.optString("ret");
+						if (ret != null && ret.equals("0")){
+							mUploadNum++;
+							if (mUploadNum <= Bimp.tempSelectBitmap.size()){
+								showLoadingView();
+								addSpecialPointFileRequest(mUploadNum);
+							}else if (mUploadNum > Bimp.tempSelectBitmap.size()){
+								Log.e("mingguo", "  upload Bimp.tempSelectBitmap.size()  "+Bimp.tempSelectBitmap.size());
+								Toast.makeText(getApplicationContext(), "上传图片完成！", Toast.LENGTH_SHORT).show();
+								AddSealTraceActivity.this.finish();
+							}
+						}
+					}catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}
@@ -437,6 +471,11 @@ public class AddSealTraceActivity extends BaseActivity {
 			if (action.equals(mAddSpecialPointAction)){
 				Message message = mHandler.obtainMessage();
 				message.what = 100;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
+			}else if (action.equals(mAddSpecialPointFileAction)){
+				Message message = mHandler.obtainMessage();
+				message.what = 101;
 				message.obj = templateInfo;
 				mHandler.sendMessage(message);
 			}

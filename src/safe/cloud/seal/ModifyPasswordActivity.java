@@ -38,8 +38,6 @@ public class ModifyPasswordActivity extends BaseActivity{
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		mTitleBar = (TextView)findViewById(R.id.id_titlebar);
 		mTitleBar.setText("修改密码");
-		
-		
 		initView();
 	}
 	

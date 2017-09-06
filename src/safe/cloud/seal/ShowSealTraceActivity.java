@@ -4,13 +4,12 @@ package safe.cloud.seal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -19,26 +18,20 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.TextView;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
-import cn.cloudwalk.libproject.callback.OnCaptureCallback;
-import safe.cloud.seal.album.ImageItem;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import safe.cloud.seal.fragment.AddSealInfoStep1Fragment;
 import safe.cloud.seal.fragment.AddSealInfoStep2Fragment;
-import safe.cloud.seal.fragment.SealStatusFragment;
-import safe.cloud.seal.model.SealStatusInfo;
+import safe.cloud.seal.model.SealTraceInfo;
 import safe.cloud.seal.model.UniversalAdapter;
 import safe.cloud.seal.model.UniversalViewHolder;
-import safe.cloud.seal.presenter.ActionOperationInterface;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
-import safe.cloud.seal.util.GlobalUtil;
+import safe.cloud.seal.util.UtilTool;
 import safe.cloud.seal.util.ViewUtil;
 
 public class ShowSealTraceActivity extends BaseActivity implements OnItemClickListener{
@@ -60,10 +53,10 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 	private AddSealInfoStep1Fragment mAddInfoFragment ;
 	private AddSealInfoStep2Fragment mUploadInfoFragment;
 	private View mLoadingView;
-	private UniversalAdapter<SealStatusInfo> mAdapter;
-	private List<SealStatusInfo> mDataList = new ArrayList<>();
+	private UniversalAdapter<SealTraceInfo> mAdapter;
+	private List<SealTraceInfo> mDataList = new ArrayList<>();
 	private TextView mEmptyContent;
-	
+	private  String mGetSpecialPointAction = "http://tempuri.org/GetSpecialPointByUser";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,34 +87,62 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 	}
 	
 	private void initAdapter(){
+		mPresenter = new HoursePresenter(getApplicationContext(), this);
+		
 		mLoadingView = findViewById(R.id.id_data_loading);
 		mLoadingView.setVisibility(View.INVISIBLE);
 		mEmptyContent = (TextView)findViewById(R.id.id_seal_trace_empty_view);
-		mEmptyContent.setVisibility(View.VISIBLE);
+		mEmptyContent.setVisibility(View.INVISIBLE);
 		ListView showList = (ListView)findViewById(R.id.id_seal_trace_show_list);
-		mAdapter = new UniversalAdapter<SealStatusInfo>(ShowSealTraceActivity.this, R.layout.aty_seal_trace_listview_item, mDataList) {
+		mAdapter = new UniversalAdapter<SealTraceInfo>(ShowSealTraceActivity.this, R.layout.aty_seal_trace_listview_item, mDataList) {
 
 			@Override
-			public void convert(UniversalViewHolder holder, SealStatusInfo info) {
+			public void convert(UniversalViewHolder holder, SealTraceInfo info) {
 				// TODO Auto-generated method stub
 				View holderView = holder.getConvertView();
 				TextView fileName = (TextView)holderView.findViewById(R.id.id_seal_trace_file_list_name);
 				TextView sealName = (TextView)holderView.findViewById(R.id.id_seal_trace_seal_list_name);
 				TextView traceDate = (TextView)holderView.findViewById(R.id.id_seal_trace_seal_list_date);
+				fileName.setText(info.getSealFileName());
+				sealName.setText(info.getSealName());
+				traceDate.setText("申请时间："+info.getSealDate());
 			}
 		};
 		showList.setAdapter(mAdapter);
 		showList.setOnItemClickListener(this);
+		requestGetSignetsList();
 	}
 	
 	private void requestGetSignetsList(){
 		Log.w("mingguo", "request signet  list  username   "+CommonUtil.mUserLoginName);
 		ViewUtil.showLoadingView(this, mLoadingView);
-		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetsListByApplyer";
-//		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSignetsListAction));
-//		rpc.addProperty("applyerId", CommonUtil.mUserLoginName);
-//		mPresent.readyPresentServiceParams(mContext, url, mGetSignetsListAction, rpc);
-//		mPresent.startPresentServiceTask();
+		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSpecialPointByUser";
+		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSpecialPointAction));
+		rpc.addProperty("userId", CommonUtil.mUserLoginName);
+		mPresenter.readyPresentServiceParams(ShowSealTraceActivity.this, url, mGetSpecialPointAction, rpc);
+		mPresenter.startPresentServiceTask();
+	}
+	
+	private void parseSealTraceInfo(String value){
+		try{
+			JSONArray array = new JSONArray(value);
+			if (array != null){
+				mDataList.clear();
+				Log.i("house", "parse house info "+array.length());
+				for (int item = 0; item < array.length(); item++){
+					JSONObject itemJsonObject = array.optJSONObject(item);
+					SealTraceInfo  statusInfo = new SealTraceInfo();
+					statusInfo.setSealTraceId(itemJsonObject.optString("sfr_file_id"));
+					statusInfo.setSealFileName(itemJsonObject.optString("sfr_memo"));
+					statusInfo.setSealName(itemJsonObject.optString("sfr_signet_content"));
+					statusInfo.setSealDate(UtilTool.stampToNormalDate(UtilTool.extractNumberFromString(itemJsonObject.optString("sfr_upload_date"))));
+					mDataList.add(statusInfo);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	private Handler mHandler = new Handler(){
@@ -130,25 +151,16 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
-			if (msg.what == mSelectPhotoFlag){
-				if (mSelectPhotoFlag == 1000){
-					zhizhaoImage1.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag  == 1001){
-					Bitmap bitmap = (Bitmap)msg.obj;
-					zhizhaoImage2.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag == 1002){
-					farenId1.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag == 1003){
-					farenId2.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag == 1004){
-					jingbanrenId1.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag == 1005){
-					jingbanrenId2.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag == 1006){
-					danweijieshaoxin1.setImageBitmap((Bitmap)msg.obj);
-				}else if (mSelectPhotoFlag == 1007){
-					danweijieshaoxin2.setImageBitmap((Bitmap)msg.obj);
-				}
+			ViewUtil.dismissLoadingView(mLoadingView);
+			if (msg.what == 100){
+					parseSealTraceInfo((String)msg.obj);
+					if (mDataList.size() > 0){
+						mEmptyContent.setVisibility(View.GONE);
+						mAdapter.notifyDataSetChanged();
+					}else{
+						mEmptyContent.setVisibility(View.VISIBLE);
+					}
+					
 			}
 		}
 	};
@@ -157,48 +169,16 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 	
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
-		super.onActivityResult(requestCode, resultCode, data);
-		switch (requestCode) {
-		case TAKE_PICTURE:
-			if (resultCode == RESULT_OK){
-				Message subMessage = mSubHandler.obtainMessage();
-				subMessage.what = mSelectPhotoFlag;
-				subMessage.obj = mPhotoFilePath;
-				mSubHandler.sendMessage(subMessage);
-				//mSubHandler.sendEmptyMessage(mSelectPhotoFlag);
-			}
-			break;
-		case SELECT_PICTURE:
-			if (resultCode == RESULT_OK){
-				if (data != null){
-					ImageItem item = (ImageItem)data.getSerializableExtra("image_shot");
-					Log.w("mingguo", "  on activity  result image  path   "+item.getImagePath());
-//					Message msg = mHandler.obtainMessage();
-//					msg.what = mSelectPhotoFlag;
-//					msg.obj = item.getBitmap();
-//					mHandler.sendMessage(msg);
-					Message subMessage = mSubHandler.obtainMessage();
-					subMessage.what = mSelectPhotoFlag;
-					subMessage.obj = item.getImagePath();
-					mSubHandler.sendMessage(subMessage);
-				}
-			}
-			break;
-		}
-	}
-
-	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
 		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
-//		if (action != null && templateInfo != null){}
-//			if (action.equals(mUserInfoAction)){
-//				Message message = mHandler.obtainMessage();
-//				message.what = 100;
-//				message.obj = templateInfo;
-//				mHandler.sendMessage(message);
-//			}else if (action.equals(mUpdateAction)){
+		if (action != null && templateInfo != null){}
+			if (action.equals(mGetSpecialPointAction)){
+				Message message = mHandler.obtainMessage();
+				message.what = 100;
+				message.obj = templateInfo;
+				mHandler.sendMessage(message);
+			}
+//			else if (action.equals(mUpdateAction)){
 //				Message message = mHandler.obtainMessage();
 //				message.what = 200;
 //				message.obj = templateInfo;
@@ -206,12 +186,24 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 //			}
 	}
 
+	
+
+
+	@Override
+	public void onStatusError(String action, String error) {
+		// TODO Auto-generated method stub
+		super.onStatusError(action, error);
+		Log.e("mingguo", "on success  action "+action+"  error  "+error);
+	}
+
 
 
 	@Override
 	public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 		// TODO Auto-generated method stub
-		
+		Intent detailIntent = new Intent(ShowSealTraceActivity.this, SealTraceDetailActivity.class);
+		detailIntent.putExtra("trace_id", mDataList.get(arg2).getSealTraceId());
+		startActivity(detailIntent);
 	}
 	
 	

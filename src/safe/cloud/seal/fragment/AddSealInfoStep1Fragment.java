@@ -839,14 +839,14 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 							json = new JSONObject((String)msg.obj);
 							String ret = json.optString("ret");
 							if (ret != null){
-								//if (ret.equals("0")){
+								if (ret.equals("0")){
 									mIsReGetSignetId = true;
 									showLoadingView();
 									requestSignetId();
-//								}else{
-//									mIsReGetSignetId = false;
-//									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
-//								}
+								}else{
+									mIsReGetSignetId = false;
+									GlobalUtil.shortToast(getActivity(), getString(R.string.verify_error), getResources().getDrawable(R.drawable.ic_dialog_no));
+								}
 							}
 						} catch (JSONException e) {
 							// TODO Auto-generated catch block

@@ -39,7 +39,7 @@
 		        android:hint="请输入印张名"       
 		        android:background="#ffffff" />
 			 
-			 <TextView
+			<!--  <TextView
 	            android:layout_width="match_parent"
 	            android:layout_height="@dimen/base_dimen_80"
 	            android:text="请添加文件（建议少于5张）"
@@ -49,9 +49,9 @@
 	            android:textStyle="bold"
 	            android:background="#ffffff"
 	            android:paddingLeft="@dimen/base_dimen_30"
-	            android:textSize="@dimen/base_dimen_30" />
+	            android:textSize="@dimen/base_dimen_30" /> -->
 			 
-			 <TextView
+			 <!-- <TextView
 	            android:layout_width="match_parent"
 	            android:layout_height="@dimen/base_dimen_80"
 	            android:text="建议保存文件头、尾、骑缝及关键敏感内容"
@@ -60,7 +60,7 @@
 	            android:textStyle="bold"
 	            android:background="#ffffff"
 	            android:paddingLeft="@dimen/base_dimen_30"
-	            android:textSize="@dimen/base_dimen_26" />
+	            android:textSize="@dimen/base_dimen_26" /> -->
 			 
 		
 		    <safe.cloud.seal.widget.MeasureGridView 

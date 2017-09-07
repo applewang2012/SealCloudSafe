@@ -8,6 +8,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.ksoap2.serialization.SoapObject;
 
+import com.squareup.picasso.Picasso;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -21,8 +23,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 import safe.cloud.seal.AddSealTraceActivity.GridAdapter;
 import safe.cloud.seal.album.ImageItem;
 import safe.cloud.seal.model.SealTraceInfo;
@@ -32,7 +34,6 @@ import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.shotview.Bimp;
 import safe.cloud.seal.shotview.FileUpLoadUtils;
 import safe.cloud.seal.util.CommonUtil;
-import safe.cloud.seal.util.UtilTool;
 import safe.cloud.seal.util.ViewUtil;
 import safe.cloud.seal.widget.MeasureGridView;
 
@@ -52,14 +53,14 @@ public class SealTraceDetailActivity extends BaseActivity {
 	
 	private  String mGetSpecialPointFileAction = "http://tempuri.org/GetSpecialPointFilesByID";
 	private HoursePresenter mPresenter;
-	private int mUploadNum = 0;
 	private View mLoadingView;
 	private TextView mFileNameEditView;
 	private TextView mSealNameEditView;
-	private String mFildId = null;
 	private String mTraceId;
 	private UniversalAdapter<SealTraceInfo> mAdapter;
 	private List<SealTraceInfo> mDataList = new ArrayList<>();
+	private String mFileName;
+	private String mSealName;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,8 @@ public class SealTraceDetailActivity extends BaseActivity {
 		TextView tilebar = (TextView)findViewById(R.id.id_titlebar);
 		tilebar.setText("印记详情");
 		mTraceId = getIntent().getStringExtra("trace_id"); 
+		mSealName = getIntent().getStringExtra("seal_name"); 
+		mFileName = getIntent().getStringExtra("file_name"); 
 		Log.i("mingguo", "trace  detail trace id  "+mTraceId);
 		Init();
 	}
@@ -84,18 +87,16 @@ public class SealTraceDetailActivity extends BaseActivity {
 		mSealNameEditView = (TextView)findViewById(R.id.id_add_seal_track_input_seal_name);
 		noScrollgridview = (MeasureGridView) findViewById(R.id.noScrollgridview);	
 		noScrollgridview.setSelector(new ColorDrawable(Color.TRANSPARENT));
+		mFileNameEditView.setText("文件名："+mFileName);
+		mSealNameEditView.setText("印章名："+mSealName);
 		mAdapter = new UniversalAdapter<SealTraceInfo>(SealTraceDetailActivity.this, R.layout.aty_item_published_grida, mDataList) {
 
 			@Override
 			public void convert(UniversalViewHolder holder, SealTraceInfo info) {
 				// TODO Auto-generated method stub
 				View holderView = holder.getConvertView();
-				TextView fileName = (TextView)holderView.findViewById(R.id.id_seal_trace_file_list_name);
-				TextView sealName = (TextView)holderView.findViewById(R.id.id_seal_trace_seal_list_name);
-				TextView traceDate = (TextView)holderView.findViewById(R.id.id_seal_trace_seal_list_date);
-				fileName.setText(info.getSealFileName());
-				sealName.setText(info.getSealName());
-				traceDate.setText("申请时间："+info.getSealDate());
+				ImageView sealImage = (ImageView) holderView.findViewById(R.id.item_grida_image);
+				Picasso.with(SealTraceDetailActivity.this).load(info.GetSealTraceImage()).into(sealImage);
 			}
 		};
 		noScrollgridview.setAdapter(mAdapter);
@@ -169,7 +170,7 @@ public class SealTraceDetailActivity extends BaseActivity {
 					statusInfo.setSealTraceId(itemJsonObject.optString("sfr_file_id"));
 					statusInfo.setSealFileName(itemJsonObject.optString("sfr_memo"));
 					statusInfo.setSealName(itemJsonObject.optString("sfr_signet_content"));
-					statusInfo.setsealis
+					statusInfo.setSealTraceImage(CommonUtil.mUserHost+itemJsonObject.optString("ImageUrl").replace("\\", "/"));
 					mDataList.add(statusInfo);
 				}
 			}
@@ -190,19 +191,9 @@ public class SealTraceDetailActivity extends BaseActivity {
 				if (msg.obj != null){
 					JSONObject object;
 					try {
+						parseSealTraceInfo((String)msg.obj);
+						mAdapter.notifyDataSetChanged();
 						object = new JSONObject((String)msg.obj);
-						String ret = object.optString("ret");
-						if (ret != null && ret.equals("0")){
-							mFildId = object.optString("ID");
-							if (mFildId != null){
-								mUploadNum = 1;
-								Log.w("mingguo", "upload file field id  "+mFildId);
-								
-							}
-							
-						}else{
-							Toast.makeText(getApplicationContext(), "上传图片失败！", Toast.LENGTH_SHORT).show();
-						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

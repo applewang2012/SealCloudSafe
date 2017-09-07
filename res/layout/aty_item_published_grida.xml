@@ -6,10 +6,10 @@
 
     <ImageView
         android:id="@+id/item_grida_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="@dimen/base_dimen_300"
+        android:layout_height="@dimen/base_dimen_500"
         android:scaleType="fitXY"
-        android:src="@drawable/add_seal_icon_image" >
+        android:background="@drawable/add_seal_icon_image" >
     </ImageView>
 
 </FrameLayout>

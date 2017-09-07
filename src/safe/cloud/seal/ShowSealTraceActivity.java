@@ -203,6 +203,8 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 		// TODO Auto-generated method stub
 		Intent detailIntent = new Intent(ShowSealTraceActivity.this, SealTraceDetailActivity.class);
 		detailIntent.putExtra("trace_id", mDataList.get(arg2).getSealTraceId());
+		detailIntent.putExtra("seal_name", mDataList.get(arg2).getSealName());
+		detailIntent.putExtra("file_name", mDataList.get(arg2).getSealFileName());
 		startActivity(detailIntent);
 	}
 	

@@ -6,7 +6,7 @@ import java.util.List;
 public class SealTraceInfo {
 	private String traceId ;
 	private String sealType;
-	private List<String> traceList;
+	private String traceImage;
 	private String sealDate;
 	private String filename;
 	private String sealname;
@@ -36,12 +36,12 @@ public class SealTraceInfo {
 	}
 	
 	
-	public void setSealTraceList(List<String> list){
-		traceList = list;
+	public void setSealTraceImage(String list){
+		traceImage = list;
 	}
 	
-	public List<String> GetSealTraceList(){
-		return traceList;
+	public String GetSealTraceImage(){
+		return traceImage;
 	}
 	
 	public void setSealDate(String date){

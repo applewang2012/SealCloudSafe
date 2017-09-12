@@ -104,7 +104,7 @@
 	        	    <TextView 
 	        	        android:layout_width="wrap_content"
 		        		android:layout_height="match_parent"
-		        		android:text="印记上传"
+		        		android:text="印迹上传"
 		        		android:textSize="@dimen/base_dimen_30"
 		        		android:layout_marginLeft="@dimen/base_dimen_116"
 		        		android:gravity="center_vertical"

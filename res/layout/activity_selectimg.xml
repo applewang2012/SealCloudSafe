@@ -37,7 +37,7 @@
 		        android:paddingLeft="@dimen/base_dimen_30"
 		        android:textSize="@dimen/base_dimen_30"
 		        android:layout_marginTop="@dimen/base_dimen_20"
-		        android:hint="请输入印张名"       
+		        android:hint="请输入印章名"       
 		        android:background="#ffffff" />
 			 
 			 <TextView

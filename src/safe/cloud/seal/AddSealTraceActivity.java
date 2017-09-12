@@ -86,7 +86,7 @@ public class AddSealTraceActivity extends BaseActivity {
 		setContentView(parentView);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		TextView tilebar = (TextView)findViewById(R.id.id_titlebar);
-		tilebar.setText("添加印记");
+		tilebar.setText("添加印迹");
 		Init();
 	}
 
@@ -238,6 +238,8 @@ public class AddSealTraceActivity extends BaseActivity {
 		rpc.addProperty("data", BMapUtil.bitmapToBase64(Bimp.tempSelectBitmap.get(num-1).getBitmap()));
 		rpc.addProperty("type", "0");
 		rpc.addProperty("uploadedBy", CommonUtil.mUserLoginName);
+		rpc.addProperty("lon", UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
+		rpc.addProperty("lat", UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0));
 		rpc.addProperty("memo", "");
 		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddSpecialPointFileAction, rpc);
 		mPresenter.startPresentServiceTask();

@@ -71,7 +71,7 @@ public class SealTraceDetailActivity extends BaseActivity {
 		setContentView(parentView);
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		TextView tilebar = (TextView)findViewById(R.id.id_titlebar);
-		tilebar.setText("印记详情");
+		tilebar.setText("印迹详情");
 		mTraceId = getIntent().getStringExtra("trace_id"); 
 		mSealName = getIntent().getStringExtra("seal_name"); 
 		mFileName = getIntent().getStringExtra("file_name"); 

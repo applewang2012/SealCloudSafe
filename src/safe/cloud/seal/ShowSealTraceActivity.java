@@ -65,7 +65,7 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 		setContentView(R.layout.aty_seal_trace_listview_layout); 
 		getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.titlebar);
 		TextView tilebar = (TextView)findViewById(R.id.id_titlebar);
-		tilebar.setText("印记上传");
+		tilebar.setText("印迹上传");
 		Button addTrace = (Button)findViewById(R.id.id_titlebar_button_add_function);
 		addTrace.setVisibility(View.VISIBLE);
 		addTrace.setOnClickListener(new OnClickListener() {

@@ -22,7 +22,7 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_gravity="center"
-       android:text="快上传您的第一张印记吧！"
+       android:text="快上传您的第一张印迹吧！"
        android:textColor="#555555"
        android:visibility="invisible"
        android:textSize="@dimen/base_dimen_40"

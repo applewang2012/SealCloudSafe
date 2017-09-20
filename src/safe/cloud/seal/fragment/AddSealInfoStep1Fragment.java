@@ -105,6 +105,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private boolean mExistSeal;
 	private EditText mRegisterPhone, mRealName, mRealId, mWaiWenEditView;
 	private boolean mIsReGetSignetId;
+	private final String mSealTypeFaren = "05"; //不校验法人章
 	
 	public  void setFragmentActionListener(ActionOperationInterface action) {
 		mAction = action;
@@ -514,6 +515,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetDefaultSignContentAction));
 				rpc.addProperty("corpId", mSelectorInfo.get("GetCorporationInfo").getSelectedId());
 				rpc.addProperty("signetTypeId", mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
+				Log.i("mingguo", "default content  signet type id  "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId()+"  type  "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedName());
 				rpc.addProperty("signetType", mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedName());
 				mPresent.readyPresentServiceParams(mContext, url, mGetDefaultSignContentAction, rpc);
 				mPresent.startPresentServiceTask();
@@ -623,6 +625,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	}
 	
 	private void requestCheckSealContentExist(String content){
+		if (mSealTypeFaren.equalsIgnoreCase(mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId())){
+			mExistSeal = false;
+			return;
+		}
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetSpecification";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mCheckSignContentExistAction));
 		Log.i("mingguo", "check seal content exist    "+content);
@@ -803,7 +809,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				}else if (msg.what == 207){
 					String ret = (String)msg.obj;
 					if (ret != null){
-						if (ret.equals("1")){
+						if (ret.equals("0")){
 							GlobalUtil.shortToast(getActivity(), "该印章内容已存在，无法继续添加印章！", getResources().getDrawable(R.drawable.ic_dialog_no));
 							mExistSeal = true;
 						}else{

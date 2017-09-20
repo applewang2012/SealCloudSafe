@@ -61,6 +61,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	private String mRegisterAction = "http://tempuri.org/AddUserInfo";
 	public static int liveLevel = FaceInterface.LevelType.LEVEL_STANDARD;
 	private ArrayList<Integer> liveList;
+	private int liveCount = 3;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -198,7 +199,8 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  ");
 	   			 	mSelfPhotoToString = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
                 }else if (msg.what == 5000){
-                	String renzhengResult = ReciveImg.getRenzhengResult(mIdCard, mRealName ,getBase64Pic());
+                	String renzhengResult = ReciveImg.getRenzhengResult(RegisterUserStep2Activity.this, mIdCard, mRealName ,getBase64Pic());
+                	Log.w("mingguo", "register step2  renzheng result  "+renzhengResult);
                     Message message = mHandler.obtainMessage();
                     message.what = 500;
                     message.obj = renzhengResult;
@@ -295,12 +297,12 @@ public class RegisterUserStep2Activity extends BaseActivity{
 						json = new JSONObject((String)msg.obj);
 						String ret = json.optString("ret");
 						if (ret != null){
-							if (ret.equals("0")){
+//							if (ret.equals("0")){
 								//showLoadingView();
-								AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
-							}else{
-								GlobalUtil.shortToast(RegisterUserStep2Activity.this, "该身份证号已被注册！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-							}
+								AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList, liveCount);
+//							}else{
+//								GlobalUtil.shortToast(RegisterUserStep2Activity.this, "该身份证号已被注册！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//							}
 						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -352,7 +354,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 						if (status_code != null){
 							if (status_code.equals("200")){
 								GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
-								registerUserName();
+								//registerUserName();
 							}else {
 								if (status_code.equals("111")){
 									String compareError = object.optString("error_code");

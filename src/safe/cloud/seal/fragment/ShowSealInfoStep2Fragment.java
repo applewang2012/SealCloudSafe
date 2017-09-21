@@ -43,7 +43,9 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import cn.cloudwalk.libproject.util.StringUtil;
 import safe.cloud.seal.AlbumActivity;
+import safe.cloud.seal.GalleryFullScreenActivity;
 import safe.cloud.seal.R;
 import safe.cloud.seal.album.ImageItem;
 import safe.cloud.seal.model.SealUploadFileType;
@@ -81,6 +83,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 	private String mGetSignetFileAction = "http://tempuri.org/GetSignetsFiles";
 	private String mSubmitFileAction = "http://tempuri.org/SubmitSignet";
 	private List<SealUploadFileType> mDataList = new ArrayList<>();
+	private ArrayList<String> mUrlList = new ArrayList<>();
 	private UniversalAdapter mAdapter;
 	private int mUploadNum = 0;
 	private List<ImageItem> mUploadList = new ArrayList<>();
@@ -324,12 +327,15 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 				ImageView addFile1 = (ImageView)holderView.findViewById(R.id.id_seal_upload_add_file1);
 				ImageView addFile2 = (ImageView)holderView.findViewById(R.id.id_seal_upload_add_file2);
 				typeName.setText(info.getFileType());
-				
 				if (info.getImageUrl() != null){
 					Picasso.with(mContext).load(info.getImageUrl()).into(addFile1);
+				}else{
+					addFile1.setBackgroundResource(R.drawable.seal_default_image);
 				}
 				if (info.getImageUrl2() != null){
 					Picasso.with(mContext).load(info.getImageUrl2()).into(addFile2);
+				}else{
+					addFile2.setBackgroundResource(R.drawable.seal_default_image);
 				}
 				if (info.getImageBitmap() != null){
 					addFile1.setImageBitmap(info.getImageBitmap());
@@ -337,30 +343,32 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 				if (info.getImage2Bitmap() != null){
 					addFile2.setImageBitmap(info.getImage2Bitmap());
 				}
-//				addFile1.setOnClickListener(new OnClickListener() {
-//					
-//					@Override
-//					public void onClick(View v) {
-//						//mSelectPhotoFlag  = 1000*(holder.getPosition()+1)+1;
-//						//info.setImageId(1000*(holder.getPosition()+1)+1);
-//						mSelectPhotoFlag = info.getImaged();
-//						Log.w("mingguo", "select  flag  "+mSelectPhotoFlag+" server  file id  "+info.getFileID());
-//						ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.activity_translate_in));
-//						pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
-//					}
-//				});
-//				addFile2.setOnClickListener(new OnClickListener() {
-//					
-//					@Override
-//					public void onClick(View v) {
-//						//info.setImageId(1000*(holder.getPosition()+1)+2);
-//						mSelectPhotoFlag = info.getImaged2();
-//						Log.w("mingguo", "select  flag2  "+mSelectPhotoFlag+" server  file id2  "+info.getFileID2());
-//						ll_popup.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.activity_translate_in));
-//						pop.showAtLocation(getActivity().findViewById(R.id.id_add_seal_content), Gravity.BOTTOM, 0, 0);
-//						
-//					}
-//				});
+				addFile1.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (!StringUtil.isEmpty(info.getImageUrl())){
+							Log.i("mingguo", "url list   "+mUrlList.size());
+							Intent intent = new Intent(mContext, GalleryFullScreenActivity.class);
+							intent.putStringArrayListExtra("imagelist", mUrlList);
+							intent.putExtra("selected_position", getClickFullScreenImagePosition(info.getImageUrl()));
+							startActivity(intent);
+						}
+					}
+				});
+				addFile2.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						if (!StringUtil.isEmpty(info.getImageUrl2())){
+							Log.i("mingguo", "url list   "+mUrlList.size());
+							Intent intent = new Intent(mContext, GalleryFullScreenActivity.class);
+							intent.putStringArrayListExtra("imagelist", mUrlList);
+							intent.putExtra("selected_position", getClickFullScreenImagePosition(info.getImageUrl2()));
+							startActivity(intent);
+						}
+					}
+				});
 			}
 		};
 		showList.setAdapter(mAdapter);
@@ -473,6 +481,29 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 			e.printStackTrace();
 		}
 	}
+	
+	private void getShowImageUrl(){
+		for (int index = 0; index < mDataList.size(); index++){
+			if (!StringUtil.isEmpty(mDataList.get(index).getImageUrl())){
+				mUrlList.add(mDataList.get(index).getImageUrl());
+			}
+			if (!StringUtil.isEmpty(mDataList.get(index).getImageUrl2())){
+				mUrlList.add(mDataList.get(index).getImageUrl2());
+			} 
+		}
+	}
+	
+	private int getClickFullScreenImagePosition(String url){
+		for (int i = 0; i < mUrlList.size(); i++){
+			if (!StringUtil.isEmpty(url)){
+				if (url.equalsIgnoreCase(mUrlList.get(i))){
+					return i;
+				}
+			}
+		}
+		return 0;
+	}
+	
 	private void showUploadDialog(){
 		new AlertDialog.Builder(getActivity(), AlertDialog.THEME_HOLO_LIGHT).setTitle(getString(R.string.upload_file_title)) 
 		  
@@ -520,6 +551,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 			}else if (msg.what == 100){
 				dismissLoadingView();
 				parseGetUploadFileType((String)msg.obj);
+				getShowImageUrl();
 				mAdapter.notifyDataSetChanged();
 			}else if (msg.what == 120){
 				String value = (String)msg.obj;

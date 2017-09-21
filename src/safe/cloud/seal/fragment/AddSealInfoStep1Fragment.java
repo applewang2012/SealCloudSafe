@@ -97,13 +97,14 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private TextView mSelectZhizuoType;
 	private TextView mSelectChaizhiType;
 	private TextView mZhizhangDanweiText;
-	private Button mVerifyCodeButton;
-	private String mPhone, mVerifyCode;;
+	//private Button mVerifyCodeButton;
+	private String mPhone;// mVerifyCode;;
 	private int mTimeCount = -1;
 	private TextView mSealNeirongText;
 	private EditText mSealUseDanweiEdit;
 	private boolean mExistSeal;
-	private EditText mRegisterPhone, mRealName, mRealId, mWaiWenEditView;
+	private EditText mWaiWenEditView;
+	private TextView mRegisterPhone, mRealName, mRealId;
 	private boolean mIsReGetSignetId;
 	private final String mSealTypeFaren = "05"; //不校验法人章
 	
@@ -284,34 +285,37 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			}
 		});
 		
-		mRegisterPhone = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_number);
-		final EditText inputVerify = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_yanzhengma);
-		mRealName = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_idname);
-		mRealId = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_idcard_number);
-		mVerifyCodeButton = (Button)mRootView.findViewById(R.id.id_aty_apply_seal_get_phone_verifycode);
-		mVerifyCodeButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				mPhone = mRegisterPhone.getEditableText().toString();
-				if (mPhone == null || mPhone.equals("")){
-					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
-					return;
-				}else if (mPhone.length() < 11){
-					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
-					return;
-				}
-				Log.w("mingguo", "register step 1  phone  "+mPhone+" time count  "+mTimeCount);
-				if (mTimeCount < 0){
-					mTimeCount = 60;
-					sendPhoneVerifyCode(mPhone);
-					mHandler.sendEmptyMessage(1000);
-				}else{
-					return;
-				}
-				
-			}
-		});
+		mRegisterPhone = (TextView)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_number);
+		//final EditText inputVerify = (EditText)mRootView.findViewById(R.id.id_aty_apply_seal_input_phone_yanzhengma);
+		mRealName = (TextView)mRootView.findViewById(R.id.id_aty_apply_seal_input_idname);
+		mRealId = (TextView)mRootView.findViewById(R.id.id_aty_apply_seal_input_idcard_number);
+		mRegisterPhone.setText(CommonUtil.mUserLoginName);
+		mRealName.setText(CommonUtil.mRegisterRealName);
+		mRealId.setText(CommonUtil.mRegisterIdcard);
+//		mVerifyCodeButton = (Button)mRootView.findViewById(R.id.id_aty_apply_seal_get_phone_verifycode);
+//		mVerifyCodeButton.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				mPhone = mRegisterPhone.getEditableText().toString();
+//				if (mPhone == null || mPhone.equals("")){
+//					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_not_null), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
+//					return;
+//				}else if (mPhone.length() < 11){
+//					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
+//					return;
+//				}
+//				Log.w("mingguo", "register step 1  phone  "+mPhone+" time count  "+mTimeCount);
+//				if (mTimeCount < 0){
+//					mTimeCount = 60;
+//					sendPhoneVerifyCode(mPhone);
+//					mHandler.sendEmptyMessage(1000);
+//				}else{
+//					return;
+//				}
+//				
+//			}
+//		});
 		
 		
 		Button actionNext = (Button)mRootView.findViewById(R.id.id_aty_apply_seal_next_step_button);
@@ -323,10 +327,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				if (!checkApplySealValid()){
 					return;
 				}
-				mVerifyCode = inputVerify.getEditableText().toString();
-				mPhone = mRegisterPhone.getEditableText().toString();
-				String name = mRealName.getEditableText().toString();
-				String idcard = mRealId.getEditableText().toString();
+				//mVerifyCode = inputVerify.getEditableText().toString();
+				mPhone = mRegisterPhone.getText().toString();
+				String name = mRealName.getText().toString();
+				String idcard = mRealId.getText().toString();
 				if (name == null || name.equals("")){
 					GlobalUtil.shortToast(getActivity(), "申请人姓名不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
@@ -349,12 +353,15 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					GlobalUtil.shortToast(getActivity(), getString(R.string.phone_input_error), mContext.getResources().getDrawable(R.drawable.ic_dialog_no));
 					return;
 				}
-				if (mVerifyCode == null || mVerifyCode.equals("")){
-					GlobalUtil.shortToast(getActivity(), "手机验证码不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
-					return;
-				}
+//				if (mVerifyCode == null || mVerifyCode.equals("")){
+//					GlobalUtil.shortToast(getActivity(), "手机验证码不能为空", getResources().getDrawable(R.drawable.ic_dialog_no));
+//					return;
+//				}
+//				showLoadingView();
+//				checkPhoneVerifyCode(mPhone, mVerifyCode);
+				mIsReGetSignetId = true;
 				showLoadingView();
-				checkPhoneVerifyCode(mPhone, mVerifyCode);
+				requestSignetId();
 			}
 		});
 	}
@@ -479,9 +486,9 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		rpc.addProperty("specification",mSelectorInfo.get("GetSignetSpecification").getSelectedName());
 		rpc.addProperty("carveLevel",mSelectorInfo.get("GetGeneralCode"+TYPE_UG).getSelectedId());
 		rpc.addProperty("material",mSelectorInfo.get("GetMaterials").getSelectedId());
-		rpc.addProperty("applyer",mRealName.getEditableText().toString());
-		rpc.addProperty("applyerId",mRealId.getEditableText().toString());
-		rpc.addProperty("applyerPhone",mRegisterPhone.getEditableText().toString());
+		rpc.addProperty("applyer",CommonUtil.mRegisterRealName);
+		rpc.addProperty("applyerId",CommonUtil.mRegisterIdcard);
+		rpc.addProperty("applyerPhone",CommonUtil.mUserLoginName);
 		rpc.addProperty("creatorPhone",CommonUtil.mUserLoginName);
 		Log.i("mingguo", "signetId "+mSealNumberText.getText()+
 				" regDeptId "+mSelectorInfo.get("getAllRegister").getSelectedId()+
@@ -498,11 +505,10 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				" specification "+mSelectorInfo.get("GetSignetSpecification").getSelectedName()+
 				" carveLevel "+mSelectorInfo.get("GetGeneralCode"+TYPE_UG).getSelectedId()+
 				" material "+mSelectorInfo.get("GetMaterials").getSelectedId()+
-				" applyer "+mRealName.getEditableText().toString()+
-				" applyerId "+mRealId.getEditableText().toString()+
-				" applyerPhone "+mRegisterPhone.getEditableText().toString()+
+				" applyer "+CommonUtil.mRegisterRealName+
+				" applyerId "+CommonUtil.mRegisterIdcard+
+				" applyerPhone "+CommonUtil.mUserLoginName+
 				" creatorPhone "+CommonUtil.mUserLoginName
-				
 				);
 		mPresent.readyPresentServiceParams(mContext, url, mGetUpdateSignAction, rpc);
 		mPresent.startPresentServiceTask();
@@ -861,17 +867,17 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 					}
 				}
 			}else{
-				if (msg.what == 1000){
-					if (mTimeCount >= 0){
-						mVerifyCodeButton.setTextColor(Color.parseColor("#b2b2b2"));
-						mVerifyCodeButton.setText(mTimeCount +" 秒");
-						mTimeCount--;
-						mHandler.sendEmptyMessageDelayed(1000, 1000);
-					}else{
-						mVerifyCodeButton.setTextColor(Color.parseColor("#ef1619"));
-						mVerifyCodeButton.setText("获取验证码");
-					}
-				}
+//				if (msg.what == 1000){
+//					if (mTimeCount >= 0){
+//						mVerifyCodeButton.setTextColor(Color.parseColor("#b2b2b2"));
+//						mVerifyCodeButton.setText(mTimeCount +" 秒");
+//						mTimeCount--;
+//						mHandler.sendEmptyMessageDelayed(1000, 1000);
+//					}else{
+//						mVerifyCodeButton.setTextColor(Color.parseColor("#ef1619"));
+//						mVerifyCodeButton.setText("获取验证码");
+//					}
+//				}
 				
 			}
 		}

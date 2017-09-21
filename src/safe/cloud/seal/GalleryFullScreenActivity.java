@@ -5,6 +5,7 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.squareup.picasso.Picasso;
 
 import android.app.Activity;
 import android.content.Context;
@@ -61,7 +62,6 @@ public class GalleryFullScreenActivity extends Activity {
 		
 		mImageStringList =  getIntent().getStringArrayListExtra("imagelist");
 		
-		//bundle.get("imagelist");
 		if (mImageStringList != null){
 			mTotalNum = mImageStringList.size();
 			for (int i = 0; i < mImageStringList.size(); i++){
@@ -69,9 +69,9 @@ public class GalleryFullScreenActivity extends Activity {
 				initListViewsByMemoryBitmap(i);
 			}
 		}
-		if (mTotalNum == 0){
-			mTotalNum = Bimp.tempSelectBitmap.size();
-		}
+//		if (mTotalNum == 0){
+//			mTotalNum = Bimp.tempSelectBitmap.size();
+//		}
 		mSelectedViewNum = (TextView) findViewById(R.id.id_show_seleted_num);
 		mSelectedViewNum.setText((location+1) + "/"+mTotalNum);
 		//isShowOkBt();
@@ -87,26 +87,13 @@ public class GalleryFullScreenActivity extends Activity {
 		});
 		pager = (ViewPagerFixed) findViewById(R.id.gallery01);
 		pager.setOnPageChangeListener(pageChangeListener);
-//		for (int i = 0; i < Bimp.tempSelectBitmap.size(); i++) {
-//			initListViews( Bimp.tempSelectBitmap.get(i).getBitmap() );
-//		}
 		
-		if (listViews.size() == 0){
-			for (int index = 0; index < Bimp.tempSelectBitmap.size(); index++){
-				Bitmap bitmap = Bimp.tempSelectBitmap.get(index).getBitmap();
-				ImageView image = new ImageView(mContext);
-				image.setBackgroundColor(0xff000000);
-				image.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-						LayoutParams.MATCH_PARENT));
-				image.setImageBitmap(bitmap);
-				listViews.add(image);
-			}
-		}
 		adapter = new MyPageAdapter(listViews);
 		pager.setAdapter(adapter);
 		pager.setPageMargin((int)getResources().getDimensionPixelOffset(R.dimen.ui_10_dip));
-		int id = intent.getIntExtra("position", 0);
-		pager.setCurrentItem(0);
+		int id = intent.getIntExtra("selected_position", 0);
+		Log.i("mingguo", "full screen click image position  "+id);
+		pager.setCurrentItem(id);
 	}
 	
 	private OnPageChangeListener pageChangeListener = new OnPageChangeListener() {
@@ -125,16 +112,6 @@ public class GalleryFullScreenActivity extends Activity {
 		}
 	};
 	
-//	private void initListViews(Bitmap bm) {
-//		if (listViews == null)
-//			listViews = new ArrayList<View>();
-//		PhotoView img = new PhotoView(this);
-//		img.setBackgroundColor(0xff000000);
-//		img.setImageBitmap(bm);
-//		img.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
-//				LayoutParams.MATCH_PARENT));
-//		listViews.add(img);
-//	}
 	
 	private void initListViewsByMemoryBitmap(int index) {
 		if (listViews == null)
@@ -144,43 +121,11 @@ public class GalleryFullScreenActivity extends Activity {
 		image.setBackgroundColor(0xff000000);
 		image.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
 				LayoutParams.MATCH_PARENT));
-		ImageLoader.getInstance().displayImage(mImageStringList.get(index), image);
+		//ImageLoader.getInstance().displayImage(mImageStringList.get(index), image);
+		Picasso.with(mContext).load(mImageStringList.get(index)).into(image);
 		listViews.add(image);
-}
+	}
 	
-	// 返回按钮添加的监听器
-//	private class BackListener implements OnClickListener {
-//
-//		public void onClick(View v) {
-//			intent.setClass(GalleryActivity.this, ImageFile.class);
-//			startActivity(intent);
-//		}
-//	}
-	
-//	// 删除按钮添加的监听器
-//	private class DelListener implements OnClickListener {
-//
-//		public void onClick(View v) {
-//			if (listViews.size() == 1) {
-//				Bimp.tempSelectBitmap.clear();
-//				Bimp.max = 0;
-//				//send_bt.setText(R.string.finish+"(" + Bimp.tempSelectBitmap.size() + "/"+PublicWay.num+")");
-//				Intent intent = new Intent("data.broadcast.action");  
-//                sendBroadcast(intent);  
-//				finish();
-//			} else {
-//				Bimp.tempSelectBitmap.remove(location);
-//				Bimp.max--;
-//				pager.removeAllViews();
-//				listViews.remove(location);
-//				adapter.setListViews(listViews);
-//				//send_bt.setText(R.string.finish +"(" + Bimp.tempSelectBitmap.size() + "/"+PublicWay.num+")");
-//				adapter.notifyDataSetChanged();
-//				mSelectedViewNum.setText((location+1) + "/"+Bimp.tempSelectBitmap.size());
-//			}
-//		}
-//	}
-
 	// 完成按钮的监听
 	private class GalleryClickListener implements OnClickListener {
 
@@ -190,38 +135,6 @@ public class GalleryFullScreenActivity extends Activity {
 		}
 	}
 
-//	public void isShowOkBt() {
-//		if (Bimp.tempSelectBitmap.size() > 0) {
-//			send_bt.setText(R.string.finish +"(" + Bimp.tempSelectBitmap.size() + "/"+PublicWay.num+")");
-//			send_bt.setPressed(true);
-//			send_bt.setClickable(true);
-//			send_bt.setTextColor(Color.WHITE);
-//		} else {
-//			send_bt.setPressed(false);
-//			send_bt.setClickable(false);
-//			send_bt.setTextColor(Color.parseColor("#E1E0DE"));
-//		}
-//	}
-
-	/**
-	 * 监听返回按钮
-	 */
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		
-//		if (keyCode == KeyEvent.KEYCODE_BACK) {
-//			if(position==1){
-//				this.finish();
-//				intent.setClass(GalleryActivity.this, AlbumActivity.class);
-//				startActivity(intent);
-//			}else if(position==2){
-//				this.finish();
-//				intent.setClass(GalleryActivity.this, ShowAllPhoto.class);
-//				startActivity(intent);
-//			}
-//		}
-//		return true;
-//	}
 	
 	
 	class MyPageAdapter extends PagerAdapter {
@@ -257,6 +170,14 @@ public class GalleryFullScreenActivity extends Activity {
 		public Object instantiateItem(View arg0, int arg1) {
 			try {
 				((ViewPagerFixed) arg0).addView(listViews.get(arg1 % size), 0);
+				listViews.get(arg1 % size).setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						finish();
+					}
+				});
 				
 			} catch (Exception e) {
 			}

@@ -31,8 +31,8 @@
                >
                <ImageView
                    android:id="@+id/id_home_seal_status_icon"
-                   android:layout_width="@dimen/base_dimen_57"
-	           	   android:layout_height="@dimen/base_dimen_53"
+                   android:layout_width="@dimen/base_dimen_48"
+	           	   android:layout_height="@dimen/base_dimen_48"
 	           	   android:layout_marginTop="@dimen/base_dimen_12"
 	           	   android:background="@drawable/home_tab_sign_status_press"
 	           	   
@@ -48,6 +48,34 @@
 	           	   android:gravity="center_horizontal"
                    />
            </LinearLayout>
+           
+           <LinearLayout 
+               android:id="@+id/id_home_seal_receive"
+	           android:layout_width="0dp"
+	           android:layout_height="match_parent"
+	           android:layout_weight="1"
+	           android:orientation="vertical"
+	           android:clickable="true"
+	           android:gravity="center_horizontal"
+               >
+               <ImageView
+                   android:id="@+id/id_home_seal_receive_icon"
+                   android:layout_width="@dimen/base_dimen_48"
+	           	   android:layout_height="@dimen/base_dimen_48"
+	           	   android:layout_marginTop="@dimen/base_dimen_12"
+	           	   android:background="@drawable/home_tab_receive_normal"
+                   />
+               <TextView 
+                   android:id="@+id/id_home_seal_receive_text"
+                   android:layout_width="wrap_content"
+	           	   android:layout_height="wrap_content"
+	           	   android:textColor="#999999"
+	           	   android:layout_marginTop="@dimen/base_dimen_5"
+	           	   android:textSize="@dimen/base_dimen_20"
+	           	   android:text="印章接收"
+	           	   android:gravity="center_horizontal"
+                   />
+           </LinearLayout>
          
            <FrameLayout 
 	           android:layout_width="0dp"
@@ -59,12 +87,40 @@
                >
                <Button
                    android:id="@+id/id_home_tab_add_sign_button"
-                   android:layout_width="@dimen/base_dimen_90"
-	           	   android:layout_height="@dimen/base_dimen_90"
+                   android:layout_width="@dimen/base_dimen_80"
+	           	   android:layout_height="@dimen/base_dimen_80"
 	           	   android:background="@drawable/home_tab_add_sign_info"
 	           	   android:layout_gravity="center"
                    />
            </FrameLayout>
+           
+           <LinearLayout 
+               android:id="@+id/id_home_seal_search"
+	           android:layout_width="0dp"
+	           android:layout_height="match_parent"
+	           android:layout_weight="1"
+	           android:orientation="vertical"
+	           android:clickable="true"
+	           android:gravity="center_horizontal"
+               >
+               <ImageView
+                   android:id="@+id/id_home_seal_search_icon"
+                   android:layout_width="@dimen/base_dimen_48"
+	           	   android:layout_height="@dimen/base_dimen_48"
+	           	   android:layout_marginTop="@dimen/base_dimen_12"
+	           	   android:background="@drawable/home_tab_search_normal"
+                   />
+               <TextView 
+                   android:id="@+id/id_home_seal_search_text"
+                   android:layout_width="wrap_content"
+	           	   android:layout_height="wrap_content"
+	           	   android:textColor="#999999"
+	           	   android:layout_marginTop="@dimen/base_dimen_5"
+	           	   android:textSize="@dimen/base_dimen_20"
+	           	   android:text="搜索印章"
+	           	   android:gravity="center_horizontal"
+                   />
+           </LinearLayout>
            
            <LinearLayout 
                android:id="@+id/id_home_seal_self_center"
@@ -77,8 +133,8 @@
                >
                <ImageView
                    android:id="@+id/id_home_seal_self_center_icon"
-                   android:layout_width="@dimen/base_dimen_57"
-	           	   android:layout_height="@dimen/base_dimen_53"
+                   android:layout_width="@dimen/base_dimen_48"
+	           	   android:layout_height="@dimen/base_dimen_48"
 	           	   android:layout_marginTop="@dimen/base_dimen_12"
 	           	   android:background="@drawable/home_tab_self_normal"
                    />

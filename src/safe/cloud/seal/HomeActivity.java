@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import safe.cloud.seal.fragment.MyFragment;
+import safe.cloud.seal.fragment.SealReceiverFragment;
 import safe.cloud.seal.fragment.SealStatusFragment;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
@@ -35,6 +36,7 @@ public class HomeActivity extends BaseActivity {
 	private String mCity = null;
 	private int mVersionCode = -1;
 	private SealStatusFragment mStatusFragment;
+	private SealReceiverFragment mReceiverFragment;
 	private MyFragment mSelfFragment;
 	private String mPhone;
 	private String mRealName;
@@ -81,6 +83,14 @@ public class HomeActivity extends BaseActivity {
 		final ImageView myIcon = (ImageView)findViewById(R.id.id_home_seal_self_center_icon);
 		final TextView myText = (TextView)findViewById(R.id.id_home_seal_self_center_text);
 		
+		LinearLayout sealReceiver = (LinearLayout)findViewById(R.id.id_home_seal_receive);
+		final ImageView sealReceiverIcon = (ImageView)findViewById(R.id.id_home_seal_receive_icon);
+		final TextView sealReceiverText = (TextView)findViewById(R.id.id_home_seal_receive_text);
+		
+		LinearLayout searchSeal = (LinearLayout)findViewById(R.id.id_home_seal_search);
+		final ImageView searchSealIcon = (ImageView)findViewById(R.id.id_home_seal_search_icon);
+		final TextView searchSealText = (TextView)findViewById(R.id.id_home_seal_search_text);
+		
 		LinearLayout sealStatus = (LinearLayout)findViewById(R.id.id_home_seal_status);
 		final ImageView statusIcon = (ImageView)findViewById(R.id.id_home_seal_status_icon);
 		final TextView statusText = (TextView)findViewById(R.id.id_home_seal_status_text);
@@ -104,6 +114,69 @@ public class HomeActivity extends BaseActivity {
 				}
 				statusIcon.setBackgroundResource(R.drawable.home_tab_sign_status_press);
 				statusText.setTextColor(Color.parseColor("#d43c33"));
+				sealReceiverIcon.setBackgroundResource(R.drawable.home_tab_receive_normal);
+				sealReceiverText.setTextColor(Color.parseColor("#999999"));
+				searchSealIcon.setBackgroundResource(R.drawable.home_tab_search_normal);
+				searchSealText.setTextColor(Color.parseColor("#999999"));
+				myIcon.setBackgroundResource(R.drawable.home_tab_self_normal);
+				myText.setTextColor(Color.parseColor("#999999"));
+				
+			}
+		});
+		
+		sealReceiver.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+				hideAllFragments(fragmentTransaction);
+				if (mReceiverFragment == null){
+					mReceiverFragment = new SealReceiverFragment();
+					Bundle args = new Bundle();  
+				    args.putString("phone", mPhone);  
+				    Log.i("mingguo", "user phone  "+mPhone);
+				    mReceiverFragment.setArguments(args);
+					fragmentTransaction.add(R.id.id_home_content, mReceiverFragment);
+					fragmentTransaction.commitAllowingStateLoss();
+				}else{
+					fragmentTransaction.show(mReceiverFragment);
+					fragmentTransaction.commitAllowingStateLoss();
+				}
+				statusIcon.setBackgroundResource(R.drawable.home_tab_sign_status_normal);
+				statusText.setTextColor(Color.parseColor("#999999"));
+				sealReceiverIcon.setBackgroundResource(R.drawable.home_tab_receive_press);
+				sealReceiverText.setTextColor(Color.parseColor("#d43c33"));
+				searchSealIcon.setBackgroundResource(R.drawable.home_tab_search_normal);
+				searchSealText.setTextColor(Color.parseColor("#999999"));
+				myIcon.setBackgroundResource(R.drawable.home_tab_self_normal);
+				myText.setTextColor(Color.parseColor("#999999"));
+			}
+		});
+		
+		searchSeal.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+//				FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+//				hideAllFragments(fragmentTransaction);
+//				if (mStatusFragment == null){
+//					mStatusFragment = new SealStatusFragment();
+//					Bundle args = new Bundle();  
+//				    args.putString("phone", mPhone);  
+//				    Log.i("mingguo", "user phone  "+mPhone);
+//				    mStatusFragment.setArguments(args);
+//					fragmentTransaction.add(R.id.id_home_content, mStatusFragment);
+//					fragmentTransaction.commitAllowingStateLoss();
+//				}else{
+//					fragmentTransaction.show(mStatusFragment);
+//					fragmentTransaction.commitAllowingStateLoss();
+//				}
+				statusIcon.setBackgroundResource(R.drawable.home_tab_sign_status_normal);
+				statusText.setTextColor(Color.parseColor("#999999"));
+				sealReceiverIcon.setBackgroundResource(R.drawable.home_tab_receive_normal);
+				sealReceiverText.setTextColor(Color.parseColor("#999999"));
+				searchSealIcon.setBackgroundResource(R.drawable.home_tab_search_press);
+				searchSealText.setTextColor(Color.parseColor("#d43c33"));
 				myIcon.setBackgroundResource(R.drawable.home_tab_self_normal);
 				myText.setTextColor(Color.parseColor("#999999"));
 			}
@@ -131,6 +204,10 @@ public class HomeActivity extends BaseActivity {
 				}
 				statusIcon.setBackgroundResource(R.drawable.home_tab_sign_status_normal);
 				statusText.setTextColor(Color.parseColor("#999999"));
+				sealReceiverIcon.setBackgroundResource(R.drawable.home_tab_receive_normal);
+				sealReceiverText.setTextColor(Color.parseColor("#999999"));
+				searchSealIcon.setBackgroundResource(R.drawable.home_tab_search_normal);
+				searchSealText.setTextColor(Color.parseColor("#999999"));
 				myIcon.setBackgroundResource(R.drawable.home_tab_self_press);
 				myText.setTextColor(Color.parseColor("#d43c33"));
 			}
@@ -142,6 +219,9 @@ public class HomeActivity extends BaseActivity {
 	private void hideAllFragments(FragmentTransaction transaction) {
 		if (mStatusFragment != null && !mStatusFragment.isHidden()) {
 			transaction.hide(mStatusFragment);
+		}
+		if (mReceiverFragment != null && !mReceiverFragment.isHidden()) {
+			transaction.hide(mReceiverFragment);
 		}
 		if (mSelfFragment != null && !mSelfFragment.isHidden()) {
 			transaction.hide(mSelfFragment);

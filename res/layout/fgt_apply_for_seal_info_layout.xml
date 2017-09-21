@@ -533,7 +533,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_idname"
                     android:layout_width="@dimen/base_dimen_560"
                     android:layout_height="wrap_content"
@@ -570,7 +570,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_idcard_number"
                     android:layout_width="@dimen/base_dimen_560"
                     android:layout_height="wrap_content"
@@ -609,7 +609,7 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <EditText
+                <TextView
                     android:id="@+id/id_aty_apply_seal_input_phone_number"
                     android:layout_width="@dimen/base_dimen_280"
                     android:layout_height="wrap_content"
@@ -623,7 +623,7 @@
                     android:textColorHint="#b2b2b2"
                     android:textSize="@dimen/base_dimen_28" />
 
-                <Button
+<!--                 <Button
                     android:id="@+id/id_aty_apply_seal_get_phone_verifycode"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -633,7 +633,7 @@
                     android:gravity="center"
                     android:text="获取验证码"
                     android:textColor="#ef1619"
-                    android:textSize="@dimen/base_dimen_28" />
+                    android:textSize="@dimen/base_dimen_28" /> -->
             </FrameLayout>
 
             <ImageView
@@ -644,7 +644,7 @@
                 android:layout_marginRight="@dimen/base_dimen_26"
                 android:background="#cccccc" />
 
-            <FrameLayout
+<!--             <FrameLayout
                 android:id="@+id/id_aty_apply_seal_input_verifycode_content"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/base_dimen_80"
@@ -673,7 +673,7 @@
                     android:textColor="#555555"
                     android:textColorHint="#b2b2b2"
                     android:textSize="@dimen/base_dimen_28" />
-            </FrameLayout>
+            </FrameLayout> -->
 
             <Button
                 android:id="@+id/id_aty_apply_seal_next_step_button"

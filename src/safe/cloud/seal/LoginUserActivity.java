@@ -320,7 +320,7 @@ public class LoginUserActivity extends BaseActivity{
 	private void getUserInfo(){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetUserInfo";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mUserInfoAction));
-		rpc.addProperty("username", CommonUtil.mRegisterRealName);
+		rpc.addProperty("username", mUserName);
 		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mUserInfoAction, rpc);
 		mPresenter.startPresentServiceTask();
 	}

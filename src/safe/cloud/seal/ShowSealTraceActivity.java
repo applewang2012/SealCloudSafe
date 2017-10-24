@@ -73,7 +73,6 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(ShowSealTraceActivity.this, AddSealTraceActivity.class));
-				
 			}
 		});
 		initView();
@@ -128,7 +127,7 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 			JSONArray array = new JSONArray(value);
 			if (array != null){
 				mDataList.clear();
-				Log.i("house", "parse house info "+array.length());
+				Log.w("house", "parse house info "+array.length());
 				for (int item = 0; item < array.length(); item++){
 					JSONObject itemJsonObject = array.optJSONObject(item);
 					SealTraceInfo  statusInfo = new SealTraceInfo();
@@ -170,7 +169,7 @@ public class ShowSealTraceActivity extends BaseActivity implements OnItemClickLi
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		if (action != null && templateInfo != null){}
 			if (action.equals(mGetSpecialPointAction)){
 				Message message = mHandler.obtainMessage();

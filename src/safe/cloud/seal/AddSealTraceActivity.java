@@ -160,7 +160,7 @@ public class AddSealTraceActivity extends BaseActivity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				if (arg2 == Bimp.tempSelectBitmap.size() && arg2 < PublicWay.num) {
-					Log.i("ddddddd", "----------");
+					Log.w("ddddddd", "----------");
 					ll_popup.startAnimation(AnimationUtils.loadAnimation(AddSealTraceActivity.this,R.anim.activity_translate_in));
 					pop.showAtLocation(parentView, Gravity.BOTTOM, 0, 0);
 				} else if (arg2 != PublicWay.num){
@@ -228,7 +228,7 @@ public class AddSealTraceActivity extends BaseActivity {
 		rpc.addProperty("memo", mFileNameEditView.getText().toString());
 		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddSpecialPointAction, rpc);
 		mPresenter.startPresentServiceTask();
-		Log.i("mingguo", "add seal trace  special point request lati  "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0)+" long "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
+		Log.w("mingguo", "add seal trace  special point request lati  "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(0)+" long "+UtilTool.getCururentLocation(AddSealTraceActivity.this).get(1));
 	}
 	
 	private void addSpecialPointFileRequest(int num){
@@ -243,7 +243,7 @@ public class AddSealTraceActivity extends BaseActivity {
 		rpc.addProperty("memo", "");
 		mPresenter.readyPresentServiceParams(getApplicationContext(), url, mAddSpecialPointFileAction, rpc);
 		mPresenter.startPresentServiceTask();
-		Log.i("mingguo", "add seal trace  special point request username  "+CommonUtil.mUserLoginName+" bitmap  width   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getWidth()
+		Log.w("mingguo", "add seal trace  special point request username  "+CommonUtil.mUserLoginName+" bitmap  width   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getWidth()
 				+" bitmap  height   "+Bimp.tempSelectBitmap.get(num-1).getBitmap().getHeight());
 	}
 
@@ -468,7 +468,7 @@ public class AddSealTraceActivity extends BaseActivity {
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "select photeo upload  status  success  action "+action+" temp info "+templateInfo);
+		Log.w("mingguo", "select photeo upload  status  success  action "+action+" temp info "+templateInfo);
 		if (action != null && templateInfo != null){
 			if (action.equals(mAddSpecialPointAction)){
 				Message message = mHandler.obtainMessage();

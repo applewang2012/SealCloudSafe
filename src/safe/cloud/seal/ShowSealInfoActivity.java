@@ -91,8 +91,6 @@ public class ShowSealInfoActivity extends BaseActivity {
 			fragmentTransaction.add(R.id.id_add_seal_content, mShowInfoFragment);
 			fragmentTransaction.commitAllowingStateLoss();
 			mShowInfoFragment.setFragmentActionListener(new ActionOperationInterface() {
-				
-
 				@Override
 				public void onNextFragment(String signId, String signType) {
 					// TODO Auto-generated method stub
@@ -357,7 +355,7 @@ public class ShowSealInfoActivity extends BaseActivity {
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 //		if (action != null && templateInfo != null){}
 //			if (action.equals(mUserInfoAction)){
 //				Message message = mHandler.obtainMessage();

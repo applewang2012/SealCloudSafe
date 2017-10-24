@@ -236,7 +236,7 @@ public class LoginUserActivity extends BaseActivity{
 			if (data != null){
 				mPassword = data.getStringExtra("new_password");
 				passwordEditText.setText(mPassword);
-				Log.i("mingguo", "login activity  onActivityResult password  "+mPassword);
+				Log.w("mingguo", "login activity  onActivityResult password  "+mPassword);
 			}
 		}
 	}
@@ -295,7 +295,7 @@ public class LoginUserActivity extends BaseActivity{
 		try{
 			JSONArray array = new JSONArray(value);
 			if (array != null){
-				Log.i("house", "parse house info "+array.length());
+				Log.w("house", "parse house info "+array.length());
 				//for (int item = 0; item < array.length(); item++){
 					
 					JSONObject itemJsonObject = array.optJSONObject(0);
@@ -388,7 +388,7 @@ public class LoginUserActivity extends BaseActivity{
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		//{"ret":"0","UserID":"26","LoginName":"kezhang","Phone":"13920887566","RealName":"刻章长"}
 		if (action != null && templateInfo != null){
 			if (action.equals(mLoginAction)){

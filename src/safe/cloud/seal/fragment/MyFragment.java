@@ -76,7 +76,7 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Log.i("fragmenttest", "homefragment onCreateView ");
+		Log.w("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fgt_my_fragment, container, false);
 		if (getArguments() != null) {  
 	        mPhone = getArguments().getString("phone");
@@ -216,7 +216,7 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 		try{
 			JSONArray array = new JSONArray(value);
 			if (array != null){
-				Log.i("house", "parse house info "+array.length());
+				Log.w("house", "parse house info "+array.length());
 				//for (int item = 0; item < array.length(); item++){
 					
 					JSONObject itemJsonObject = array.optJSONObject(0);
@@ -262,7 +262,7 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 	         @Override  
 	  
 	         public void onClick(DialogInterface dialog, int which) {
-	             Log.i("alertdialog"," dialog interface ");  
+	             Log.w("alertdialog"," dialog interface ");  
 	         }  
 	  
 	     }).show();
@@ -294,7 +294,7 @@ public class MyFragment extends Fragment implements DataStatusInterface{
 //	         @Override  
 //	  
 //	         public void onClick(DialogInterface dialog, int which) {//��Ӧ�¼�  
-//	             Log.i("alertdialog"," �뱣�����ݣ�");  
+//	             Log.w("alertdialog"," �뱣�����ݣ�");  
 //	         }  
 //	  
 //	     }).show();

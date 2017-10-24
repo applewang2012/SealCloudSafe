@@ -65,7 +65,7 @@ public class GalleryFullScreenActivity extends Activity {
 		if (mImageStringList != null){
 			mTotalNum = mImageStringList.size();
 			for (int i = 0; i < mImageStringList.size(); i++){
-				Log.i("mingguo", "mImageStringList.get(i) "+mImageStringList.get(i));
+				Log.w("mingguo", "mImageStringList.get(i) "+mImageStringList.get(i));
 				initListViewsByMemoryBitmap(i);
 			}
 		}
@@ -92,7 +92,7 @@ public class GalleryFullScreenActivity extends Activity {
 		pager.setAdapter(adapter);
 		pager.setPageMargin((int)getResources().getDimensionPixelOffset(R.dimen.ui_10_dip));
 		int id = intent.getIntExtra("selected_position", 0);
-		Log.i("mingguo", "full screen click image position  "+id);
+		Log.w("mingguo", "full screen click image position  "+id);
 		pager.setCurrentItem(id);
 	}
 	

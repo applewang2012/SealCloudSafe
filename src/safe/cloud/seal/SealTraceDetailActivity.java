@@ -75,7 +75,7 @@ public class SealTraceDetailActivity extends BaseActivity {
 		mTraceId = getIntent().getStringExtra("trace_id"); 
 		mSealName = getIntent().getStringExtra("seal_name"); 
 		mFileName = getIntent().getStringExtra("file_name"); 
-		Log.i("mingguo", "trace  detail trace id  "+mTraceId);
+		Log.w("mingguo", "trace  detail trace id  "+mTraceId);
 		Init();
 	}
 
@@ -163,7 +163,7 @@ public class SealTraceDetailActivity extends BaseActivity {
 			JSONArray array = new JSONArray(value);
 			if (array != null){
 				mDataList.clear();
-				Log.i("house", "parse house info "+array.length());
+				Log.w("house", "parse house info "+array.length());
 				for (int item = 0; item < array.length(); item++){
 					JSONObject itemJsonObject = array.optJSONObject(item);
 					SealTraceInfo  statusInfo = new SealTraceInfo();
@@ -208,7 +208,7 @@ public class SealTraceDetailActivity extends BaseActivity {
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "select photeo upload  status  success  action "+action+" temp info "+templateInfo);
+		Log.w("mingguo", "select photeo upload  status  success  action "+action+" temp info "+templateInfo);
 		if (action != null && templateInfo != null){
 			if (action.equals(mGetSpecialPointFileAction)){
 				Message message = mHandler.obtainMessage();

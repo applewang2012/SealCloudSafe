@@ -21,6 +21,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import safe.cloud.seal.fragment.MyFragment;
 import safe.cloud.seal.fragment.SealReceiverFragment;
+import safe.cloud.seal.fragment.SealSearchFragment;
 import safe.cloud.seal.fragment.SealStatusFragment;
 import safe.cloud.seal.presenter.HoursePresenter;
 import safe.cloud.seal.util.CommonUtil;
@@ -37,6 +38,7 @@ public class HomeActivity extends BaseActivity {
 	private int mVersionCode = -1;
 	private SealStatusFragment mStatusFragment;
 	private SealReceiverFragment mReceiverFragment;
+	private SealSearchFragment mSearchFragment;
 	private MyFragment mSelfFragment;
 	private String mPhone;
 	private String mRealName;
@@ -104,7 +106,7 @@ public class HomeActivity extends BaseActivity {
 					mStatusFragment = new SealStatusFragment();
 					Bundle args = new Bundle();  
 				    args.putString("phone", mPhone);  
-				    Log.i("mingguo", "user phone  "+mPhone);
+				    Log.w("mingguo", "user phone  "+mPhone);
 				    mStatusFragment.setArguments(args);
 					fragmentTransaction.add(R.id.id_home_content, mStatusFragment);
 					fragmentTransaction.commitAllowingStateLoss();
@@ -134,7 +136,7 @@ public class HomeActivity extends BaseActivity {
 					mReceiverFragment = new SealReceiverFragment();
 					Bundle args = new Bundle();  
 				    args.putString("phone", mPhone);  
-				    Log.i("mingguo", "user phone  "+mPhone);
+				    Log.w("mingguo", "user phone  "+mPhone);
 				    mReceiverFragment.setArguments(args);
 					fragmentTransaction.add(R.id.id_home_content, mReceiverFragment);
 					fragmentTransaction.commitAllowingStateLoss();
@@ -157,20 +159,20 @@ public class HomeActivity extends BaseActivity {
 			
 			@Override
 			public void onClick(View v) {
-//				FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-//				hideAllFragments(fragmentTransaction);
-//				if (mStatusFragment == null){
-//					mStatusFragment = new SealStatusFragment();
-//					Bundle args = new Bundle();  
-//				    args.putString("phone", mPhone);  
-//				    Log.i("mingguo", "user phone  "+mPhone);
-//				    mStatusFragment.setArguments(args);
-//					fragmentTransaction.add(R.id.id_home_content, mStatusFragment);
-//					fragmentTransaction.commitAllowingStateLoss();
-//				}else{
-//					fragmentTransaction.show(mStatusFragment);
-//					fragmentTransaction.commitAllowingStateLoss();
-//				}
+				FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+				hideAllFragments(fragmentTransaction);
+				if (mSearchFragment == null){
+					mSearchFragment = new SealSearchFragment();
+					Bundle args = new Bundle();  
+				    args.putString("phone", mPhone);  
+				    Log.w("mingguo", "user phone  "+mPhone);
+				    mSearchFragment.setArguments(args);
+					fragmentTransaction.add(R.id.id_home_content, mSearchFragment);
+					fragmentTransaction.commitAllowingStateLoss();
+				}else{
+					fragmentTransaction.show(mSearchFragment);
+					fragmentTransaction.commitAllowingStateLoss();
+				}
 				statusIcon.setBackgroundResource(R.drawable.home_tab_sign_status_normal);
 				statusText.setTextColor(Color.parseColor("#999999"));
 				sealReceiverIcon.setBackgroundResource(R.drawable.home_tab_receive_normal);
@@ -225,6 +227,9 @@ public class HomeActivity extends BaseActivity {
 		}
 		if (mSelfFragment != null && !mSelfFragment.isHidden()) {
 			transaction.hide(mSelfFragment);
+		}
+		if (mSearchFragment != null && !mSearchFragment.isHidden()) {
+			transaction.hide(mSearchFragment);
 		}
 	}
 	
@@ -299,7 +304,7 @@ public class HomeActivity extends BaseActivity {
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 //		if (action != null && templateInfo != null){}
 //			if (action.equals(mUserInfoAction)){
 //				Message message = mHandler.obtainMessage();

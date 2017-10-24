@@ -199,7 +199,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	   			 	Log.w("mingguo", "onActivityResult  compress image  "+newBitmap.getWidth()+" height  "+newBitmap.getHeight()+"  byte  ");
 	   			 	mSelfPhotoToString = android.util.Base64.encodeToString(GlobalUtil.Bitmap2Bytes(newBitmap), android.util.Base64.NO_WRAP);
                 }else if (msg.what == 5000){
-                	String renzhengResult = ReciveImg.getRenzhengResult(RegisterUserStep2Activity.this, mIdCard, mRealName ,getBase64Pic());
+                	String renzhengResult = ReciveImg.getRenzhengResult( mIdCard, mRealName ,getBase64Pic());
                 	Log.w("mingguo", "register step2  renzheng result  "+renzhengResult);
                     Message message = mHandler.obtainMessage();
                     message.what = 500;
@@ -216,8 +216,8 @@ public class RegisterUserStep2Activity extends BaseActivity{
 		if (faceStr == null || screenshotStr == null){
 			return;
 		}
-		Log.i("mingguo", "register interface  faceStr  "+faceStr.length()+"  screenshot   "+screenshotStr.length());
-		Log.i("mingguo", "register interface  mIdCard  "+mIdCard+"  mRealName  "+mRealName);
+		Log.w("mingguo", "register interface  faceStr  "+faceStr.length()+"  screenshot   "+screenshotStr.length());
+		Log.w("mingguo", "register interface  mIdCard  "+mIdCard+"  mRealName  "+mRealName);
 		String identifyUrl = "http://www.guardts.com/ValidateService/IdentifyValidateService.asmx?op=IdentifyValidateLive";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mIdentifyAction));
 		rpc.addProperty("idcard", mIdCard);
@@ -251,7 +251,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.i("mingguo", "onActivityResult resultCode  "+resultCode+" requestCode  "+requestCode+"  file  "+mPhotoFilePath);
+		Log.w("mingguo", "onActivityResult resultCode  "+resultCode+" requestCode  "+requestCode+"  file  "+mPhotoFilePath);
 		if (resultCode == RESULT_OK && requestCode == 1) {
 			 Log.w("mingguo", "activity result  width data   "+data);
 			 mSubHandler.sendEmptyMessage(1000);
@@ -299,7 +299,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 						if (ret != null){
 //							if (ret.equals("0")){
 								//showLoadingView();
-								AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList, liveCount);
+								AuthenticationUtil.startLive(RegisterUserStep2Activity.this, LiveStartActivity.class, liveLevel, liveList);
 //							}else{
 //								GlobalUtil.shortToast(RegisterUserStep2Activity.this, "该身份证号已被注册！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
 //							}
@@ -317,18 +317,18 @@ public class RegisterUserStep2Activity extends BaseActivity{
 					JSONObject object = new JSONObject((String)msg.obj);
 					if (object != null){
 						String compareResult = object.optString("compareresult");
-						if (compareResult == null || compareResult.equals("")){
-							GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-						}else{
-							if (compareResult.equals("0")){
-									GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
+//						if (compareResult == null || compareResult.equals("")){
+//							GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//						}else{
+//							if (compareResult.equals("0")){
+//									GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证成功 ", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_yes));
 									registerUserName();
-									return;
-								
-							}else{
-								GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败  "+compareResult , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-							}
-						}
+//									return;
+//								
+//							}else{
+//								GlobalUtil.shortToast(RegisterUserStep2Activity.this, mRealName + " 身份认证失败  "+compareResult , getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//							}
+//						}
 					}
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -411,7 +411,7 @@ public class RegisterUserStep2Activity extends BaseActivity{
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		if (action != null && templateInfo != null){
 			if (action.equals(mValidIDcardAction)){
 				Message message = mHandler.obtainMessage();

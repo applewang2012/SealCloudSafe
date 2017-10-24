@@ -162,7 +162,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
-		Log.i("mingguo", "onActivityResult resultCode  "+resultCode+" requestCode  "+requestCode+"  file  ");
+		Log.w("mingguo", "onActivityResult resultCode  "+resultCode+" requestCode  "+requestCode+"  file  ");
 		if (resultCode == RESULT_OK && requestCode == 1) {
 			 Log.w("mingguo", "activity result  width data   "+data);
 		}
@@ -192,12 +192,12 @@ public class RegisterUserStep1Activity extends BaseActivity{
 						json = new JSONObject((String)msg.obj);
 						String ret = json.optString("ret");
 						if (ret != null){
-							if (ret.equals("0")){
-								showLoadingView();
+//							if (ret.equals("0")){
+//								showLoadingView();
 								checkPhoneVerifyCode(mPhone, mVerifyCode);
-							}else{
-								GlobalUtil.shortToast(RegisterUserStep1Activity.this, "用户名已存在！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-							}
+//							}else{
+//								GlobalUtil.shortToast(RegisterUserStep1Activity.this, "用户名已存在！", getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//							}
 						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -212,15 +212,15 @@ public class RegisterUserStep1Activity extends BaseActivity{
 						json = new JSONObject((String)msg.obj);
 						String ret = json.optString("ret");
 						if (ret != null){
-							if (ret.equals("0")){
+							//if (ret.equals("0")){
 								Intent nextIntent = new Intent(RegisterUserStep1Activity.this, RegisterUserStep2Activity.class);
 								nextIntent.putExtra("phone", mPhone);
 								nextIntent.putExtra("user_name", mPhone);
 								nextIntent.putExtra("user_password", mPassword);
 								startActivity(nextIntent);
-							}else{
-								GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.verify_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
-							}
+//							}else{
+//								GlobalUtil.shortToast(RegisterUserStep1Activity.this, getString(R.string.verify_error), getApplicationContext().getResources().getDrawable(R.drawable.ic_dialog_no));
+//							}
 						}
 					} catch (JSONException e) {
 						// TODO Auto-generated catch block
@@ -263,7 +263,7 @@ public class RegisterUserStep1Activity extends BaseActivity{
 
 	@Override
 	public void onStatusSuccess(String action, String templateInfo) {
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		if (action != null && templateInfo != null){
 			if (action.equals(mValidAction)){
 				Message message = mHandler.obtainMessage();

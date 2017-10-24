@@ -83,11 +83,11 @@ public class SealReceiverFragment extends Fragment implements DataStatusInterfac
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Log.i("fragmenttest", "homefragment onCreateView ");
+		Log.w("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fg_signal_receiver_layout, container, false);
 		if (getArguments() != null) {
 	        mPhoneNumber = getArguments().getString("phone");
-	        Log.i("mingguo", "framgent user phone  "+mPhoneNumber);
+	        Log.w("mingguo", "framgent user phone  "+mPhoneNumber);
 		}
 		initTitleBar();
 		initAdapter();
@@ -190,7 +190,7 @@ public class SealReceiverFragment extends Fragment implements DataStatusInterfac
 	         @Override  
 	  
 	         public void onClick(DialogInterface dialog, int which) {//��Ӧ�¼�  
-	             Log.i("alertdialog"," dialog interface ");  
+	             Log.w("alertdialog"," dialog interface ");  
 	         }  
 	  
 	     }).show();
@@ -238,7 +238,7 @@ public class SealReceiverFragment extends Fragment implements DataStatusInterfac
 						String type = obj.optString("type");
 						if (type != null && type.equalsIgnoreCase("login")){
 							String sid = obj.optString("sid");
-							Log.i("mingguo", "scan  result  sid " + sid+"  phone  "+mPhoneNumber);
+							Log.w("mingguo", "scan  result  sid " + sid+"  phone  "+mPhoneNumber);
 							showScanLoginDialog(sid);
 							
 						}
@@ -286,7 +286,7 @@ public class SealReceiverFragment extends Fragment implements DataStatusInterfac
 			JSONArray array = new JSONArray(value);
 			if (array != null){
 				mDataList.clear();
-				Log.i("house", "parse house info "+array.length());
+				Log.w("house", "parse house info "+array.length());
 				for (int item = 0; item < array.length(); item++){
 					JSONObject itemJsonObject = array.optJSONObject(item);
 					SealStatusInfo  statusInfo = new SealStatusInfo();

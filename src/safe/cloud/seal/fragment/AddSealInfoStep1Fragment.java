@@ -124,7 +124,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Log.i("fragmenttest", "homefragment onCreateView ");
+		Log.w("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fgt_apply_for_seal_info_layout, container, false);
 		initTitleBar();
 		initView();
@@ -203,7 +203,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				Log.i("mingguo", "use danwei  onTextChanged  ");
+				Log.w("mingguo", "use danwei  onTextChanged  ");
 				mSelectSealType.setText("");
 				mSelectSealGuige.setText("");
 				mSealNeirongText.setText("");
@@ -490,7 +490,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		rpc.addProperty("applyerId",CommonUtil.mRegisterIdcard);
 		rpc.addProperty("applyerPhone",CommonUtil.mUserLoginName);
 		rpc.addProperty("creatorPhone",CommonUtil.mUserLoginName);
-		Log.i("mingguo", "signetId "+mSealNumberText.getText()+
+		Log.w("mingguo", "signetId "+mSealNumberText.getText()+
 				" regDeptId "+mSelectorInfo.get("getAllRegister").getSelectedId()+
 				" regDeptName "+mSelectorInfo.get("getAllRegister").getSelectedName()+
 				" content "+mSealNeirongText.getText()+
@@ -521,7 +521,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 				SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetDefaultSignContentAction));
 				rpc.addProperty("corpId", mSelectorInfo.get("GetCorporationInfo").getSelectedId());
 				rpc.addProperty("signetTypeId", mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId());
-				Log.i("mingguo", "default content  signet type id  "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId()+"  type  "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedName());
+				Log.w("mingguo", "default content  signet type id  "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedId()+"  type  "+mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedName());
 				rpc.addProperty("signetType", mSelectorInfo.get("GetGeneralCode"+TYPE_ST).getSelectedName());
 				mPresent.readyPresentServiceParams(mContext, url, mGetDefaultSignContentAction, rpc);
 				mPresent.startPresentServiceTask();
@@ -544,7 +544,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private void requestGetAllCarveCorps(){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetAllCarveCorps";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetAllCarveCorpsAction));
-		Log.i("mingguo", "add seal info get adll carvecorps  id  "+mSelectorInfo.get("getAllRegister").getSelectedId());
+		Log.w("mingguo", "add seal info get adll carvecorps  id  "+mSelectorInfo.get("getAllRegister").getSelectedId());
 		rpc.addProperty("regDeptId", mSelectorInfo.get("getAllRegister").getSelectedId());
 		SealInfoModel infoModel = new SealInfoModel();
 		mSelectorInfo.put("GetAllCarveCorps", infoModel);
@@ -578,7 +578,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private void requestGetMaterials(){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetMaterials";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetMaterialsAction));
-		//Log.i("mingguo", "add seal info get common data  typeid   "+typeId);
+		//Log.w("mingguo", "add seal info get common data  typeid   "+typeId);
 		//rpc.addProperty("typeId", typeId);
 		mPresent.readyPresentServiceParams(mContext, url, mGetMaterialsAction, rpc);
 		mPresent.startPresentServiceTask();
@@ -615,7 +615,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private void requestCommonData(String typeId){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetGeneralCode";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetGeneralCodeAction));
-		Log.i("mingguo", "add seal info get common data  typeid   "+typeId);
+		Log.w("mingguo", "add seal info get common data  typeid   "+typeId);
 		rpc.addProperty("typeId", typeId);
 		mPresent.readyPresentServiceParams(mContext, url, mGetGeneralCodeAction, rpc);
 		mPresent.startPresentServiceTask();
@@ -624,7 +624,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 	private void requestSealGuige(String typeId){
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetSpecification";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mGetSealGuigeAction));
-		Log.i("mingguo", "add seal info get common data  typeid   "+typeId);
+		Log.w("mingguo", "add seal info get common data  typeid   "+typeId);
 		rpc.addProperty("typeId", typeId);
 		mPresent.readyPresentServiceParams(mContext, url, mGetSealGuigeAction, rpc);
 		mPresent.startPresentServiceTask();
@@ -637,7 +637,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 		}
 		String url = CommonUtil.mUserHost+"SignetService.asmx?op=GetSignetSpecification";
 		SoapObject rpc = new SoapObject(CommonUtil.NAMESPACE, CommonUtil.getSoapName(mCheckSignContentExistAction));
-		Log.i("mingguo", "check seal content exist    "+content);
+		Log.w("mingguo", "check seal content exist    "+content);
 		rpc.addProperty("content", content);
 		mPresent.readyPresentServiceParams(mContext, url, mCheckSignContentExistAction, rpc);
 		mPresent.startPresentServiceTask();
@@ -670,7 +670,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 						TextView sealName = (TextView)holderView.findViewById(R.id.item_gridview_text);
 						sealName.setText(info.getImageName());
 						ImageView sealImage = (ImageView)holderView.findViewById(R.id.item_gridview_image);
-						Log.i("mingguo", "convert  url  "+info.getImageUrl());
+						Log.w("mingguo", "convert  url  "+info.getImageUrl());
 						//sealImage.setBackgroundResource(R.drawable.seal_default_image);
 						Picasso.with(getActivity()).load(info.getImageUrl()).into(sealImage);
 					}
@@ -841,7 +841,7 @@ public class AddSealInfoStep1Fragment extends Fragment implements DataStatusInte
 						
 					}
 				}else if (msg.what == 1000){
-					Log.i("mingguo", "time count  "+mTimeCount);
+					Log.w("mingguo", "time count  "+mTimeCount);
 					
 				}else if (msg.what == 1002){
 					dismissLoadingView();

@@ -36,7 +36,7 @@ public class CommonUtil {
     public static double mCurrentLati, mCurrentLongi;
     public static int mScanCodeRequestCode = 1;
     public static int mSelectCityRequestCode = 2;
-   //public static String mSignetNumberId = null;
+    
     
     
     public static String getSoapName(String action){
@@ -81,7 +81,7 @@ public class CommonUtil {
             // 不存在获取内部存
             return null;
         }
-        Log.i("mingguo", "common util get default download path  "+path);
+        Log.w("mingguo", "common util get default download path  "+path);
        return path;
     }
     

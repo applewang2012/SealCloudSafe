@@ -101,7 +101,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Log.i("fragmenttest", "homefragment onCreateView ");
+		Log.w("fragmenttest", "homefragment onCreateView ");
 		mRootView = inflater.inflate(R.layout.fgt_apply_for_seal_upload_file_layout, container, false);
 		mSignetNo = getArguments().getString("sealNo");
 		initTitleBar();
@@ -348,7 +348,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 					@Override
 					public void onClick(View v) {
 						if (!StringUtil.isEmpty(info.getImageUrl())){
-							Log.i("mingguo", "url list   "+mUrlList.size());
+							Log.w("mingguo", "url list   "+mUrlList.size());
 							Intent intent = new Intent(mContext, GalleryFullScreenActivity.class);
 							intent.putStringArrayListExtra("imagelist", mUrlList);
 							intent.putExtra("selected_position", getClickFullScreenImagePosition(info.getImageUrl()));
@@ -361,7 +361,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 					@Override
 					public void onClick(View v) {
 						if (!StringUtil.isEmpty(info.getImageUrl2())){
-							Log.i("mingguo", "url list   "+mUrlList.size());
+							Log.w("mingguo", "url list   "+mUrlList.size());
 							Intent intent = new Intent(mContext, GalleryFullScreenActivity.class);
 							intent.putStringArrayListExtra("imagelist", mUrlList);
 							intent.putExtra("selected_position", getClickFullScreenImagePosition(info.getImageUrl2()));
@@ -474,7 +474,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 					}
 					isFind = false;
 				}
-				Log.i("mingguo", "add seal step  data size  "+mDataList.size());
+				Log.w("mingguo", "add seal step  data size  "+mDataList.size());
 			}
 			
 		} catch (Exception e) {
@@ -521,7 +521,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 	        @Override  
 	 
 	        public void onClick(DialogInterface dialog, int which) {
-	            Log.i("alertdialog"," dialog interface ");  
+	            Log.w("alertdialog"," dialog interface ");  
 	        }  
 	 
 	    }).show();
@@ -536,7 +536,7 @@ public class ShowSealInfoStep2Fragment extends Fragment implements DataStatusInt
 			if (msg.what == mSelectPhotoFlag){
 				int position = mSelectPhotoFlag/2;
 				int imagePositon = mSelectPhotoFlag % 2;
-				Log.i("mingguo", "position  "+position+"  iamge position   "+imagePositon+"  bitmap  "+msg.obj);
+				Log.w("mingguo", "position  "+position+"  iamge position   "+imagePositon+"  bitmap  "+msg.obj);
 				ImageItem item = (ImageItem)msg.obj;
 				if (imagePositon == 0){
 					mDataList.get(position).setImageBitmap(item.getBitmap());

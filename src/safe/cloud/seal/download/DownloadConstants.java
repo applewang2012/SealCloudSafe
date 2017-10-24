@@ -140,7 +140,7 @@ public class DownloadConstants {
     private static final boolean LOCAL_LOGV = false;
     @SuppressWarnings("unused")
     public static final boolean LOGV = Config.LOGV
-            || (Config.LOGD && LOCAL_LOGV && Log.isLoggable(TAG, Log.VERBOSE));
+            || (Config.LOGD && LOCAL_LOGV);
 
     /** Enable super-verbose logging */
     private static final boolean LOCAL_LOGVV = false;

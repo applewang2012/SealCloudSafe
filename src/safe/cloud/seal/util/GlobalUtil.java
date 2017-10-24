@@ -297,7 +297,7 @@ public final class GlobalUtil {
 			file.mkdir();
 		}
 		String filename = file.getPath()+"/"+"signetsuser"+".jpg";
-		Log.i("mingguo", "phote generate  file name   "+filename);
+		Log.w("mingguo", "phote generate  file name   "+filename);
 		return filename;
 	}
 	
@@ -307,7 +307,7 @@ public final class GlobalUtil {
 			file.mkdir();
 		}
 		String filename = file.getPath()+"/"+name+".jpg";
-		Log.i("mingguo", "phote generate  file name   "+filename);
+		Log.w("mingguo", "phote generate  file name   "+filename);
 		return filename;
 	}
 	
@@ -337,7 +337,7 @@ public final class GlobalUtil {
 	       //旋转图片 动作   
 	       Matrix matrix = new Matrix();;  
 	       matrix.postRotate(angle);  
-	       Log.i("mingguo", "image  rotation  angle = " + angle);  
+	       Log.w("mingguo", "image  rotation  angle = " + angle);  
 	       // 创建新的图片   
 	       Bitmap resizedBitmap = Bitmap.createBitmap(bitmap, 0, 0,  
 	               bitmap.getWidth(), bitmap.getHeight(), matrix, true);  

@@ -176,7 +176,7 @@ public class DataModel {
 		            //���ز���
 		            for(Map.Entry<String, String> entry:mPostData.entrySet()){    
 		            	urlList.add(new BasicNameValuePair(entry.getKey(), entry.getValue())); 
-		            	Log.i("house", "entry.getKey()  "+entry.getKey()+"  entry.getValue()  "+entry.getValue());
+		            	Log.w("house", "entry.getKey()  "+entry.getKey()+"  entry.getValue()  "+entry.getValue());
 		            }   
 		            
 		            HttpEntity entity = new UrlEncodedFormEntity(urlList, HTTP.UTF_8);

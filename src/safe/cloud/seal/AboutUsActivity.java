@@ -112,7 +112,7 @@ public class AboutUsActivity extends BaseActivity {
 //		}
 //		
 //		  AlertDialog.Builder builder =new AlertDialog.Builder(AboutUsActivity.this, AlertDialog.THEME_HOLO_LIGHT);
-//		  builder.setTitle("升级云上之家");
+//		  builder.setTitle("升级连心锁");
 //		  builder.setIcon(android.R.drawable.ic_dialog_info);
 //		  builder.setPositiveButton(getString(R.string.button_ok),new DialogInterface.OnClickListener() {
 //		         @Override  
@@ -147,7 +147,7 @@ public class AboutUsActivity extends BaseActivity {
 	public void onStatusSuccess(String action, String templateInfo) {
 		// TODO Auto-generated method stub
 		super.onStatusSuccess(action, templateInfo);
-		Log.i("mingguo", "on success  action "+action+"  msg  "+templateInfo);
+		Log.w("mingguo", "on success  action "+action+"  msg  "+templateInfo);
 		if (action.equals(mUpdateAction)){
 			Message message = mHandler.obtainMessage();
 			message.what = 200;

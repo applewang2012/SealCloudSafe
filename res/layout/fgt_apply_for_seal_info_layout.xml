@@ -260,12 +260,13 @@
                     android:textColor="#000000"
                     android:textSize="@dimen/base_dimen_30" />
 
-                <TextView
+                <EditText
                     android:id="@+id/id_aty_apply_seal_seal_neirong_content"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/base_dimen_165"
+                    android:background="#00000000"
                     android:text=""
                     android:textColor="#555555"
                     android:textSize="@dimen/base_dimen_28" />

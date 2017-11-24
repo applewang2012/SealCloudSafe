@@ -34,7 +34,7 @@
            android:layout_gravity="center_vertical|right"
            android:background="@drawable/titlebar_scan_login"
            android:layout_marginRight="@dimen/base_dimen_30"
-           android:visibility="invisible"
+           android:visibility="visible"
            android:clickable="true"
            />
        <ImageView 

@@ -64,7 +64,7 @@
 	            android:textSize="@dimen/base_dimen_26" />
 			 
 		
-		    <safe.cloud.seal.widget.MeasureGridView 
+		    <plugin.safe.cloud.seal.widget.MeasureGridView
 		        android:id="@+id/noScrollgridview"
 		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
 		        android:numColumns="2"
 		        android:scrollbars="none"
 		        >
-	    	</safe.cloud.seal.widget.MeasureGridView>
+	    	</plugin.safe.cloud.seal.widget.MeasureGridView>
 	    	
 		    <Button 
 		        android:id="@+id/id_upload_selected_image"

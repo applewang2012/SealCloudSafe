@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/base_dimen_110"
+    android:background="#ffffff"
+     >
+	<TextView
+		android:id="@+id/id_item_police_check_name"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:gravity="center_vertical|left"
+		android:layout_marginLeft="@dimen/base_dimen_80"
+		android:text=""
+		android:textSize="@dimen/base_dimen_30"
+		android:paddingRight="@dimen/base_dimen_60"
+		android:textColor="#444444"
+		/>
+	<TextView
+		android:id="@+id/id_item_police_check_status"
+		android:layout_width="wrap_content"
+		android:layout_height="match_parent"
+		android:gravity="center_vertical|right"
+		android:layout_gravity="right|center_vertical"
+		android:layout_marginRight="@dimen/base_dimen_140"
+		android:text=""
+		android:textSize="@dimen/base_dimen_30"
+		android:textColor="#444444"
+		/>
+	<ImageView
+		android:id="@+id/id_item_police_check_indicator"
+		android:layout_width="@dimen/base_dimen_16"
+		android:layout_height="@dimen/base_dimen_30"
+		android:layout_gravity="right|center_vertical"
+		android:visibility="gone"
+		android:layout_marginRight="@dimen/base_dimen_30"
+		android:background="@drawable/seal_list_more_icon" />
+
+
+		   <include
+		        android:id="@+id/id_data_loading"
+			   android:visibility="invisible"
+		        layout="@layout/layout_loading_dialog"
+	       />
+
+</FrameLayout>
+    
+   
+   

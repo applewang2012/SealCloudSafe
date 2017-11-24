@@ -51,7 +51,7 @@
     </FrameLayout>
     
     
-    <safe.cloud.seal.shotview.ViewPagerFixed
+    <plugin.safe.cloud.seal.shotview.ViewPagerFixed
       android:id="@+id/gallery01" 
       android:layout_width="fill_parent" 
       android:layout_height="wrap_content"
@@ -59,7 +59,7 @@
       android:layout_centerHorizontal="true"
       android:background="#f1f2f3"
       android:unselectedAlpha="1">
-   	</safe.cloud.seal.shotview.ViewPagerFixed>
+   	</plugin.safe.cloud.seal.shotview.ViewPagerFixed>
    	
 </FrameLayout>
   

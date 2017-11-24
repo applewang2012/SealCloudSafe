@@ -18,7 +18,7 @@
 	        android:layout_marginTop="@dimen/base_dimen_90"
 	         >
 	
-	        <safe.cloud.seal.widget.ViewFlow
+	        <plugin.safe.cloud.seal.widget.ViewFlow
 	            android:id="@+id/id_fragment_surround_life_viewflow"
 	            android:layout_width="fill_parent"
 	            android:layout_height="fill_parent"
@@ -31,7 +31,7 @@
 		            android:background="@color/transparent"
 		            android:gravity="center"
 		            >
-			       <safe.cloud.seal.widget.CircleFlowIndicator 
+			       <plugin.safe.cloud.seal.widget.CircleFlowIndicator
 			            android:id="@+id/id_fragment_surround_life_viewflow_indicator"
 			            android:layout_width="wrap_content"
 			            android:layout_height="wrap_content"

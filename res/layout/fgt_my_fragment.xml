@@ -186,21 +186,21 @@
 	        	        />
 	        	</FrameLayout>
 	        	
-	        	<FrameLayout 
+	        	<FrameLayout
 	        	    android:id="@+id/id_my_seal_exit_user"
 	        	    android:layout_width="match_parent"
 	        	    android:background="#ffffff"
 		        	android:layout_height="@dimen/base_dimen_120"
 		        	android:layout_marginTop="@dimen/base_dimen_1"
 	        	    >
-	        	    <ImageView 
+	        	    <ImageView
 	        	        android:layout_width="@dimen/base_dimen_44"
 		        		android:layout_height="@dimen/base_dimen_44"
 		        		android:background="@drawable/fgt_my_exit_icon"
 		        		android:layout_gravity="center_vertical"
 		        		android:layout_marginLeft="@dimen/base_dimen_48"
 	        	        />
-	        	    <TextView 
+	        	    <TextView
 	        	        android:layout_width="wrap_content"
 		        		android:layout_height="match_parent"
 		        		android:text="退出登录"
@@ -210,7 +210,7 @@
 		        		android:textColor="#555555"
 		        		android:layout_gravity="center_vertical"
 	        	        />
-	        	    <ImageView 
+	        	    <ImageView
 	        	        android:layout_width="@dimen/base_dimen_16"
 		        		android:layout_height="@dimen/base_dimen_30"
 		        		android:background="@drawable/seal_list_more_icon"

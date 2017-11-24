@@ -26,14 +26,15 @@
         
         <Button 
 	        android:id="@+id/id_seal_receiver_item_button"
-	        android:layout_width="wrap_content" 
-	    	android:layout_height="fill_parent"
+	        android:layout_width="@dimen/base_dimen_80"
+	    	android:layout_height="@dimen/base_dimen_55"
 	    	android:layout_marginRight="@dimen/base_dimen_40"
-	    	android:layout_gravity="right"
-	    	android:textColor="#2cc55e"
-	    	android:textSize="@dimen/base_dimen_26"
+	    	android:layout_gravity="right|center_vertical"
+	    	android:textColor="#555555"
+			android:background="#e5e3e3"
+	    	android:textSize="@dimen/base_dimen_28"
 	    	android:text="接收"
-	    	android:gravity="right|center_vertical"
+	    	android:gravity="center"
 	        />
     </FrameLayout>
     <ImageView 

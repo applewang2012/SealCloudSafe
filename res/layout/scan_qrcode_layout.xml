@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <safe.cloud.seal.zxingview.ViewfinderView
+    <plugin.safe.cloud.seal.zxingview.ViewfinderView
         android:id="@+id/viewfinder_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
